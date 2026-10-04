@@ -2,6 +2,7 @@ import { motion, useReducedMotion, useScroll, useTransform } from "motion/react"
 import { ArrowDown } from "@phosphor-icons/react";
 import { asset } from "../asset";
 import { BG_VIDEOS, EVENTS } from "../content";
+import { useIntro } from "./Intro";
 import { eventDate } from "../lib";
 import { BackgroundVideo } from "./BackgroundVideo";
 import { Button } from "./Button";
@@ -28,6 +29,7 @@ function HeroVideo() {
 
 export function Hero() {
   const reduce = useReducedMotion();
+  const { revealed } = useIntro();
   const { scrollY } = useScroll();
   const sunRotate = useTransform(scrollY, [0, 1400], [0, reduce ? 0 : 140]);
 
@@ -48,7 +50,7 @@ export function Hero() {
             <motion.p
               className="mb-5 inline-flex rounded-full border border-cream/30 bg-night/50 px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.16em] text-sun backdrop-blur"
               initial={{ opacity: 0, y: 16 }}
-              animate={{ opacity: 1, y: 0 }}
+              animate={revealed ? { opacity: 1, y: 0 } : { opacity: 0, y: 16 }}
               transition={{ duration: 0.7, ease }}
             >
               {date.weekday}, {date.day} no {next?.venue}
@@ -57,7 +59,7 @@ export function Hero() {
 
           <motion.div
             initial={{ opacity: 0, y: 40 }}
-            animate={{ opacity: 1, y: 0 }}
+              animate={revealed ? { opacity: 1, y: 0 } : { opacity: 0, y: 40 }}
             transition={{ duration: 0.9, delay: 0.1, ease }}
           >
             <Wordmark className="text-[clamp(4.4rem,10.5vw,9rem)]" />
@@ -66,7 +68,7 @@ export function Hero() {
           <motion.p
             className="mt-8 max-w-md text-lg leading-relaxed text-cream/90"
             initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
+              animate={revealed ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
             transition={{ duration: 0.8, delay: 0.35, ease }}
           >
             Uma festa para ver o sol ir embora dançando, com quem você ama. Em Porto Alegre.
@@ -75,7 +77,7 @@ export function Hero() {
           <motion.div
             className="mt-8 flex flex-wrap items-center gap-3"
             initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
+              animate={revealed ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
             transition={{ duration: 0.8, delay: 0.5, ease }}
           >
             {next && <TicketButton event={next} location="hero" />}
@@ -93,7 +95,7 @@ export function Hero() {
           <motion.figure
             className="relative mx-auto aspect-[3/4] w-[78%] overflow-hidden rounded-t-[999px] rounded-b-card border-[5px] border-cream shadow-[0_40px_90px_-30px_rgba(4,23,30,0.9)]"
             initial={{ opacity: 0, scale: 0.92, y: 50 }}
-            animate={{ opacity: 1, scale: 1, y: 0 }}
+              animate={revealed ? { opacity: 1, scale: 1, y: 0 } : { opacity: 0, scale: 0.92, y: 50 }}
             transition={{ duration: 1, delay: 0.25, ease }}
           >
             <img

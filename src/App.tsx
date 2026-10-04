@@ -8,6 +8,7 @@ import { Events } from "./components/Events";
 import { Videos } from "./components/Videos";
 import { Gallery } from "./components/Gallery";
 import { Finale } from "./components/Finale";
+import { Intro, IntroProvider } from "./components/Intro";
 import { Proof } from "./components/Proof";
 import { Faq } from "./components/Faq";
 import { FloatingTicket } from "./components/FloatingTicket";
@@ -29,6 +30,8 @@ export default function App() {
   return (
     <MotionConfig reducedMotion="user">
       <IconContext.Provider value={{ weight: "bold" }}>
+       <IntroProvider>
+        <Intro />
         <ScrollProgress />
         <Nav />
         <SunCursor />
@@ -44,6 +47,7 @@ export default function App() {
           <Faq />
         </main>
         <Finale />
+       </IntroProvider>
       </IconContext.Provider>
     </MotionConfig>
   );
