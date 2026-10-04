@@ -15,9 +15,22 @@ export function whatsappLink(message: string): string {
   return `https://wa.me/${SITE.whatsapp}?text=${encodeURIComponent(message)}`;
 }
 
-/** Link de ingressos do evento, ou WhatsApp como alternativa enquanto não houver link. */
-export function ticketLink(event: SbEvent): string {
-  return event.ticketUrl || whatsappLink(`Oi! Quero ingressos para o ${event.title} no ${event.venue}.`);
+/**
+ * Link de ingressos do evento, ou WhatsApp como alternativa enquanto não houver link.
+ * Na página de venda, acrescenta UTMs para a plataforma de vendas saber de qual botão veio a compra.
+ */
+export function ticketLink(event: SbEvent, location = "site"): string {
+  if (!event.ticketUrl) return whatsappLink(`Oi! Quero ingressos para o ${event.title} no ${event.venue}.`);
+  try {
+    const url = new URL(event.ticketUrl);
+    url.searchParams.set("utm_source", "site");
+    url.searchParams.set("utm_medium", "botao");
+    url.searchParams.set("utm_campaign", event.id);
+    url.searchParams.set("utm_content", location);
+    return url.toString();
+  } catch {
+    return event.ticketUrl;
+  }
 }
 
 export function mapsLink(event: SbEvent): string {

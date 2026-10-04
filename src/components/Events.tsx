@@ -1,12 +1,16 @@
-import { useCallback, useRef, useState } from "react";
-import { AnimatePresence, LayoutGroup, motion, useMotionValue, useReducedMotion, useSpring } from "motion/react";
-import { ArrowUpRight, CalendarBlank, Check, Clock, MapPin, ShareNetwork, Ticket, WhatsappLogo } from "@phosphor-icons/react";
+import { useCallback, useState } from "react";
+import { LayoutGroup, motion } from "motion/react";
+import { ArrowUpRight, CalendarBlank, Check, Clock, MapPin, ShareNetwork, WhatsappLogo } from "@phosphor-icons/react";
+import { track } from "../analytics";
 import { EVENTS, SITE, type SbEvent } from "../content";
-import { eventDate, mapsLink, ticketLink, whatsappLink } from "../lib";
+import { eventDate, mapsLink, whatsappLink } from "../lib";
 import { Button } from "./Button";
 import { Countdown } from "./Countdown";
 import { Modal } from "./Modal";
 import { Reveal } from "./Reveal";
+import { SaleBadge } from "./SaleBadge";
+import { SunWipeOverlay, useSunWipe } from "./SunWipe";
+import { TicketButton } from "./TicketButton";
 
 type Tab = "upcoming" | "past";
 const TABS: { id: Tab; label: string }[] = [
@@ -14,41 +18,37 @@ const TABS: { id: Tab; label: string }[] = [
   { id: "past", label: "Já rolou" },
 ];
 
-/** Cartaz com inclinação 3D que segue o cursor. */
-function TiltFlyer({ event, onOpen, priority }: { event: SbEvent; onOpen: () => void; priority?: boolean }) {
-  const reduce = useReducedMotion();
-  const ref = useRef<HTMLButtonElement>(null);
-  const rx = useSpring(useMotionValue(0), { stiffness: 160, damping: 16 });
-  const ry = useSpring(useMotionValue(0), { stiffness: 160, damping: 16 });
-
+function FlyerButton({ event, onOpen }: { event: SbEvent; onOpen: () => void }) {
   return (
-    <motion.button
-      ref={ref}
+    <button
       type="button"
       onClick={onOpen}
       aria-label={`Ver detalhes: ${event.title} no ${event.venue}`}
-      className="group block w-full cursor-pointer rounded-card text-left [perspective:900px]"
-      style={{ rotateX: reduce ? 0 : rx, rotateY: reduce ? 0 : ry, transformStyle: "preserve-3d" }}
-      onPointerMove={(e) => {
-        if (reduce || e.pointerType !== "mouse" || !ref.current) return;
-        const r = ref.current.getBoundingClientRect();
-        ry.set(((e.clientX - r.left) / r.width - 0.5) * 12);
-        rx.set(-((e.clientY - r.top) / r.height - 0.5) * 12);
-      }}
-      onPointerLeave={() => {
-        rx.set(0);
-        ry.set(0);
-      }}
-      whileTap={{ scale: 0.98 }}
+      className="group block w-full cursor-pointer rounded-card text-left"
     >
       <motion.img
         layoutId={`flyer-${event.id}`}
         src={event.flyer}
         alt={`Cartaz: ${event.title}, ${event.venue}`}
-        loading={priority ? "eager" : "lazy"}
-        className="aspect-[6/7] w-full rounded-card object-cover shadow-[0_30px_70px_-25px_rgba(240,40,110,0.55)] ring-1 ring-cream/20"
+        className="aspect-[6/7] w-full rounded-card object-cover shadow-[0_30px_70px_-25px_rgba(240,40,110,0.55)] ring-1 ring-cream/20 transition-transform duration-500 ease-out-expo group-hover:-translate-y-1.5"
       />
-    </motion.button>
+    </button>
+  );
+}
+
+function Lineup({ names }: { names?: string[] }) {
+  if (!names?.length) return null;
+  return (
+    <div>
+      <h4 className="text-sm font-semibold uppercase tracking-[0.16em] text-flame">Line-up</h4>
+      <ul className="mt-3 flex flex-wrap gap-2">
+        {names.map((n) => (
+          <li key={n} className="rounded-full border border-cream/30 px-4 py-1.5 font-semibold">
+            {n}
+          </li>
+        ))}
+      </ul>
+    </div>
   );
 }
 
@@ -56,13 +56,15 @@ function UpcomingFeature({ event, onOpen }: { event: SbEvent; onOpen: (e: SbEven
   const date = eventDate(event);
   return (
     <div className="grid items-center gap-10 lg:grid-cols-[minmax(0,440px)_1fr] lg:gap-16">
-      <TiltFlyer event={event} onOpen={() => onOpen(event)} priority />
-      <div>
-        <p className="text-sm font-semibold uppercase tracking-[0.16em] text-flame">{date.weekday}</p>
-        <h3 className="mt-2 font-display text-[clamp(2.6rem,6vw,5rem)] uppercase leading-[0.95] tracking-tight text-balance">
-          {date.day}
-        </h3>
-        <ul className="mt-6 grid gap-3 text-cream/90">
+      <FlyerButton event={event} onOpen={() => onOpen(event)} />
+      <div className="grid gap-6">
+        <div>
+          <p className="text-sm font-semibold uppercase tracking-[0.16em] text-flame">{date.weekday}</p>
+          <h3 className="mt-2 font-display text-[clamp(2.6rem,6vw,5rem)] uppercase leading-[0.95] tracking-tight">
+            {date.day}
+          </h3>
+        </div>
+        <ul className="grid gap-3 text-cream/90">
           <li className="flex items-center gap-3">
             <Clock size={22} className="text-sun" /> Abertura às {event.time}
           </li>
@@ -73,15 +75,13 @@ function UpcomingFeature({ event, onOpen }: { event: SbEvent; onOpen: (e: SbEven
             </span>
           </li>
         </ul>
-        {event.startsAt && (
-          <div className="mt-8">
-            <Countdown startsAt={event.startsAt} />
-          </div>
-        )}
-        <div className="mt-8 flex flex-wrap gap-3">
-          <Button href={ticketLink(event)} external icon={<Ticket size={20} weight="fill" />}>
-            Ingressos
-          </Button>
+        <div>
+          <SaleBadge sale={event.sale} />
+        </div>
+        <Lineup names={event.lineup} />
+        {event.startsAt && <Countdown startsAt={event.startsAt} />}
+        <div className="flex flex-wrap gap-3">
+          <TicketButton event={event} location="evento" />
           <Button variant="ghost" onClick={() => onOpen(event)} icon={<ArrowUpRight size={18} />}>
             Detalhes
           </Button>
@@ -95,17 +95,13 @@ function PastCard({ event, onOpen }: { event: SbEvent; onOpen: (e: SbEvent) => v
   const date = eventDate(event);
   return (
     <div>
-      <TiltFlyer event={event} onOpen={() => onOpen(event)} />
+      <FlyerButton event={event} onOpen={() => onOpen(event)} />
       <div className="mt-5 flex items-start justify-between gap-4">
         <div>
           <h3 className="font-display text-2xl uppercase leading-tight">{event.title === SITE.name ? event.venue : event.title}</h3>
           <p className="mt-1 text-cream/75">{date.day}</p>
         </div>
-        {event.soldOut && (
-          <span className="shrink-0 rounded-full bg-rose px-3 py-1 text-xs font-bold uppercase tracking-wider text-cream">
-            Esgotado
-          </span>
-        )}
+        <SaleBadge sale={event.sale} />
       </div>
     </div>
   );
@@ -117,6 +113,7 @@ function EventModalBody({ event, onClose }: { event: SbEvent; onClose: () => voi
   const upcoming = event.status === "upcoming";
 
   const share = async () => {
+    track("share_click", { event_id: event.id });
     const data = { title: event.title, text: `${event.title} no ${event.venue}`, url: window.location.href };
     try {
       if (navigator.share) await navigator.share(data);
@@ -141,7 +138,7 @@ function EventModalBody({ event, onClose }: { event: SbEvent; onClose: () => voi
       <div className="flex flex-col justify-center gap-6 p-6 md:p-10">
         <div>
           <p className="text-sm font-semibold uppercase tracking-[0.16em] text-flame">
-            {upcoming ? "Próximo evento" : event.soldOut ? "Ingressos esgotados" : "Edição encerrada"}
+            {upcoming ? "Próximo evento" : event.sale.status === "soldout" ? "Ingressos esgotados" : "Edição encerrada"}
           </p>
           <h3 className="mt-2 font-display text-4xl uppercase leading-[0.98] tracking-tight md:text-5xl">
             {event.title}
@@ -167,15 +164,25 @@ function EventModalBody({ event, onClose }: { event: SbEvent; onClose: () => voi
           )}
         </ul>
 
+        {upcoming && (
+          <div>
+            <SaleBadge sale={event.sale} />
+          </div>
+        )}
+        <Lineup names={event.lineup} />
         {upcoming && event.startsAt && <Countdown startsAt={event.startsAt} />}
 
         <div className="flex flex-wrap gap-3">
           {upcoming ? (
             <>
-              <Button href={ticketLink(event)} external icon={<Ticket size={20} weight="fill" />}>
-                Ingressos
-              </Button>
-              <Button variant="ghost" href={mapsLink(event)} external icon={<MapPin size={18} />}>
+              <TicketButton event={event} location="modal" />
+              <Button
+                variant="ghost"
+                href={mapsLink(event)}
+                external
+                icon={<MapPin size={18} />}
+                trackEvent={["maps_click", { event_id: event.id }]}
+              >
                 Como chegar
               </Button>
               <Button variant="ghost" onClick={share} icon={copied ? <Check size={18} /> : <ShareNetwork size={18} />}>
@@ -192,17 +199,13 @@ function EventModalBody({ event, onClose }: { event: SbEvent; onClose: () => voi
                 href={whatsappLink("Oi! Quero saber da próxima edição do Sun, Bar & Love.")}
                 external
                 icon={<WhatsappLogo size={18} />}
+                trackEvent={["whatsapp_click", { location: "evento_encerrado" }]}
               >
                 Próxima edição
               </Button>
             </>
           )}
         </div>
-        {!upcoming && (
-          <button type="button" onClick={onClose} className="self-start text-sm text-cream/60 underline-offset-4 hover:underline">
-            Voltar aos eventos
-          </button>
-        )}
       </div>
     </div>
   );
@@ -212,6 +215,7 @@ export function Events() {
   const [tab, setTab] = useState<Tab>("upcoming");
   const [selected, setSelected] = useState<SbEvent | null>(null);
   const close = useCallback(() => setSelected(null), []);
+  const { containerRef, overlayRef, labelRef, go } = useSunWipe<Tab>(setTab);
 
   const upcoming = EVENTS.filter((e) => e.status === "upcoming");
   const past = EVENTS.filter((e) => e.status === "past");
@@ -234,8 +238,12 @@ export function Events() {
                 type="button"
                 id={`tab-${t.id}`}
                 aria-selected={tab === t.id}
-                aria-controls={`panel-${t.id}`}
-                onClick={() => setTab(t.id)}
+                aria-controls="events-panel"
+                onClick={(e) => {
+                  if (t.id === tab) return;
+                  track("tab_change", { area: "eventos", tab: t.id });
+                  void go(t.id, t.label, e.currentTarget);
+                }}
                 className="relative h-11 rounded-full px-6 text-[15px] font-semibold"
               >
                 {tab === t.id && (
@@ -252,53 +260,39 @@ export function Events() {
         </Reveal>
 
         <LayoutGroup>
-          <div className="mt-12" role="tabpanel" id={`panel-${tab}`} aria-labelledby={`tab-${tab}`}>
-            <AnimatePresence mode="wait" initial={false}>
-              {tab === "upcoming" ? (
-                <motion.div
-                  key="upcoming"
-                  initial={{ opacity: 0, y: 24 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -16 }}
-                  transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
-                  className="grid gap-16"
-                >
-                  {upcoming.map((e) => (
-                    <UpcomingFeature key={e.id} event={e} onOpen={setSelected} />
-                  ))}
+          <div ref={containerRef} className="relative mt-12" role="tabpanel" id="events-panel" aria-labelledby={`tab-${tab}`}>
+            <SunWipeOverlay overlayRef={overlayRef} labelRef={labelRef} />
+            {tab === "upcoming" ? (
+              <div className="grid gap-16">
+                {upcoming.map((e) => (
+                  <UpcomingFeature key={e.id} event={e} onOpen={setSelected} />
+                ))}
 
-                  <div className="relative overflow-hidden rounded-card bg-[linear-gradient(120deg,#f0286e,#ff6a2b_60%,#ffc21a)] p-8 text-deep md:p-12">
-                    <h3 className="max-w-md font-display text-3xl uppercase leading-tight md:text-4xl">
-                      Novas datas saem em breve
-                    </h3>
-                    <p className="mt-3 max-w-md text-deep/85">Chama no WhatsApp e seja o primeiro a saber.</p>
-                    <div className="mt-6">
-                      <a
-                        href={whatsappLink("Oi! Quero ser avisado das próximas edições do Sun, Bar & Love.")}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="inline-flex h-12 items-center gap-2 whitespace-nowrap rounded-full bg-deep px-6 font-semibold text-cream transition hover:bg-night active:scale-[0.97]"
-                      >
-                        <WhatsappLogo size={20} weight="fill" /> Chamar no WhatsApp
-                      </a>
-                    </div>
+                <div className="overflow-hidden rounded-card bg-[linear-gradient(120deg,#f0286e,#ff6a2b_60%,#ffc21a)] p-8 text-deep md:p-12">
+                  <h3 className="max-w-md font-display text-3xl uppercase leading-tight md:text-4xl">
+                    Novas datas saem em breve
+                  </h3>
+                  <p className="mt-3 max-w-md text-deep/85">Chama no WhatsApp e seja o primeiro a saber.</p>
+                  <div className="mt-6">
+                    <a
+                      href={whatsappLink("Oi! Quero ser avisado das próximas edições do Sun, Bar & Love.")}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      onClick={() => track("whatsapp_click", { location: "novas_datas" })}
+                      className="inline-flex h-12 items-center gap-2 whitespace-nowrap rounded-full bg-deep px-6 font-semibold text-cream transition hover:bg-night active:scale-[0.97]"
+                    >
+                      <WhatsappLogo size={20} weight="fill" /> Chamar no WhatsApp
+                    </a>
                   </div>
-                </motion.div>
-              ) : (
-                <motion.div
-                  key="past"
-                  initial={{ opacity: 0, y: 24 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -16 }}
-                  transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
-                  className="grid gap-10 sm:grid-cols-2 md:max-w-3xl"
-                >
-                  {past.map((e) => (
-                    <PastCard key={e.id} event={e} onOpen={setSelected} />
-                  ))}
-                </motion.div>
-              )}
-            </AnimatePresence>
+                </div>
+              </div>
+            ) : (
+              <div className="grid gap-10 sm:grid-cols-2 md:max-w-3xl">
+                {past.map((e) => (
+                  <PastCard key={e.id} event={e} onOpen={setSelected} />
+                ))}
+              </div>
+            )}
           </div>
 
           <Modal open={!!selected} onClose={close} label={selected ? `${selected.title} no ${selected.venue}` : "Evento"}>

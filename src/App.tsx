@@ -8,6 +8,10 @@ import { Events } from "./components/Events";
 import { Videos } from "./components/Videos";
 import { Gallery } from "./components/Gallery";
 import { Finale } from "./components/Finale";
+import { Proof } from "./components/Proof";
+import { Faq } from "./components/Faq";
+import { FloatingTicket } from "./components/FloatingTicket";
+import { SunCursor } from "./components/SunCursor";
 
 function ScrollProgress() {
   const { scrollYProgress } = useScroll();
@@ -27,13 +31,17 @@ export default function App() {
       <IconContext.Provider value={{ weight: "bold" }}>
         <ScrollProgress />
         <Nav />
+        <SunCursor />
+        <FloatingTicket />
         <main>
           <Hero />
           <Marquee />
           <Manifesto />
+          <Proof />
           <Events />
           <Videos />
           <Gallery />
+          <Faq />
         </main>
         <Finale />
       </IconContext.Provider>

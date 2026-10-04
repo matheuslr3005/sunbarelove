@@ -1,10 +1,11 @@
 import { useRef } from "react";
 import { motion, useReducedMotion, useScroll, useTransform } from "motion/react";
-import { InstagramLogo, Ticket, WhatsappLogo } from "@phosphor-icons/react";
+import { InstagramLogo, WhatsappLogo } from "@phosphor-icons/react";
 import { EVENTS, SITE } from "../content";
-import { ticketLink, whatsappLink } from "../lib";
-import { Button } from "./Button";
+import { track } from "../analytics";
+import { whatsappLink } from "../lib";
 import { Sun } from "./Sun";
+import { TicketButton } from "./TicketButton";
 
 const next = EVENTS.find((e) => e.status === "upcoming");
 
@@ -17,7 +18,7 @@ export function Finale() {
   const rotate = useTransform(scrollYProgress, [0, 1], [0, reduce ? 0 : 90]);
 
   return (
-    <footer ref={ref} className="relative overflow-clip bg-[linear-gradient(to_bottom,#07232c,#04171e)] px-5 pt-32 md:px-8 md:pt-44">
+    <footer ref={ref} id="fim" className="relative overflow-clip bg-[linear-gradient(to_bottom,#07232c,#04171e)] px-5 pt-32 md:px-8 md:pt-44">
       <motion.div
         className="pointer-events-none absolute left-1/2 top-[84%] w-[min(130vw,1100px)] -translate-y-1/2 -translate-x-1/2"
         style={{ y }}
@@ -34,9 +35,7 @@ export function Finale() {
         </h2>
         {next && (
           <div className="mt-10">
-            <Button href={ticketLink(next)} external icon={<Ticket size={20} weight="fill" />}>
-              Ingressos
-            </Button>
+            <TicketButton event={next} location="final" />
           </div>
         )}
       </div>
@@ -50,6 +49,7 @@ export function Finale() {
             href={whatsappLink("Oi! Vim pelo site do Sun, Bar & Love.")}
             target="_blank"
             rel="noopener noreferrer"
+            onClick={() => track("whatsapp_click", { location: "rodape" })}
             className="flex items-center gap-2 hover:text-sun"
           >
             <WhatsappLogo size={22} weight="fill" /> WhatsApp

@@ -25,9 +25,11 @@
 
 /* z-index scale */
 :root {
+  --z-float: 38;
   --z-nav: 40;
   --z-progress: 50;
   --z-modal: 60;
+  --z-cursor: 80;
 }
 
 html {
@@ -104,4 +106,16 @@ body {
 }
 .hide-scrollbar::-webkit-scrollbar {
   display: none;
+}
+
+/* Solzinho do cursor: giro lento, só quando o movimento não está reduzido. */
+@keyframes sun-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .sun-cursor {
+    animation: sun-spin 9s linear infinite;
+  }
 }

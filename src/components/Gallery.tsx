@@ -1,14 +1,44 @@
 import { useCallback, useEffect, useState } from "react";
 import { AnimatePresence, motion } from "motion/react";
-import { ArrowLeft, ArrowRight } from "@phosphor-icons/react";
-import { PHOTOS } from "../content";
+import { ArrowLeft, ArrowRight, Camera } from "@phosphor-icons/react";
+import { track } from "../analytics";
+import { GALLERIES, type SbPhoto } from "../content";
 import { Modal } from "./Modal";
 import { Reveal } from "./Reveal";
+import { SunWipeOverlay, useSunWipe } from "./SunWipe";
+
+function PhotoButton({ photo, onOpen, className = "", masonry }: { photo: SbPhoto; onOpen: () => void; className?: string; masonry?: boolean }) {
+  return (
+    <button
+      type="button"
+      onClick={onOpen}
+      aria-label={`Ampliar foto: ${photo.alt}`}
+      className={`group relative block overflow-hidden rounded-card ring-1 ring-cream/15 ${className}`}
+    >
+      <img
+        src={photo.src}
+        alt={photo.alt}
+        loading="lazy"
+        draggable={false}
+        className={`w-full object-cover transition-transform duration-700 ease-out-expo group-hover:scale-[1.05] ${masonry ? "h-auto" : "size-full"}`}
+        style={{ objectPosition: photo.position }}
+      />
+    </button>
+  );
+}
 
 export function Gallery() {
+  const [galleryId, setGalleryId] = useState(GALLERIES[0].id);
   const [index, setIndex] = useState<number | null>(null);
+  const { containerRef, overlayRef, labelRef, go } = useSunWipe<string>(setGalleryId);
+
+  const gallery = GALLERIES.find((g) => g.id === galleryId) ?? GALLERIES[0];
+  const photos = gallery.photos;
   const close = useCallback(() => setIndex(null), []);
-  const step = useCallback((dir: 1 | -1) => setIndex((i) => (i === null ? i : (i + dir + PHOTOS.length) % PHOTOS.length)), []);
+  const step = useCallback(
+    (dir: 1 | -1) => setIndex((i) => (i === null ? i : (i + dir + photos.length) % photos.length)),
+    [photos.length],
+  );
 
   useEffect(() => {
     if (index === null) return;
@@ -20,7 +50,11 @@ export function Gallery() {
     return () => window.removeEventListener("keydown", onKey);
   }, [index, step]);
 
-  const current = index === null ? null : PHOTOS[index];
+  const open = (i: number) => {
+    track("gallery_open", { gallery: gallery.id, photo_id: photos[i].id });
+    setIndex(i);
+  };
+  const current = index === null ? null : photos[index];
 
   return (
     <section id="fotos" className="relative overflow-clip bg-night px-5 py-24 md:px-8 md:py-36">
@@ -31,31 +65,55 @@ export function Gallery() {
           </h2>
         </Reveal>
 
-        <div className="mt-12 grid auto-rows-[170px] grid-cols-2 gap-3 md:auto-rows-[190px] md:grid-cols-4 md:gap-4">
-          {PHOTOS.map((p, i) => (
-            <motion.button
-              key={p.id}
-              type="button"
-              onClick={() => setIndex(i)}
-              aria-label={`Ampliar foto: ${p.alt}`}
-              className={`group relative overflow-hidden rounded-card ring-1 ring-cream/15 ${p.className}`}
-              initial={{ opacity: 0, scale: 0.94, y: 30 }}
-              whileInView={{ opacity: 1, scale: 1, y: 0 }}
-              viewport={{ once: true, amount: 0.15 }}
-              transition={{ duration: 0.7, delay: (i % 3) * 0.08, ease: [0.16, 1, 0.3, 1] }}
-              whileTap={{ scale: 0.98 }}
-            >
-              <img
-                src={p.src}
-                alt={p.alt}
-                loading="lazy"
-                draggable={false}
-                className="size-full object-cover transition-transform duration-700 ease-out-expo group-hover:scale-[1.07]"
-                style={{ objectPosition: p.position }}
-              />
-              <span className="pointer-events-none absolute inset-0 bg-flame/0 mix-blend-soft-light transition-colors duration-500 group-hover:bg-flame/40" />
-            </motion.button>
-          ))}
+        <Reveal delay={0.1} className="mt-10">
+          <div role="tablist" aria-label="Fotos por edição" className="flex w-fit max-w-full overflow-x-auto rounded-full border border-cream/20 bg-deep/50 p-1.5">
+            {GALLERIES.map((g) => (
+              <button
+                key={g.id}
+                role="tab"
+                type="button"
+                id={`gtab-${g.id}`}
+                aria-selected={galleryId === g.id}
+                aria-controls="gallery-panel"
+                onClick={(e) => {
+                  if (g.id === galleryId) return;
+                  track("tab_change", { area: "fotos", tab: g.id });
+                  void go(g.id, g.label, e.currentTarget);
+                }}
+                className="relative h-11 shrink-0 rounded-full px-5 text-[15px] font-semibold"
+              >
+                {galleryId === g.id && (
+                  <motion.span
+                    layoutId="gallery-tab"
+                    className="absolute inset-0 rounded-full bg-sun"
+                    transition={{ type: "spring", stiffness: 380, damping: 30 }}
+                  />
+                )}
+                <span className={`relative transition-colors ${galleryId === g.id ? "text-deep" : "text-cream/80"}`}>{g.label}</span>
+              </button>
+            ))}
+          </div>
+        </Reveal>
+
+        <div ref={containerRef} id="gallery-panel" role="tabpanel" aria-labelledby={`gtab-${galleryId}`} className="relative mt-10">
+          <SunWipeOverlay overlayRef={overlayRef} labelRef={labelRef} />
+          {gallery.layout === "bento" ? (
+            <div className="grid auto-rows-[170px] grid-cols-2 gap-3 md:auto-rows-[190px] md:grid-cols-4 md:gap-4">
+              {photos.map((p, i) => (
+                <PhotoButton key={p.id} photo={p} onOpen={() => open(i)} className={p.className} />
+              ))}
+            </div>
+          ) : (
+            <div className="columns-2 gap-3 md:columns-3 md:gap-4 [&>*]:mb-3 md:[&>*]:mb-4">
+              {photos.map((p, i) => (
+                <PhotoButton key={p.id} photo={p} onOpen={() => open(i)} className="w-full break-inside-avoid" masonry />
+              ))}
+              <div className="flex min-h-48 break-inside-avoid flex-col items-start justify-end gap-3 rounded-card bg-[linear-gradient(160deg,#19a7c9,#0b3341_70%)] p-6 ring-1 ring-cream/15">
+                <Camera size={36} weight="fill" className="text-sun" />
+                <p className="font-display text-2xl uppercase leading-tight">Mais fotos desta edição em breve</p>
+              </div>
+            </div>
+          )}
         </div>
       </div>
 
@@ -68,32 +126,34 @@ export function Gallery() {
                 src={current.src}
                 alt={current.alt}
                 className="mx-auto max-h-[78dvh] w-full object-contain"
-                initial={{ opacity: 0, x: 40 }}
-                animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: -40 }}
-                transition={{ duration: 0.25 }}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.2 }}
               />
             </AnimatePresence>
             <div className="flex items-center justify-between gap-4 p-4 md:px-6">
               <p className="text-sm text-cream/85">{current.caption}</p>
-              <div className="flex shrink-0 gap-2">
-                <button
-                  type="button"
-                  onClick={() => step(-1)}
-                  aria-label="Foto anterior"
-                  className="flex size-11 items-center justify-center rounded-full border border-cream/30 hover:bg-cream/10 active:scale-95"
-                >
-                  <ArrowLeft size={18} />
-                </button>
-                <button
-                  type="button"
-                  onClick={() => step(1)}
-                  aria-label="Próxima foto"
-                  className="flex size-11 items-center justify-center rounded-full bg-sun text-deep hover:bg-[#ffd24d] active:scale-95"
-                >
-                  <ArrowRight size={18} />
-                </button>
-              </div>
+              {photos.length > 1 && (
+                <div className="flex shrink-0 gap-2">
+                  <button
+                    type="button"
+                    onClick={() => step(-1)}
+                    aria-label="Foto anterior"
+                    className="flex size-11 items-center justify-center rounded-full border border-cream/30 hover:bg-cream/10 active:scale-95"
+                  >
+                    <ArrowLeft size={18} />
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => step(1)}
+                    aria-label="Próxima foto"
+                    className="flex size-11 items-center justify-center rounded-full bg-sun text-deep hover:bg-[#ffd24d] active:scale-95"
+                  >
+                    <ArrowRight size={18} />
+                  </button>
+                </div>
+              )}
             </div>
           </div>
         )}

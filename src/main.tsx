@@ -5,6 +5,9 @@ import "@fontsource/bagel-fat-one/latin-ext-400.css";
 import "@fontsource-variable/outfit/index.css";
 import "./index.css";
 import App from "./App";
+import { initAnalytics } from "./analytics";
+
+initAnalytics();
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>

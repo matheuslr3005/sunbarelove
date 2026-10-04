@@ -1,13 +1,14 @@
 import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "motion/react";
-import { List, Ticket, X } from "@phosphor-icons/react";
+import { List, X } from "@phosphor-icons/react";
 import { EVENTS } from "../content";
-import { ticketLink } from "../lib";
+import { TicketButton } from "./TicketButton";
 
 const LINKS = [
   { id: "eventos", label: "Eventos" },
   { id: "videos", label: "Vídeos" },
   { id: "fotos", label: "Fotos" },
+  { id: "duvidas", label: "Dúvidas" },
 ];
 
 const next = EVENTS.find((e) => e.status === "upcoming");
@@ -63,17 +64,7 @@ export function Nav() {
           </ul>
 
           <div className="flex items-center gap-2">
-            {next && (
-              <a
-                href={ticketLink(next)}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex h-10 items-center gap-2 whitespace-nowrap rounded-full bg-sun px-5 text-sm font-semibold text-deep transition hover:bg-[#ffd24d] active:scale-[0.97]"
-              >
-                <Ticket size={18} weight="fill" />
-                Ingressos
-              </a>
-            )}
+            {next && <TicketButton event={next} location="nav" size="sm" />}
             <button
               type="button"
               aria-label={open ? "Fechar menu" : "Abrir menu"}

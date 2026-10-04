@@ -1,6 +1,6 @@
 import { useCallback, useRef, useState } from "react";
-import { motion } from "motion/react";
 import { ArrowLeft, ArrowRight, Play, Sun } from "@phosphor-icons/react";
+import { track } from "../analytics";
 import { VIDEOS, type SbVideo } from "../content";
 import { Modal } from "./Modal";
 import { Reveal } from "./Reveal";
@@ -43,6 +43,52 @@ function VideoPlayer({ video }: { video: SbVideo }) {
   );
 }
 
+/** Card vertical. Com `preview`, um trecho mudo toca enquanto o mouse está em cima. */
+function VideoCard({ video, onPlay }: { video: SbVideo; onPlay: (v: SbVideo) => void }) {
+  const previewRef = useRef<HTMLVideoElement>(null);
+
+  return (
+    <button
+      type="button"
+      onClick={() => onPlay(video)}
+      onPointerEnter={(e) => {
+        if (e.pointerType === "mouse") void previewRef.current?.play().catch(() => undefined);
+      }}
+      onPointerLeave={() => {
+        const el = previewRef.current;
+        if (el) {
+          el.pause();
+          el.currentTime = 0;
+        }
+      }}
+      className="group block w-full text-left"
+      aria-label={`Assistir: ${video.title}`}
+    >
+      <div className="relative aspect-[9/16] overflow-hidden rounded-card ring-1 ring-cream/15 transition-transform duration-500 ease-out-expo group-hover:-translate-y-1.5">
+        <img src={video.poster} alt="" draggable={false} loading="lazy" className="size-full object-cover" />
+        {video.preview && (
+          <video
+            ref={previewRef}
+            src={video.preview}
+            muted
+            loop
+            playsInline
+            preload="none"
+            aria-hidden="true"
+            className="absolute inset-0 size-full object-cover opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+          />
+        )}
+        <div className="absolute inset-0 bg-gradient-to-t from-deep/70 via-transparent to-transparent" />
+        <span className="absolute left-1/2 top-1/2 flex size-16 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-rose text-cream shadow-[0_10px_30px_-8px_rgba(240,40,110,0.9)] transition-transform duration-300 group-hover:scale-110 group-active:scale-95">
+          <Play size={28} weight="fill" />
+        </span>
+      </div>
+      <h3 className="mt-4 font-display text-xl uppercase leading-tight">{video.title}</h3>
+      <p className="mt-1 text-sm text-cream/70">{video.edition}</p>
+    </button>
+  );
+}
+
 export function Videos() {
   const [playing, setPlaying] = useState<SbVideo | null>(null);
   const close = useCallback(() => setPlaying(null), []);
@@ -51,6 +97,12 @@ export function Videos() {
 
   const scrollBy = (dir: 1 | -1) =>
     rail.current?.scrollBy({ left: dir * Math.min(520, rail.current.clientWidth * 0.8), behavior: "smooth" });
+
+  const play = (v: SbVideo) => {
+    if (drag.current.moved) return;
+    track("video_play", { video_id: v.id, has_file: Boolean(v.src || v.youtube) });
+    setPlaying(v);
+  };
 
   return (
     <section id="videos" className="relative overflow-clip bg-deep py-24 md:py-36">
@@ -88,45 +140,19 @@ export function Videos() {
               rail.current.style.scrollSnapType = "";
               rail.current.style.scrollBehavior = "";
             }
+            // libera o clique no card logo depois de soltar um arrasto
+            window.setTimeout(() => {
+              drag.current.moved = false;
+            }, 0);
           }}
           onPointerLeave={() => {
             drag.current.active = false;
           }}
         >
-          {VIDEOS.map((v, i) => (
-            <motion.li
-              key={v.id}
-              className="w-[68vw] max-w-[300px] shrink-0 snap-start"
-              initial={{ opacity: 0, x: 60 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true, amount: 0.2 }}
-              transition={{ duration: 0.7, delay: i * 0.08, ease: [0.16, 1, 0.3, 1] }}
-            >
-              <button
-                type="button"
-                onClick={() => {
-                  if (!drag.current.moved) setPlaying(v);
-                }}
-                className="group block w-full text-left"
-                aria-label={`Assistir: ${v.title}`}
-              >
-                <div className="relative aspect-[9/16] overflow-hidden rounded-card ring-1 ring-cream/15 transition-transform duration-500 ease-out-expo group-hover:-translate-y-2 group-hover:rotate-[-1deg]">
-                  <img
-                    src={v.poster}
-                    alt=""
-                    draggable={false}
-                    loading="lazy"
-                    className="size-full object-cover transition-transform duration-700 ease-out-expo group-hover:scale-105"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-deep/70 via-transparent to-transparent" />
-                  <span className="absolute left-1/2 top-1/2 flex size-16 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-rose text-cream shadow-[0_10px_30px_-8px_rgba(240,40,110,0.9)] transition-transform duration-300 group-hover:scale-110 group-active:scale-95">
-                    <Play size={28} weight="fill" />
-                  </span>
-                </div>
-                <h3 className="mt-4 font-display text-xl uppercase leading-tight">{v.title}</h3>
-                <p className="mt-1 text-sm text-cream/70">{v.edition}</p>
-              </button>
-            </motion.li>
+          {VIDEOS.map((v) => (
+            <li key={v.id} className="w-[68vw] max-w-[300px] shrink-0 snap-start">
+              <VideoCard video={v} onPlay={play} />
+            </li>
           ))}
 
           <li className="w-[68vw] max-w-[300px] shrink-0 snap-start">
