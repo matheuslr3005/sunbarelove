@@ -1,3 +1,5 @@
+import { asset } from "./asset";
+
 /**
  * Todo o conteúdo editável do site mora aqui.
  * Troque textos, links, fotos e vídeos sem mexer nos componentes.
@@ -56,7 +58,7 @@ export const EVENTS: SbEvent[] = [
     venue: "Cenna",
     address: "Rua João Moreira Maciel, 470, Beira do Guaíba",
     city: "Porto Alegre, RS",
-    flyer: "/media/flyer-cenna.webp",
+    flyer: asset("media/flyer-cenna.webp"),
     blurb:
       "Sábado de sol, música boa e o pôr do sol na beira do Guaíba. Chama a galera e garante o seu ingresso.",
     ticketUrl: "",
@@ -71,7 +73,7 @@ export const EVENTS: SbEvent[] = [
     dateLabel: "13 de setembro",
     venue: "Quintal",
     city: "Porto Alegre, RS",
-    flyer: "/media/flyer-quintal.webp",
+    flyer: asset("media/flyer-quintal.webp"),
     blurb: "Uma tarde de música, drinks e pôr do sol no Quintal.",
     ticketUrl: "",
     sale: { status: "closed" },
@@ -83,7 +85,7 @@ export const EVENTS: SbEvent[] = [
     dateLabel: "Edição From Rio",
     venue: "",
     city: "",
-    flyer: "/media/flyer-rio.webp",
+    flyer: asset("media/flyer-rio.webp"),
     blurb: "A edição que esgotou os ingressos antes do grande dia.",
     ticketUrl: "",
     sale: { status: "soldout" },
@@ -95,9 +97,9 @@ export const EVENTS: SbEvent[] = [
  * Dica para trocar: mp4 H.264, até 1280x720, 5 a 15 segundos, até 4 MB, em public/media/videos/.
  */
 export const BG_VIDEOS: Partial<Record<"hero" | "finale" | "videos", { src: string; poster?: string }>> = {
-  hero: { src: "/media/videos/hero.mp4", poster: "/media/hero-poster.webp" },
-  finale: { src: "/media/videos/finale.mp4", poster: "/media/finale-poster.webp" },
-  videos: { src: "/media/videos/fogos-fundo.mp4" },
+  hero: { src: asset("media/videos/hero.mp4"), poster: asset("media/hero-poster.webp") },
+  finale: { src: asset("media/videos/finale.mp4"), poster: asset("media/finale-poster.webp") },
+  videos: { src: asset("media/videos/fogos-fundo.mp4") },
 };
 
 export interface SbVideo {
@@ -105,7 +107,7 @@ export interface SbVideo {
   title: string;
   edition: string;
   poster: string;
-  /** Vídeo completo: arquivo .mp4 em /public/media/videos/ (ex: "/media/videos/quintal.mp4"). */
+  /** Vídeo completo: arquivo .mp4 em /public/media/videos/ (ex: asset("media/videos/quintal.mp4")). */
   src?: string;
   /** Alternativa: ID de vídeo do YouTube. */
   youtube?: string;
@@ -120,25 +122,25 @@ export const VIDEOS: SbVideo[] = [
     id: "v-pista-palco",
     title: "Pista e palco no pôr do sol",
     edition: "Sun, Bar & Love",
-    poster: "/media/poster-pista-palco.webp",
-    src: "/media/videos/pista-palco.mp4",
-    preview: "/media/videos/pista-palco.mp4",
+    poster: asset("media/poster-pista-palco.webp"),
+    src: asset("media/videos/pista-palco.mp4"),
+    preview: asset("media/videos/pista-palco.mp4"),
   },
   {
     id: "v-chegada",
     title: "Da entrada ao pôr do sol",
     edition: "Sun, Bar & Love",
-    poster: "/media/poster-chegada.webp",
-    src: "/media/videos/chegada.mp4",
-    preview: "/media/videos/chegada.mp4",
+    poster: asset("media/poster-chegada.webp"),
+    src: asset("media/videos/chegada.mp4"),
+    preview: asset("media/videos/chegada.mp4"),
   },
   {
     id: "v-fogos",
     title: "Fogos para fechar",
     edition: "Sun, Bar & Love",
-    poster: "/media/poster-fogos.webp",
-    src: "/media/videos/fogos.mp4",
-    preview: "/media/videos/fogos.mp4",
+    poster: asset("media/poster-fogos.webp"),
+    src: asset("media/videos/fogos.mp4"),
+    preview: asset("media/videos/fogos.mp4"),
   },
 ];
 
@@ -170,7 +172,7 @@ export const GALLERIES: Gallery[] = [
     photos: [
       {
         id: "p-selfie",
-        src: "/media/foto-selfie.webp",
+        src: asset("media/foto-selfie.webp"),
         alt: "Duas amigas tirando selfie na pista, com o sol de palco ao fundo",
         caption: "Selfie na pista, com o sol de palco ao fundo.",
         className: "col-span-2 row-span-2 md:col-span-1 md:row-span-1 md:[grid-area:1/1/4/3]",
@@ -178,35 +180,35 @@ export const GALLERIES: Gallery[] = [
       },
       {
         id: "p-risada",
-        src: "/media/foto-risada.webp",
+        src: asset("media/foto-risada.webp"),
         alt: "Detalhe das duas amigas sorrindo durante a selfie",
         caption: "Sorriso de quem chegou cedo para ver o pôr do sol.",
         className: "col-span-2 md:col-span-1 md:[grid-area:4/1/5/3]",
       },
       {
         id: "p-arco",
-        src: "/media/foto-arco.webp",
+        src: asset("media/foto-arco.webp"),
         alt: "Público chegando pela entrada com o letreiro Sun, Bar & Love ao pôr do sol",
         caption: "A chegada pelo letreiro, com o céu já alaranjado.",
         className: "md:[grid-area:1/3/3/4]",
       },
       {
         id: "p-palco",
-        src: "/media/foto-palco.webp",
+        src: asset("media/foto-palco.webp"),
         alt: "Detalhe do palco com um microfone gigante dentro de um sol",
         caption: "O microfone gigante dentro do sol, marca registrada do palco.",
         className: "md:[grid-area:1/4/4/5]",
       },
       {
         id: "p-cantor",
-        src: "/media/foto-cantor.webp",
+        src: asset("media/foto-cantor.webp"),
         alt: "Cantor no palco cercado pela banda, com o painel colorido de olhos e luas",
         caption: "O palco em plena tarde, com o painel de olhos e luas.",
         className: "md:[grid-area:3/3/5/4]",
       },
       {
         id: "p-sol",
-        src: "/media/foto-sol.webp",
+        src: asset("media/foto-sol.webp"),
         alt: "Sol de palco aceso na beira do Guaíba com o sol de verdade se pondo ao fundo",
         caption: "O sol de palco aceso, com o sol de verdade se pondo atrás.",
         className: "md:[grid-area:4/4/5/5]",
@@ -221,25 +223,25 @@ export const GALLERIES: Gallery[] = [
     photos: [
       {
         id: "q-flyer",
-        src: "/media/flyer-quintal.webp",
+        src: asset("media/flyer-quintal.webp"),
         alt: "Cartaz da edição no Quintal, 13 de setembro",
         caption: "Cartaz da edição no Quintal.",
       },
       {
         id: "q-selfie",
-        src: "/media/foto-quintal-selfie.webp",
+        src: asset("media/foto-quintal-selfie.webp"),
         alt: "Amigas fazendo selfie com o pôr do sol atrás, no Quintal",
         caption: "Selfie com o pôr do sol, no Quintal.",
       },
       {
         id: "q-palco",
-        src: "/media/foto-palco-amplo.webp",
+        src: asset("media/foto-palco-amplo.webp"),
         alt: "Pista lotada diante do palco, com o pôr do sol atrás da cúpula",
         caption: "Pista lotada diante do palco, com o pôr do sol atrás da cúpula.",
       },
       {
         id: "q-tendas",
-        src: "/media/foto-tendas.webp",
+        src: asset("media/foto-tendas.webp"),
         alt: "Tendas e pista vistas de cima, com o sol baixo sobre o Guaíba",
         caption: "As tendas vistas de cima, com o sol baixo sobre o Guaíba.",
       },
@@ -252,7 +254,7 @@ export const GALLERIES: Gallery[] = [
     photos: [
       {
         id: "r-flyer",
-        src: "/media/flyer-rio.webp",
+        src: asset("media/flyer-rio.webp"),
         alt: "Cartaz da edição Melhor Dia: From Rio com ingressos esgotados",
         caption: "Cartaz da edição From Rio, com ingressos esgotados.",
       },

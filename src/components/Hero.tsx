@@ -1,5 +1,6 @@
 import { motion, useReducedMotion, useScroll, useTransform } from "motion/react";
 import { ArrowDown } from "@phosphor-icons/react";
+import { asset } from "../asset";
 import { BG_VIDEOS, EVENTS } from "../content";
 import { eventDate } from "../lib";
 import { BackgroundVideo } from "./BackgroundVideo";
@@ -96,7 +97,7 @@ export function Hero() {
             transition={{ duration: 1, delay: 0.25, ease }}
           >
             <img
-              src="/media/foto-selfie.webp"
+              src={asset("media/foto-selfie.webp")}
               alt="Duas amigas tirando selfie na pista do Sun, Bar & Love"
               className="size-full object-cover"
               fetchPriority="high"

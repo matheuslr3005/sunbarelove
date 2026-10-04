@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "motion/react";
 import { List, X } from "@phosphor-icons/react";
+import { asset } from "../asset";
 import { EVENTS } from "../content";
 import { TicketButton } from "./TicketButton";
 
@@ -39,7 +40,7 @@ export function Nav() {
           className="flex h-14 w-full max-w-4xl items-center justify-between gap-2 rounded-full border border-cream/15 bg-night/60 py-2 pl-2 pr-2 shadow-[inset_0_1px_0_rgba(255,241,214,0.12),0_18px_50px_-20px_rgba(4,23,30,0.9)] backdrop-blur-xl"
         >
           <a href="#top" className="flex items-center gap-2.5 rounded-full pr-2" aria-label="Sun, Bar & Love, início">
-            <img src="/media/logo.webp" alt="" width={40} height={40} className="size-10 rounded-full" />
+            <img src={asset("media/logo.webp")} alt="" width={40} height={40} className="size-10 rounded-full" />
             <span className="font-display text-lg uppercase leading-none tracking-tight max-sm:hidden">Sun,Bar &amp; Love</span>
           </a>
 
