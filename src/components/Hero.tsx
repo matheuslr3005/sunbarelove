@@ -87,8 +87,8 @@ export function Hero() {
           </motion.div>
         </div>
 
-        <div className="relative mx-auto w-full max-w-[420px] lg:col-span-5 lg:max-w-none">
-          <div className="absolute left-1/2 top-[44%] w-[135%] -translate-x-1/2 -translate-y-1/2">
+        <div className="relative mx-auto mt-14 w-full max-w-[420px] lg:col-span-5 lg:mt-0 lg:max-w-none">
+          <div className="absolute left-1/2 top-[58%] w-[108%] -translate-x-1/2 -translate-y-1/2 lg:top-[44%] lg:w-[135%]">
             <Sun rotate={sunRotate} />
           </div>
 
