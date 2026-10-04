@@ -1,8 +1,10 @@
 import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "motion/react";
-import { List, X } from "@phosphor-icons/react";
+import { List, WhatsappLogo, X } from "@phosphor-icons/react";
 import { asset } from "../asset";
 import { EVENTS } from "../content";
+import { whatsappLink } from "../lib";
+import { track } from "../analytics";
 import { TicketButton } from "./TicketButton";
 
 const LINKS = [
@@ -32,6 +34,17 @@ export function Nav() {
     return () => io.disconnect();
   }, []);
 
+  // com o menu aberto no celular, a página atrás não rola
+  useEffect(() => {
+    if (!open) return;
+    const html = document.documentElement;
+    const previous = html.style.overflow;
+    html.style.overflow = "hidden";
+    return () => {
+      html.style.overflow = previous;
+    };
+  }, [open]);
+
   return (
     <>
       <header className="fixed inset-x-0 top-3 flex justify-center px-3" style={{ zIndex: "var(--z-nav)" }}>
@@ -41,7 +54,7 @@ export function Nav() {
         >
           <a href="#top" className="flex items-center gap-2.5 rounded-full pr-2" aria-label="Sun, Bar & Love, início">
             <img src={asset("media/logo.webp")} alt="" width={40} height={40} className="size-10 rounded-full" />
-            <span className="font-display text-lg uppercase leading-none tracking-tight max-sm:hidden">Sun,Bar &amp; Love</span>
+            <span className="font-display text-base uppercase leading-none tracking-tight sm:text-lg">Sun,Bar &amp; Love</span>
           </a>
 
           <ul className="hidden items-center gap-1 md:flex">
@@ -49,7 +62,7 @@ export function Nav() {
               <li key={l.id}>
                 <a
                   href={`#${l.id}`}
-                  className="relative block rounded-full px-4 py-2 text-sm font-medium text-cream/80 transition-colors hover:text-cream"
+                  className="relative block rounded-full px-4 py-2.5 text-sm font-medium text-cream/80 transition-colors hover:text-cream"
                 >
                   {active === l.id && (
                     <motion.span
@@ -65,13 +78,17 @@ export function Nav() {
           </ul>
 
           <div className="flex items-center gap-2">
-            {next && <TicketButton event={next} location="nav" size="sm" />}
+            {next && (
+              <div className="hidden md:block">
+                <TicketButton event={next} location="nav" size="sm" />
+              </div>
+            )}
             <button
               type="button"
               aria-label={open ? "Fechar menu" : "Abrir menu"}
               aria-expanded={open}
               onClick={() => setOpen((v) => !v)}
-              className="flex size-10 items-center justify-center rounded-full border border-cream/25 transition hover:bg-cream/10 md:hidden"
+              className="flex size-11 items-center justify-center rounded-full border border-cream/25 transition hover:bg-cream/10 md:hidden"
             >
               {open ? <X size={20} /> : <List size={20} />}
             </button>
@@ -101,6 +118,23 @@ export function Nav() {
                 {l.label}
               </motion.a>
             ))}
+            <motion.div
+              className="mt-8 flex flex-wrap items-center gap-3"
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.08 + LINKS.length * 0.07, duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+            >
+              {next && <TicketButton event={next} location="menu" />}
+              <a
+                href={whatsappLink("Oi! Vim pelo site do Sun, Bar & Love.")}
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={() => track("whatsapp_click", { location: "menu" })}
+                className="inline-flex h-12 items-center gap-2 whitespace-nowrap rounded-full border border-cream/45 px-6 font-semibold text-cream transition hover:border-cream hover:bg-cream/10 active:scale-[0.97]"
+              >
+                <WhatsappLogo size={20} weight="fill" /> WhatsApp
+              </a>
+            </motion.div>
           </motion.div>
         )}
       </AnimatePresence>

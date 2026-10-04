@@ -44,8 +44,8 @@ export function Hero() {
       {/* horizonte do pôr do sol */}
       <div className="pointer-events-none absolute inset-x-0 bottom-0 h-2/5 bg-[linear-gradient(to_top,rgba(255,106,43,0.7),rgba(240,40,110,0.3)_45%,transparent)]" />
 
-      <div className="relative mx-auto grid min-h-[100dvh] max-w-7xl grid-cols-1 items-center gap-8 px-5 pb-24 pt-24 md:grid-cols-12 md:px-8">
-        <div className="relative z-10 md:col-span-7">
+      <div className="relative mx-auto grid min-h-[100dvh] max-w-7xl grid-cols-1 items-center gap-8 px-5 pb-24 pt-24 lg:grid-cols-12 md:px-8">
+        <div className="relative z-10 lg:col-span-7">
           {date && (
             <motion.p
               className="mb-5 inline-flex rounded-full border border-cream/30 bg-night/50 px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.16em] text-sun backdrop-blur"
@@ -87,7 +87,7 @@ export function Hero() {
           </motion.div>
         </div>
 
-        <div className="relative mx-auto w-full max-w-[420px] md:col-span-5 md:max-w-none">
+        <div className="relative mx-auto w-full max-w-[420px] lg:col-span-5 lg:max-w-none">
           <div className="absolute left-1/2 top-[44%] w-[135%] -translate-x-1/2 -translate-y-1/2">
             <Sun rotate={sunRotate} />
           </div>
