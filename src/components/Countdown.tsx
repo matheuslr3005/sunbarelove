@@ -45,7 +45,7 @@ export function Countdown({ startsAt }: { startsAt: string }) {
           <div className="font-display text-4xl leading-none tabular-nums text-sun md:text-5xl">
             {String(c.v).padStart(2, "0")}
           </div>
-          <div className="mt-1.5 text-[11px] font-medium uppercase tracking-wider text-cream/70">{c.l}</div>
+          <div className="mt-1.5 text-xs font-medium uppercase tracking-wider text-cream/70">{c.l}</div>
         </div>
       ))}
     </div>

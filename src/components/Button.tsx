@@ -19,7 +19,8 @@ const base =
 export const buttonVariants = {
   primary:
     "bg-sun text-deep shadow-[0_12px_32px_-12px_rgba(255,106,43,0.9)] hover:bg-[#ffd24d] hover:shadow-[0_16px_40px_-10px_rgba(240,40,110,0.8)]",
-  ghost: "border border-cream/45 text-cream hover:border-cream hover:bg-cream/10",
+  ghost:
+    "border border-cream/45 text-cream hover:border-cream hover:bg-cream/10 max-md:bg-night/45 max-md:backdrop-blur-sm",
 };
 
 export function Button({ children, variant = "primary", href, onClick, icon, external, className = "", trackEvent }: Props) {

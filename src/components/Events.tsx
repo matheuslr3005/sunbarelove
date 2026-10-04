@@ -56,7 +56,9 @@ function UpcomingFeature({ event, onOpen }: { event: SbEvent; onOpen: (e: SbEven
   const date = eventDate(event);
   return (
     <div className="grid items-center gap-10 lg:grid-cols-[minmax(0,440px)_1fr] lg:gap-16">
-      <FlyerButton event={event} onOpen={() => onOpen(event)} />
+      <div className="w-full max-w-[440px] lg:max-w-none">
+        <FlyerButton event={event} onOpen={() => onOpen(event)} />
+      </div>
       <div className="grid gap-6">
         <div>
           <p className="text-sm font-semibold uppercase tracking-[0.16em] text-flame">{date.weekday}</p>
@@ -133,10 +135,10 @@ function EventModalBody({ event, onClose }: { event: SbEvent; onClose: () => voi
         layoutId={`flyer-${event.id}`}
         src={event.flyer}
         alt={`Cartaz: ${event.title}, ${event.venue}`}
-        className="aspect-[6/7] w-full object-cover md:aspect-auto md:h-full"
+        className="aspect-[6/7] w-full object-cover max-md:aspect-auto max-md:h-[30dvh] max-md:object-[50%_42%] md:aspect-auto md:h-full"
       />
       <div className="flex flex-col justify-center gap-6 p-6 md:p-10">
-        <div>
+        <div className="max-md:order-1">
           <p className="text-sm font-semibold uppercase tracking-[0.16em] text-flame">
             {upcoming ? "Próximo evento" : event.sale.status === "soldout" ? "Ingressos esgotados" : "Edição encerrada"}
           </p>
@@ -145,9 +147,9 @@ function EventModalBody({ event, onClose }: { event: SbEvent; onClose: () => voi
           </h3>
         </div>
 
-        <p className="max-w-prose leading-relaxed text-cream/85">{event.blurb}</p>
+        <p className="max-w-prose leading-relaxed text-cream/85 max-md:order-3">{event.blurb}</p>
 
-        <ul className="grid gap-3">
+        <ul className="grid gap-3 max-md:order-4">
           <li className="flex items-start gap-3">
             <CalendarBlank size={22} className="mt-0.5 shrink-0 text-sun" />
             <span>
@@ -165,14 +167,20 @@ function EventModalBody({ event, onClose }: { event: SbEvent; onClose: () => voi
         </ul>
 
         {upcoming && (
-          <div>
+          <div className="max-md:order-5">
             <SaleBadge sale={event.sale} />
           </div>
         )}
-        <Lineup names={event.lineup} />
-        {upcoming && event.startsAt && <Countdown startsAt={event.startsAt} />}
+        <div className="max-md:order-5">
+          <Lineup names={event.lineup} />
+        </div>
+        {upcoming && event.startsAt && (
+          <div className="max-md:order-5">
+            <Countdown startsAt={event.startsAt} />
+          </div>
+        )}
 
-        <div className="flex flex-wrap gap-3">
+        <div className="flex flex-wrap gap-2 md:gap-3 max-md:order-2">
           {upcoming ? (
             <>
               <TicketButton event={event} location="modal" />
@@ -180,12 +188,13 @@ function EventModalBody({ event, onClose }: { event: SbEvent; onClose: () => voi
                 variant="ghost"
                 href={mapsLink(event)}
                 external
+                className="max-md:px-4"
                 icon={<MapPin size={18} />}
                 trackEvent={["maps_click", { event_id: event.id }]}
               >
                 Como chegar
               </Button>
-              <Button variant="ghost" onClick={share} icon={copied ? <Check size={18} /> : <ShareNetwork size={18} />}>
+              <Button variant="ghost" onClick={share} className="max-md:px-4" icon={copied ? <Check size={18} /> : <ShareNetwork size={18} />}>
                 {copied ? "Link copiado" : "Compartilhar"}
               </Button>
             </>

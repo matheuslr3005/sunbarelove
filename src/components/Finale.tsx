@@ -62,7 +62,7 @@ export function Finale() {
               target="_blank"
               rel="noopener noreferrer"
               onClick={() => track("whatsapp_click", { location: "rodape" })}
-              className="flex items-center gap-2 hover:text-sun"
+              className="flex items-center gap-2 py-3 hover:text-sun"
             >
               <WhatsappLogo size={22} weight="fill" /> WhatsApp
             </a>

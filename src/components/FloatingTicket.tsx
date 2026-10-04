@@ -34,7 +34,7 @@ export function FloatingTicket() {
           exit={{ opacity: 0, scale: 0.7, y: 24 }}
           transition={{ type: "spring", stiffness: 380, damping: 26 }}
         >
-          <TicketButton event={next} location="flutuante" size="sm" />
+          <TicketButton event={next} location="flutuante" size="sm" className="max-md:h-11" />
         </motion.div>
       )}
     </AnimatePresence>
