@@ -1,0 +1,107 @@
+@import "tailwindcss";
+
+/*
+ * Sun, Bar & Love design tokens.
+ * Theme lock: one deliberate "sunset night" theme for the whole page.
+ * Shape lock: interactive elements are full pills, containers use --radius-card.
+ */
+@theme {
+  --font-display: "Bagel Fat One", system-ui, sans-serif;
+  --font-sans: "Outfit Variable", system-ui, sans-serif;
+
+  --color-deep: #04171e;
+  --color-night: #07232c;
+  --color-night-2: #0b3341;
+  --color-teal: #19a7c9;
+  --color-sun: #ffc21a;
+  --color-flame: #ff6a2b;
+  --color-rose: #f0286e;
+  --color-cream: #fff1d6;
+
+  --radius-card: 28px;
+
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* z-index scale */
+:root {
+  --z-nav: 40;
+  --z-progress: 50;
+  --z-modal: 60;
+}
+
+html {
+  scroll-behavior: smooth;
+  background: var(--color-night);
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-sans);
+  color: var(--color-cream);
+  background: var(--color-night);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+::selection {
+  background: var(--color-sun);
+  color: var(--color-deep);
+}
+
+:focus-visible {
+  outline: 3px solid var(--color-sun);
+  outline-offset: 3px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+/* Groovy 70s wordmark, built from the display font (not an image). */
+.wordmark {
+  font-family: var(--font-display);
+  text-transform: uppercase;
+  line-height: 0.92;
+  letter-spacing: -0.01em;
+  color: var(--color-cream);
+  -webkit-text-stroke: 0.06em var(--color-deep);
+  paint-order: stroke fill;
+  text-shadow:
+    0.04em 0.04em 0 var(--color-flame),
+    0.08em 0.08em 0 var(--color-flame),
+    0.12em 0.12em 0 var(--color-rose),
+    0.16em 0.16em 0 var(--color-rose);
+}
+
+/* Sponsor marquee, the only marquee on the page. */
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+.marquee-track {
+  display: flex;
+  width: max-content;
+  animation: marquee 38s linear infinite;
+}
+.marquee:hover .marquee-track {
+  animation-play-state: paused;
+}
+@media (prefers-reduced-motion: reduce) {
+  .marquee-track {
+    animation: none;
+  }
+}
+
+.hide-scrollbar {
+  scrollbar-width: none;
+}
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
