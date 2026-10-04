@@ -91,11 +91,14 @@ export const EVENTS: SbEvent[] = [
 ];
 
 /**
- * Vídeo de fundo do hero (horizontal, 8 a 15 segundos, sem som, em loop).
- * TODO: gravar/escolher o vídeo, salvar em public/media/videos/ e preencher.
- * Dica: mp4 H.264, 1280x720, até 4 MB.
+ * Vídeos de fundo (horizontais, sem som, em loop). Cada um é opcional.
+ * Dica para trocar: mp4 H.264, até 1280x720, 5 a 15 segundos, até 4 MB, em public/media/videos/.
  */
-export const HERO_VIDEO: { src: string; poster?: string } | undefined = undefined;
+export const BG_VIDEOS: Partial<Record<"hero" | "finale" | "videos", { src: string; poster?: string }>> = {
+  hero: { src: "/media/videos/hero.mp4", poster: "/media/hero-poster.webp" },
+  finale: { src: "/media/videos/finale.mp4", poster: "/media/finale-poster.webp" },
+  videos: { src: "/media/videos/fogos-fundo.mp4" },
+};
 
 export interface SbVideo {
   id: string;
@@ -110,26 +113,32 @@ export interface SbVideo {
   preview?: string;
 }
 
-// TODO: adicionar `src` (mp4) ou `youtube` em cada vídeo, e `preview` para o trecho do card.
-// Sem `src`/`youtube` o modal mostra "Vídeo em breve".
+// Cortes verticais (9:16) dos takes de drone. `src` abre no modal; `preview` toca no card ao passar o mouse.
+// TODO: confirmar a edição de cada vídeo e trocar o campo `edition`.
 export const VIDEOS: SbVideo[] = [
   {
-    id: "v-quintal",
-    title: "Tarde no Quintal",
-    edition: "Quintal, 13 de setembro",
-    poster: "/media/flyer-quintal.webp",
-  },
-  {
-    id: "v-selfie",
-    title: "Melhores momentos",
+    id: "v-pista-palco",
+    title: "Pista e palco no pôr do sol",
     edition: "Sun, Bar & Love",
-    poster: "/media/foto-selfie.webp",
+    poster: "/media/poster-pista-palco.webp",
+    src: "/media/videos/pista-palco.mp4",
+    preview: "/media/videos/pista-palco.mp4",
   },
   {
-    id: "v-rio",
-    title: "Melhor Dia: From Rio",
-    edition: "Edição esgotada",
-    poster: "/media/flyer-rio.webp",
+    id: "v-chegada",
+    title: "Da entrada ao pôr do sol",
+    edition: "Sun, Bar & Love",
+    poster: "/media/poster-chegada.webp",
+    src: "/media/videos/chegada.mp4",
+    preview: "/media/videos/chegada.mp4",
+  },
+  {
+    id: "v-fogos",
+    title: "Fogos para fechar",
+    edition: "Sun, Bar & Love",
+    poster: "/media/poster-fogos.webp",
+    src: "/media/videos/fogos.mp4",
+    preview: "/media/videos/fogos.mp4",
   },
 ];
 
@@ -151,7 +160,8 @@ export interface Gallery {
   photos: SbPhoto[];
 }
 
-// TODO: trocar por fotos reais de cada edição (public/media/) e acrescentar mais.
+// TODO: conferir a edição de cada foto e acrescentar mais (public/media/).
+// As fotos de drone vêm de quadros dos vídeos, então são menores que fotos originais.
 export const GALLERIES: Gallery[] = [
   {
     id: "destaques",
@@ -174,10 +184,10 @@ export const GALLERIES: Gallery[] = [
         className: "col-span-2 md:col-span-1 md:[grid-area:4/1/5/3]",
       },
       {
-        id: "p-quintal",
-        src: "/media/flyer-quintal.webp",
-        alt: "Cartaz da edição no Quintal, 13 de setembro",
-        caption: "Cartaz da edição no Quintal.",
+        id: "p-arco",
+        src: "/media/foto-arco.webp",
+        alt: "Público chegando pela entrada com o letreiro Sun, Bar & Love ao pôr do sol",
+        caption: "A chegada pelo letreiro, com o céu já alaranjado.",
         className: "md:[grid-area:1/3/3/4]",
       },
       {
@@ -188,19 +198,19 @@ export const GALLERIES: Gallery[] = [
         className: "md:[grid-area:1/4/4/5]",
       },
       {
-        id: "p-rio",
-        src: "/media/flyer-rio.webp",
-        alt: "Cartaz da edição Melhor Dia: From Rio com ingressos esgotados",
-        caption: "Cartaz da edição From Rio, com ingressos esgotados.",
+        id: "p-cantor",
+        src: "/media/foto-cantor.webp",
+        alt: "Cantor no palco cercado pela banda, com o painel colorido de olhos e luas",
+        caption: "O palco em plena tarde, com o painel de olhos e luas.",
         className: "md:[grid-area:3/3/5/4]",
       },
       {
-        id: "p-cenna",
-        src: "/media/flyer-cenna.webp",
-        alt: "Cartaz da edição no Cenna, sábado 10 de outubro às 17h",
-        caption: "Cartaz da próxima edição, no Cenna.",
+        id: "p-sol",
+        src: "/media/foto-sol.webp",
+        alt: "Sol de palco aceso na beira do Guaíba com o sol de verdade se pondo ao fundo",
+        caption: "O sol de palco aceso, com o sol de verdade se pondo atrás.",
         className: "md:[grid-area:4/4/5/5]",
-        position: "50% 62%",
+        position: "50% 50%",
       },
     ],
   },
@@ -220,6 +230,18 @@ export const GALLERIES: Gallery[] = [
         src: "/media/foto-quintal-selfie.webp",
         alt: "Amigas fazendo selfie com o pôr do sol atrás, no Quintal",
         caption: "Selfie com o pôr do sol, no Quintal.",
+      },
+      {
+        id: "q-palco",
+        src: "/media/foto-palco-amplo.webp",
+        alt: "Pista lotada diante do palco, com o pôr do sol atrás da cúpula",
+        caption: "Pista lotada diante do palco, com o pôr do sol atrás da cúpula.",
+      },
+      {
+        id: "q-tendas",
+        src: "/media/foto-tendas.webp",
+        alt: "Tendas e pista vistas de cima, com o sol baixo sobre o Guaíba",
+        caption: "As tendas vistas de cima, com o sol baixo sobre o Guaíba.",
       },
     ],
   },

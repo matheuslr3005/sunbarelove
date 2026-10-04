@@ -20,8 +20,10 @@ Tudo fica em `src/content.ts`.
 - **Eventos** (`EVENTS`): `status: "upcoming"` aparece na aba "Próximos" com contagem regressiva; `"past"` aparece em "Já rolou". Preencha `ticketUrl` com o link da página de venda. Enquanto estiver vazio, o botão "Ingressos" abre o WhatsApp.
 - **Lotes** (`sale` de cada evento): `{ status: "onsale" }` mostra "Ingressos à venda". Com `lot: "2º lote"` mostra "2º lote à venda", e com `lotEndsAt: "2026-10-09T12:00:00-03:00"` mostra também "Vira em 1d 04h". `status: "soldout"` mostra "Esgotado" e troca o botão por "Esgotado". Não há preço no site, de propósito.
 - **Line-up** (`lineup` do evento): lista de nomes. Vazia, o bloco não aparece.
-- **Vídeo de fundo do hero** (`HERO_VIDEO`): coloque um mp4 horizontal (H.264, 1280x720, 8 a 15 s, sem som, até 4 MB) em `public/media/videos/` e preencha `src` (e `poster`). Não toca com "reduzir movimento" nem com economia de dados.
-- **Vídeos** (`VIDEOS`): `src` (mp4 em `public/media/videos/`) ou `youtube` (ID) para o vídeo completo, e `preview` (mp4 vertical curto e mudo) para o trecho que toca ao passar o mouse no card. Sem `src`/`youtube`, o modal mostra "Vídeo em breve". Use um `poster` vertical (9:16).
+- **Vídeos de fundo** (`BG_VIDEOS`): `hero`, `finale` e `videos` (atrás do título da seção de vídeos). Cada um é um mp4 horizontal, sem som e em loop (H.264, até 1280x720, 5 a 15 s, até 4 MB) em `public/media/videos/`. Só tocam enquanto estão na tela, e viram imagem parada com "reduzir movimento" ou economia de dados. Remova a chave para desligar.
+- **Vídeos** (`VIDEOS`): `src` (mp4 vertical em `public/media/videos/`) ou `youtube` (ID) para o vídeo completo, e `preview` (mp4 vertical curto e mudo) para o trecho que toca ao passar o mouse no card. Sem `src`/`youtube`, o modal mostra "Vídeo em breve". Use um `poster` vertical (9:16).
+
+  Os vídeos atuais são cortes de gravações de tela de takes de drone. Os originais, sem gravação de tela, dariam mais qualidade (principalmente os horizontais).
 - **Fotos** (`GALLERIES`): cada edição é uma aba. `layout: "bento"` exige exatamente 6 fotos com `className`; `"masonry"` aceita qualquer quantidade. Imagens em `public/media/`.
 - **Números** (`STATS`): o público (+2.500) é um valor de exemplo. Troque pelo real antes de divulgar.
 - **Dúvidas** (`FAQ`): revise as respostas com a equipe (idade, entrada, lotes).

@@ -1,7 +1,8 @@
 import { motion, useReducedMotion, useScroll, useTransform } from "motion/react";
 import { ArrowDown } from "@phosphor-icons/react";
-import { EVENTS, HERO_VIDEO } from "../content";
+import { BG_VIDEOS, EVENTS } from "../content";
 import { eventDate } from "../lib";
+import { BackgroundVideo } from "./BackgroundVideo";
 import { Button } from "./Button";
 import { Sun } from "./Sun";
 import { TicketButton } from "./TicketButton";
@@ -11,32 +12,15 @@ const next = EVENTS.find((e) => e.status === "upcoming");
 
 const ease = [0.16, 1, 0.3, 1] as const;
 
-/** Vídeo de fundo: respeita movimento reduzido e economia de dados. */
+/** Vídeo de fundo do hero, com escurecimento para o texto ficar legível. */
 function HeroVideo() {
-  const reduce = useReducedMotion();
-  if (!HERO_VIDEO) return null;
-  const saveData = (navigator as Navigator & { connection?: { saveData?: boolean } }).connection?.saveData;
-  const still = reduce || saveData;
-
+  const bg = BG_VIDEOS.hero;
+  if (!bg) return null;
   return (
     <>
-      {still ? (
-        HERO_VIDEO.poster && <img src={HERO_VIDEO.poster} alt="" className="absolute inset-0 size-full object-cover" />
-      ) : (
-        <video
-          className="absolute inset-0 size-full object-cover"
-          src={HERO_VIDEO.src}
-          poster={HERO_VIDEO.poster}
-          autoPlay
-          muted
-          loop
-          playsInline
-          preload="metadata"
-          aria-hidden="true"
-        />
-      )}
-      <div className="absolute inset-0 bg-[linear-gradient(to_bottom,rgba(7,35,44,0.82),rgba(7,35,44,0.55)_50%,rgba(7,35,44,0.88))]" />
-      <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(7,35,44,0.7),transparent_65%)]" />
+      <BackgroundVideo src={bg.src} poster={bg.poster} className="absolute inset-0 size-full" />
+      <div className="absolute inset-0 bg-[linear-gradient(to_bottom,rgba(7,35,44,0.62),rgba(7,35,44,0.18)_50%,rgba(7,35,44,0.82))]" />
+      <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(7,35,44,0.62),transparent_62%)]" />
     </>
   );
 }

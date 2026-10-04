@@ -1,7 +1,8 @@
 import { useCallback, useRef, useState } from "react";
 import { ArrowLeft, ArrowRight, Play, Sun } from "@phosphor-icons/react";
 import { track } from "../analytics";
-import { VIDEOS, type SbVideo } from "../content";
+import { BG_VIDEOS, VIDEOS, type SbVideo } from "../content";
+import { BackgroundVideo } from "./BackgroundVideo";
 import { Modal } from "./Modal";
 import { Reveal } from "./Reveal";
 
@@ -106,7 +107,14 @@ export function Videos() {
 
   return (
     <section id="videos" className="relative overflow-clip bg-deep py-24 md:py-36">
-      <div className="mx-auto max-w-6xl px-5 md:px-8">
+      {BG_VIDEOS.videos && (
+        <BackgroundVideo
+          src={BG_VIDEOS.videos.src}
+          poster={BG_VIDEOS.videos.poster}
+          className="absolute inset-x-0 top-0 h-[560px] w-full opacity-30 [mask-image:linear-gradient(to_bottom,black_15%,transparent_85%)]"
+        />
+      )}
+      <div className="relative mx-auto max-w-6xl px-5 md:px-8">
         <Reveal>
           <p className="mb-4 text-sm font-semibold uppercase tracking-[0.16em] text-teal">Edições passadas</p>
           <h2 className="font-display text-[clamp(2.8rem,8vw,6.5rem)] uppercase leading-[0.95] tracking-tight text-balance">
@@ -183,7 +191,7 @@ export function Videos() {
         </div>
       </div>
 
-      <Modal open={!!playing} onClose={close} label={playing?.title ?? "Vídeo"} panelClass="max-w-md md:max-w-xl">
+      <Modal open={!!playing} onClose={close} label={playing?.title ?? "Vídeo"} panelClass={playing?.youtube ? "max-w-3xl" : "max-w-[min(92vw,460px)]"}>
         {playing && <VideoPlayer video={playing} />}
       </Modal>
     </section>

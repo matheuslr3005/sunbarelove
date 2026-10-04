@@ -1,9 +1,10 @@
 import { useRef } from "react";
 import { motion, useReducedMotion, useScroll, useTransform } from "motion/react";
 import { InstagramLogo, WhatsappLogo } from "@phosphor-icons/react";
-import { EVENTS, SITE } from "../content";
+import { BG_VIDEOS, EVENTS, SITE } from "../content";
 import { track } from "../analytics";
 import { whatsappLink } from "../lib";
+import { BackgroundVideo } from "./BackgroundVideo";
 import { Sun } from "./Sun";
 import { TicketButton } from "./TicketButton";
 
@@ -18,6 +19,13 @@ export function Finale() {
 
   return (
     <footer ref={ref} id="fim" className="relative overflow-clip bg-[linear-gradient(to_bottom,#07232c,#04171e)]">
+      {BG_VIDEOS.finale && (
+        <BackgroundVideo
+          src={BG_VIDEOS.finale.src}
+          poster={BG_VIDEOS.finale.poster}
+          className="absolute inset-0 size-full opacity-60"
+        />
+      )}
       <div className="relative grid min-h-[min(150vw,900px)] place-items-center px-5 py-16 md:px-8">
         <motion.div
           className="pointer-events-none absolute left-1/2 top-1/2 w-[min(150vw,860px)] -translate-x-1/2 -translate-y-1/2"
@@ -27,7 +35,7 @@ export function Finale() {
             <Sun />
           </div>
         </motion.div>
-        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_55%,rgba(4,23,30,0.85)_100%)]" />
+        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_55%,rgba(4,23,30,0.8)_100%)]" />
 
         <div className="relative flex flex-col items-center text-center">
           <h2 className="wordmark text-[clamp(2.3rem,6vw,5rem)] leading-[1.3]">
