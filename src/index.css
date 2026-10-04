@@ -17,6 +17,7 @@
   --color-flame: #ff6a2b;
   --color-rose: #f0286e;
   --color-cream: #fff1d6;
+  --color-paper: #fffaf0;
 
   --radius-card: 28px;
 
@@ -117,5 +118,9 @@ body {
 @media (prefers-reduced-motion: no-preference) {
   .sun-cursor {
     animation: sun-spin 9s linear infinite;
+  }
+  /* Sol grande do final: o mesmo giro contínuo do cursor, mais lento por causa do tamanho. */
+  .sun-spin {
+    animation: sun-spin 20s linear infinite;
   }
 }
