@@ -71,11 +71,11 @@ export function Hero() {
               animate={revealed ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
             transition={{ duration: 0.8, delay: 0.35, ease }}
           >
-            Uma festa para ver o sol ir embora dançando, com quem você ama. Em Porto Alegre.
+            Uma festa para ver o sol ir embora dançando, com quem você ama.
           </motion.p>
 
           <motion.div
-            className="mt-8 flex flex-wrap items-center gap-3"
+            className="mt-5 flex flex-wrap items-center gap-3"
             initial={{ opacity: 0, y: 20 }}
               animate={revealed ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
             transition={{ duration: 0.8, delay: 0.5, ease }}
@@ -87,8 +87,8 @@ export function Hero() {
           </motion.div>
         </div>
 
-        <div className="relative mx-auto mt-14 w-full max-w-[420px] lg:col-span-5 lg:mt-0 lg:max-w-none">
-          <div className="absolute left-1/2 top-[58%] w-[108%] -translate-x-1/2 -translate-y-1/2 lg:top-[44%] lg:w-[135%]">
+        <div className="relative mx-auto mt-12 w-full max-w-[420px] lg:col-span-5 lg:mt-0 lg:max-w-none">
+          <div className="absolute left-1/2 top-[44%] w-[135%] -translate-x-1/2 -translate-y-1/2">
             <Sun rotate={sunRotate} />
           </div>
 
