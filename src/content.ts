@@ -262,6 +262,16 @@ export const GALLERIES: Gallery[] = [
   },
 ];
 
+export type ShopColor = "azul" | "laranja" | "branco" | "preto";
+
+/** Cor da peça e do fundo do card (o fundo muda junto com a cor escolhida). */
+export const SHOP_COLORS: Record<ShopColor, { label: string; garment: string; backdrop: string }> = {
+  azul: { label: "Azul", garment: "#19a7c9", backdrop: "#fff1d6" },
+  laranja: { label: "Laranja", garment: "#ff6a2b", backdrop: "#0b3341" },
+  branco: { label: "Branco", garment: "#fffaf0", backdrop: "#f0286e" },
+  preto: { label: "Preto", garment: "#0b0f12", backdrop: "#ffc21a" },
+};
+
 export interface SbProduct {
   id: string;
   name: string;
@@ -269,24 +279,26 @@ export interface SbProduct {
   price?: string;
   /** Link do produto na loja. Vazio = usa SHOP.url, e se esse também estiver vazio, abre o WhatsApp. */
   url?: string;
-  /** Foto do produto (public/media/). Sem foto, o card mostra o desenho do tipo de peça. */
-  image?: string;
   kind: "hoodie" | "tshirt" | "glasses" | "cap";
-  color: "rose" | "flame" | "sun" | "teal";
+  /** Cores disponíveis, na ordem em que aparecem. */
+  colors: ShopColor[];
+  /** Foto por cor (public/media/). Sem foto, o card mostra um desenho da peça na cor escolhida. */
+  images?: Partial<Record<ShopColor, string>>;
 }
 
 export const SHOP = {
-  // TODO: link da loja da marca (Nuvemshop, Shopify, Mercado Livre, Instagram Shop etc.).
+  // TODO: link da loja da marca (Shopify, quando existir).
   url: "",
 };
 
-// TODO: trocar pelos produtos reais: nome, preço, link e foto de cada peça.
+// TODO: trocar pelos produtos reais: preço, link e foto de cada peça e cor.
 // Enquanto não houver foto, cada card mostra um desenho da peça nas cores da marca.
+const ALL_COLORS: ShopColor[] = ["azul", "laranja", "branco", "preto"];
 export const PRODUCTS: SbProduct[] = [
-  { id: "moletom", name: "Moletom", kind: "hoodie", color: "rose" },
-  { id: "camiseta", name: "Camiseta", kind: "tshirt", color: "teal" },
-  { id: "oculos", name: "Óculos", kind: "glasses", color: "sun" },
-  { id: "chapeu", name: "Chapéu", kind: "cap", color: "flame" },
+  { id: "moletom", name: "Moletom", kind: "hoodie", colors: ALL_COLORS },
+  { id: "bone", name: "Boné", kind: "cap", colors: ALL_COLORS },
+  { id: "camiseta", name: "Camiseta", kind: "tshirt", colors: ALL_COLORS },
+  { id: "oculos", name: "Óculos", kind: "glasses", colors: ALL_COLORS },
 ];
 
 export const SPONSORS = [
