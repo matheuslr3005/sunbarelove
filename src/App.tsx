@@ -11,6 +11,7 @@ import { Finale } from "./components/Finale";
 import { Intro, IntroProvider } from "./components/Intro";
 import { Proof } from "./components/Proof";
 import { Faq } from "./components/Faq";
+import { Shop } from "./components/Shop";
 import { FloatingTicket } from "./components/FloatingTicket";
 import { SunCursor } from "./components/SunCursor";
 
@@ -44,6 +45,7 @@ export default function App() {
           <Events />
           <Videos />
           <Gallery />
+          <Shop />
           <Faq />
         </main>
         <Finale />

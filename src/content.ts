@@ -262,6 +262,33 @@ export const GALLERIES: Gallery[] = [
   },
 ];
 
+export interface SbProduct {
+  id: string;
+  name: string;
+  /** Preço para exibir, ex: "R$ 189". Vazio = não mostra preço. */
+  price?: string;
+  /** Link do produto na loja. Vazio = usa SHOP.url, e se esse também estiver vazio, abre o WhatsApp. */
+  url?: string;
+  /** Foto do produto (public/media/). Sem foto, o card mostra o desenho do tipo de peça. */
+  image?: string;
+  kind: "hoodie" | "tshirt" | "glasses" | "cap";
+  color: "rose" | "flame" | "sun" | "teal";
+}
+
+export const SHOP = {
+  // TODO: link da loja da marca (Nuvemshop, Shopify, Mercado Livre, Instagram Shop etc.).
+  url: "",
+};
+
+// TODO: trocar pelos produtos reais: nome, preço, link e foto de cada peça.
+// Enquanto não houver foto, cada card mostra um desenho da peça nas cores da marca.
+export const PRODUCTS: SbProduct[] = [
+  { id: "moletom", name: "Moletom", kind: "hoodie", color: "rose" },
+  { id: "camiseta", name: "Camiseta", kind: "tshirt", color: "teal" },
+  { id: "oculos", name: "Óculos", kind: "glasses", color: "sun" },
+  { id: "chapeu", name: "Chapéu", kind: "cap", color: "flame" },
+];
+
 export const SPONSORS = [
   "Aperol Spritz",
   "Bar Mate",
