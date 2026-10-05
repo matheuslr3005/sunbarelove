@@ -8,63 +8,121 @@ import {
 } from "motion/react";
 import { ArrowLeft, ArrowRight, ArrowUpRight, BaseballCap, Hoodie, Storefront, Sunglasses, TShirt } from "@phosphor-icons/react";
 import { track } from "../analytics";
-import { PRODUCTS, SHOP, type SbProduct } from "../content";
+import { PRODUCTS, SHOP, SHOP_COLORS, type SbProduct, type ShopColor } from "../content";
 import { starClip, whatsappLink } from "../lib";
 import { Reveal } from "./Reveal";
+import { Sun } from "./Sun";
 
 const KIND_ICON = { hoodie: Hoodie, tshirt: TShirt, glasses: Sunglasses, cap: BaseballCap } as const;
 
-/** Fundo e cor do desenho de cada peça, todos da paleta da marca. */
-const TONES = {
-  rose: "bg-rose text-cream",
-  teal: "bg-teal text-deep",
-  sun: "bg-sun text-deep",
-  flame: "bg-flame text-deep",
-} as const;
+/** Onde fica o sol da marca estampado em cada peça (porcentagem do card). Óculos não tem estampa. */
+const EMBLEM: Record<SbProduct["kind"], { top: number; width: number } | null> = {
+  hoodie: { top: 50, width: 17 },
+  tshirt: { top: 46, width: 17 },
+  cap: { top: 42, width: 12 },
+  glasses: null,
+};
 
 const RAYS = starClip(16, 44);
 const SPEED = 38; // pixels por segundo
 const GAP = 20;
 
-function productHref(p: SbProduct): string {
-  return p.url || SHOP.url || whatsappLink(`Oi! Quero comprar: ${p.name} do Sun, Bar & Love.`);
+function productHref(p: SbProduct, color: ShopColor): string {
+  return (
+    p.url ||
+    SHOP.url ||
+    whatsappLink(`Oi! Quero comprar: ${p.name} ${SHOP_COLORS[color].label.toLowerCase()} do Sun, Bar & Love.`)
+  );
 }
 
 function ProductCard({ product, hidden }: { product: SbProduct; hidden?: boolean }) {
+  const [color, setColor] = useState<ShopColor>(product.colors[0]);
+  const tone = SHOP_COLORS[color];
   const Icon = KIND_ICON[product.kind];
+  const emblem = EMBLEM[product.kind];
+  const photo = product.images?.[color];
+  const href = productHref(product, color);
+  const buy = () => track("shop_click", { product_id: product.id, color });
+
   return (
-    <a
-      href={productHref(product)}
-      target="_blank"
-      rel="noopener noreferrer"
-      draggable={false}
-      tabIndex={hidden ? -1 : undefined}
-      onClick={() => track("shop_click", { product_id: product.id })}
-      className="group block w-[min(68vw,264px)] shrink-0 select-none"
-      aria-label={`Comprar: ${product.name}`}
-    >
-      <div
-        className={`relative aspect-[4/5] overflow-hidden rounded-card transition-transform duration-500 ease-out-expo group-hover:-translate-y-1.5 ${TONES[product.color]}`}
+    <div data-product-card className="w-[min(68vw,264px)] shrink-0 select-none">
+      <a
+        href={href}
+        target="_blank"
+        rel="noopener noreferrer"
+        draggable={false}
+        tabIndex={hidden ? -1 : undefined}
+        onClick={buy}
+        aria-label={`Comprar: ${product.name} ${tone.label.toLowerCase()}`}
+        className="group block"
       >
-        {product.image ? (
-          <img src={product.image} alt="" draggable={false} loading="lazy" className="size-full object-cover" />
-        ) : (
-          <>
-            <div className="absolute inset-[8%] bg-current opacity-15" style={{ clipPath: RAYS }} />
-            <Icon className="absolute left-1/2 top-1/2 size-[46%] -translate-x-1/2 -translate-y-1/2" weight="duotone" />
-          </>
-        )}
+        <div
+          className="relative aspect-[4/5] overflow-hidden rounded-card transition-[background-color,transform] duration-500 ease-out-expo group-hover:-translate-y-1.5"
+          style={{ backgroundColor: tone.backdrop }}
+        >
+          {photo ? (
+            <img src={photo} alt="" draggable={false} loading="lazy" className="size-full object-cover" />
+          ) : (
+            <>
+              <div className="absolute inset-[9%] bg-white/20" style={{ clipPath: RAYS }} />
+              <Icon
+                className="absolute left-1/2 top-1/2 size-[60%] -translate-x-1/2 -translate-y-1/2 drop-shadow-[0_16px_18px_rgba(4,23,30,0.3)] transition-colors duration-500"
+                weight="fill"
+                style={{ color: tone.garment }}
+              />
+              {emblem && (
+                <div
+                  className="absolute left-1/2 -translate-x-1/2 -translate-y-1/2"
+                  style={{ top: `${emblem.top}%`, width: `${emblem.width}%` }}
+                  aria-hidden="true"
+                >
+                  <Sun />
+                </div>
+              )}
+            </>
+          )}
+        </div>
+      </a>
+
+      <div className="mt-3 flex items-center gap-1" role="group" aria-label={`Cor de ${product.name}`}>
+        {product.colors.map((c) => (
+          <button
+            key={c}
+            type="button"
+            tabIndex={hidden ? -1 : undefined}
+            onClick={() => setColor(c)}
+            aria-pressed={c === color}
+            aria-label={`Cor ${SHOP_COLORS[c].label.toLowerCase()}`}
+            className="flex size-10 items-center justify-center rounded-full"
+          >
+            <span
+              className={`block size-6 rounded-full border transition-transform duration-300 ${
+                c === color ? "scale-110 border-sun ring-2 ring-sun/70 ring-offset-2 ring-offset-night" : "border-cream/40"
+              }`}
+              style={{ backgroundColor: SHOP_COLORS[c].garment }}
+            />
+          </button>
+        ))}
       </div>
-      <div className="mt-4 flex items-center justify-between gap-3">
+
+      <div className="mt-2 flex items-center justify-between gap-3">
         <div>
           <h3 className="font-display text-xl uppercase leading-tight">{product.name}</h3>
           {product.price && <p className="mt-0.5 text-cream/75">{product.price}</p>}
         </div>
-        <span className="flex h-10 shrink-0 items-center gap-1.5 rounded-full bg-sun px-4 text-sm font-semibold text-deep transition group-hover:bg-[#ffd24d]">
+        <a
+          href={href}
+          target="_blank"
+          rel="noopener noreferrer"
+          draggable={false}
+          tabIndex={hidden ? -1 : undefined}
+          onClick={buy}
+          className="flex h-10 shrink-0 items-center gap-1.5 rounded-full bg-sun px-4 text-sm font-semibold text-deep transition hover:bg-[#ffd24d] active:scale-[0.97]"
+        >
           Comprar <ArrowUpRight size={16} />
-        </span>
+        </a>
       </div>
-    </a>
+    </div>
   );
 }
 
@@ -121,7 +179,7 @@ function Conveyor() {
   const onFocus = (e: React.FocusEvent<HTMLDivElement>) => {
     paused.current = true;
     const view = viewport.current;
-    const card = (e.target as HTMLElement).closest("a");
+    const card = (e.target as HTMLElement).closest("[data-product-card]");
     if (!view || !card) return;
     const v = view.getBoundingClientRect();
     const c = card.getBoundingClientRect();
@@ -165,7 +223,6 @@ function Conveyor() {
               className="flex shrink-0"
               style={{ gap: GAP, paddingRight: GAP }}
               aria-hidden={c > 0 || undefined}
-              {...(c > 0 ? { inert: true } : {})}
             >
               {PRODUCTS.map((p) => (
                 <ProductCard key={p.id} product={p} hidden={c > 0} />
@@ -177,7 +234,7 @@ function Conveyor() {
 
       <div className="mx-auto mt-8 flex max-w-6xl items-center justify-between gap-4 px-5 md:px-8">
         <ShopButton />
-        <div className="flex gap-2">
+        <div className="flex gap-2 max-md:hidden">
           <button
             type="button"
             onClick={() => step(-1)}
@@ -242,7 +299,7 @@ export function Shop() {
             Vista o <span className="text-sun">sol</span>
           </h2>
           <p className="mt-5 max-w-md text-lg leading-relaxed text-cream/85">
-            Moletom, camiseta, óculos e chapéu da festa para levar o pôr do sol com você.
+            Moletom, boné, camiseta e óculos da festa, em quatro cores, para levar o pôr do sol com você.
           </p>
         </Reveal>
       </div>

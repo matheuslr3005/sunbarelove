@@ -27,7 +27,7 @@ Tudo fica em `src/content.ts`.
 - **Fotos** (`GALLERIES`): cada edição é uma aba. `layout: "bento"` exige exatamente 6 fotos com `className`; `"masonry"` aceita qualquer quantidade. Imagens em `public/media/`.
 - **Números** (`STATS`): o público (+2.500) é um valor de exemplo. Troque pelo real antes de divulgar.
 - **Dúvidas** (`FAQ`): revise as respostas com a equipe (idade, entrada, lotes).
-- **Loja** (`PRODUCTS` e `SHOP`): a esteira de produtos. Cada produto tem `name`, `kind` (moletom, camiseta, óculos ou boné), `color` e, quando houver, `price`, `url` (link do produto) e `image` (foto em `public/media/`). Sem foto, o card mostra um desenho da peça. Sem `url`, usa `SHOP.url` (link da loja), e sem esse também abre o WhatsApp. Para trocar o sentido da esteira, mude o sinal em `Shop.tsx` (`next += ...`).
+- **Loja** (`PRODUCTS`, `SHOP_COLORS` e `SHOP`): a esteira de produtos. Cada produto tem `name`, `kind` (moletom, boné, camiseta ou óculos), `colors` (azul, laranja, branco, preto) e, quando houver, `price`, `url` (link do produto) e `images` (uma foto por cor, em `public/media/`). Sem foto, o card mostra um desenho da peça na cor escolhida. Sem `url`, usa `SHOP.url` (link da loja, a Shopify quando existir), e sem esse também abre o WhatsApp com o nome do produto e a cor. Para trocar o sentido da esteira, mude o sinal em `Shop.tsx` (`next += ...`).
 - **Parceiros** (`SPONSORS`): textos da faixa amarela. Para usar logos, troque o conteúdo de `src/components/Marquee.tsx`.
 - **Contato** (`SITE`): WhatsApp, link do Instagram e ID do Google Analytics.
 
