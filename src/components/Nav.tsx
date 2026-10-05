@@ -11,6 +11,7 @@ const LINKS = [
   { id: "eventos", label: "Eventos" },
   { id: "videos", label: "Vídeos" },
   { id: "fotos", label: "Fotos" },
+  { id: "loja", label: "Loja" },
   { id: "duvidas", label: "Dúvidas" },
 ];
 

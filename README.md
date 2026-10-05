@@ -27,6 +27,7 @@ Tudo fica em `src/content.ts`.
 - **Fotos** (`GALLERIES`): cada edição é uma aba. `layout: "bento"` exige exatamente 6 fotos com `className`; `"masonry"` aceita qualquer quantidade. Imagens em `public/media/`.
 - **Números** (`STATS`): o público (+2.500) é um valor de exemplo. Troque pelo real antes de divulgar.
 - **Dúvidas** (`FAQ`): revise as respostas com a equipe (idade, entrada, lotes).
+- **Loja** (`PRODUCTS` e `SHOP`): a esteira de produtos. Cada produto tem `name`, `kind` (moletom, camiseta, óculos ou boné), `color` e, quando houver, `price`, `url` (link do produto) e `image` (foto em `public/media/`). Sem foto, o card mostra um desenho da peça. Sem `url`, usa `SHOP.url` (link da loja), e sem esse também abre o WhatsApp. Para trocar o sentido da esteira, mude o sinal em `Shop.tsx` (`next += ...`).
 - **Parceiros** (`SPONSORS`): textos da faixa amarela. Para usar logos, troque o conteúdo de `src/components/Marquee.tsx`.
 - **Contato** (`SITE`): WhatsApp, link do Instagram e ID do Google Analytics.
 
@@ -42,6 +43,7 @@ Os cliques importantes são enviados como eventos (`src/analytics.ts`):
 | `video_play` | abrir um vídeo | `video_id` |
 | `gallery_open` | ampliar uma foto | `gallery`, `photo_id` |
 | `faq_open` | abrir uma pergunta | `question` |
+| `shop_click`, `shop_all_click` | clique em um produto, ou em Ver a loja | `product_id` |
 | `tab_change` | trocar de aba | `area`, `tab` |
 
 Para ver os números, preencha `SITE.analyticsId` com o ID do Google Analytics 4 (`G-...`). Sem ele, os eventos vão só para o `dataLayer` (prontos para o Google Tag Manager). Quando `ticketUrl` estiver preenchido, o link de venda recebe `utm_source=site`, `utm_medium=botao`, `utm_campaign=<id do evento>` e `utm_content=<botão>`, para a plataforma de vendas mostrar de onde veio cada compra.
@@ -52,7 +54,7 @@ Para ver os números, preencha `SITE.analyticsId` com o ID do Google Analytics 4
 src/
   content.ts          textos, eventos, vídeos, fotos
   analytics.ts        rastreamento de cliques
-  components/         Hero, Marquee, Manifesto, Proof, Events, Videos, Gallery, Faq, Finale...
+  components/         Hero, Marquee, Manifesto, Proof, Events, Videos, Gallery, Shop, Faq, Finale...
   index.css           tokens da marca (cores, fontes) e wordmark
 public/media/         logo, cartazes e fotos
 ```
