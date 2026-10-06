@@ -99,8 +99,8 @@ export function Hero() {
             transition={{ duration: 1, delay: 0.25, ease }}
           >
             <img
-              src={asset("media/foto-selfie.webp")}
-              alt="Duas amigas tirando selfie na pista do Sun, Bar & Love"
+              src={asset("media/foto-copos.webp")}
+              alt="Dois copos azuis da festa brindando com respingo, com o pôr do sol ao fundo"
               className="size-full object-cover"
               fetchPriority="high"
             />

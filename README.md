@@ -24,6 +24,7 @@ Tudo fica em `src/content.ts`.
 - **Vídeos** (`VIDEOS`): `src` (mp4 vertical em `public/media/videos/`) ou `youtube` (ID) para o vídeo completo, e `preview` (mp4 vertical curto e mudo) para o trecho que toca ao passar o mouse no card. Sem `src`/`youtube`, o modal mostra "Vídeo em breve". Use um `poster` vertical (9:16).
 
   Os vídeos atuais são cortes de gravações de tela de takes de drone. Os originais, sem gravação de tela, dariam mais qualidade (principalmente os horizontais).
+- **Arquivos originais da marca** em `public/media/`: `logo-neon.webp` (logo neon com fundo transparente, ainda não usado no site) e `fundo-nuvens.webp` (fundo azul com nuvens e moldura, ainda não usado).
 - **Fotos** (`GALLERIES`): cada edição é uma aba. `layout: "bento"` exige exatamente 6 fotos com `className`; `"masonry"` aceita qualquer quantidade. Imagens em `public/media/`.
 - **Números** (`STATS`): o público (+2.500) é um valor de exemplo. Troque pelo real antes de divulgar.
 - **Dúvidas** (`FAQ`): revise as respostas com a equipe (idade, entrada, lotes).
