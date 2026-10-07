@@ -20,9 +20,15 @@ function HeroVideo() {
   if (!bg) return null;
   return (
     <>
-      <BackgroundVideo src={bg.src} poster={bg.poster} className="absolute inset-0 size-full" />
-      <div className="absolute inset-0 bg-[linear-gradient(to_bottom,rgba(7,35,44,0.62),rgba(7,35,44,0.18)_50%,rgba(7,35,44,0.82))]" />
-      <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(7,35,44,0.62),transparent_62%)]" />
+      <BackgroundVideo
+        src={bg.src}
+        poster={bg.poster}
+        mobileSrc={bg.mobileSrc}
+        mobilePoster={bg.mobilePoster}
+        className="absolute inset-0 size-full"
+      />
+      <div className="absolute inset-0 bg-[linear-gradient(to_bottom,rgba(7,35,44,0.5),rgba(7,35,44,0.05)_45%,rgba(7,35,44,0.7))]" />
+      <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(7,35,44,0.55),transparent_58%)]" />
     </>
   );
 }
