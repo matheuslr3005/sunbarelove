@@ -25,7 +25,7 @@ export function Band() {
             Agora tem <span className="text-rose">banda</span>
           </h2>
           <p className="mt-5 max-w-md text-lg leading-relaxed text-cream/85">
-            Pagode com o clima do Sun, Bar &amp; Love. Aperte o play e escute.
+            Pagode com o clima do Sun, Bar &amp; Love. <span className="whitespace-nowrap">Aperte o play e escute.</span>
           </p>
         </Reveal>
 
