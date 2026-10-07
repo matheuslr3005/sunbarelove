@@ -49,7 +49,8 @@ export function Intro() {
   const skipped = useRef(false);
   const holeSize = useRef(0);
 
-  const mask = useTransform(hole, (r) => `radial-gradient(circle at 50% 50%, transparent ${r}px, #000 ${r + 2}px)`);
+  // a borda macia fica DENTRO do raio (r-2 → r): com r=0 a máscara é toda opaca, sem furinho no centro
+  const mask = useTransform(hole, (r) => `radial-gradient(circle at 50% 50%, transparent ${r - 2}px, #000 ${r}px)`);
 
   // largura do selo do logo; o sol de CSS é desenhado para o disco coincidir com o do logo
   const badge = typeof window === "undefined" ? 240 : Math.min(window.innerWidth * 0.58, 250);
