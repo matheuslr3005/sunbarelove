@@ -94,26 +94,39 @@ export const EVENTS: SbEvent[] = [
 
 /**
  * Vídeos de fundo (horizontais, sem som, em loop). Cada um é opcional.
- * Dica para trocar: mp4 H.264, até 1280x720, 5 a 15 segundos, até 4 MB, em public/media/videos/.
+ * Dica para trocar: mp4 H.264 (e, se puder, um webm VP9 mais leve) em public/media/videos/, sem som, de 5 a 15 segundos.
  */
-export interface BgVideo {
-  src: string;
+/** Arquivos de um mesmo vídeo: o webm (VP9) é mais leve e vai primeiro; o mp4 (H.264) serve o Safari e o iPhone. */
+export interface VideoFiles {
+  mp4: string;
+  webm?: string;
+}
+
+export interface BgVideo extends VideoFiles {
   poster?: string;
-  /** Versão vertical para celular (telas até 767 px). Sem ela, o celular usa `src`. */
-  mobileSrc?: string;
+  /** Versão vertical para celular (telas até 767 px). Sem ela, o celular usa o vídeo principal. */
+  mobile?: VideoFiles;
   mobilePoster?: string;
 }
 
 export const BG_VIDEOS: Partial<Record<"hero" | "finale" | "videos", BgVideo>> = {
   hero: {
-    // Takes de drone em 4K cortados em 1080p (computador) e 720x1280 (celular).
-    src: asset("media/videos/hero-fpv.mp4"),
+    // Takes de drone em 4K: 1920x1080 no computador e 900x1600 no celular, com nitidez e cor reforçadas.
+    mp4: asset("media/videos/hero-fpv.mp4"),
+    webm: asset("media/videos/hero-fpv.webm"),
     poster: asset("media/hero-poster.webp"),
-    mobileSrc: asset("media/videos/hero-fpv-vertical.mp4"),
+    mobile: {
+      mp4: asset("media/videos/hero-fpv-vertical.mp4"),
+      webm: asset("media/videos/hero-fpv-vertical.webm"),
+    },
     mobilePoster: asset("media/hero-poster-vertical.webp"),
   },
-  finale: { src: asset("media/videos/finale.mp4"), poster: asset("media/finale-poster.webp") },
-  videos: { src: asset("media/videos/fogos-fundo.mp4") },
+  finale: {
+    mp4: asset("media/videos/finale-fpv.mp4"),
+    webm: asset("media/videos/finale-fpv.webm"),
+    poster: asset("media/finale-poster.webp"),
+  },
+  videos: { mp4: asset("media/videos/fogos-fundo.mp4") },
 };
 
 export interface SbVideo {
@@ -171,13 +184,13 @@ export interface SbPhoto {
 export interface Gallery {
   id: string;
   label: string;
-  /** "bento" exige exatamente 6 fotos com className. "masonry" aceita qualquer quantidade. */
+  /** "bento": grade de 4 colunas e 2 linhas (4 fotos com className + o cartão de "mais fotos"). "masonry" aceita qualquer quantidade. */
   layout: "bento" | "masonry";
   photos: SbPhoto[];
 }
 
-// TODO: conferir a edição de cada foto e acrescentar mais (public/media/).
-// As fotos de drone vêm de quadros dos vídeos, então são menores que fotos originais.
+// Só fotos de verdade (nada de quadros de vídeo). Com mais de uma galeria, as abas por edição aparecem.
+// TODO: acrescentar as demais fotos (public/media/) e, depois, separar por edição.
 export const GALLERIES: Gallery[] = [
   {
     id: "destaques",
@@ -189,90 +202,32 @@ export const GALLERIES: Gallery[] = [
         src: asset("media/foto-brinde.webp"),
         alt: "Grupo de amigos rindo e brindando com copos amarelos da festa",
         caption: "Brinde com os copos amarelos da festa.",
-        className: "order-1 col-span-2 row-span-2 md:order-none md:col-span-1 md:row-span-1 md:[grid-area:1/1/4/3]",
-        position: "50% 40%",
+        className: "col-span-2 md:[grid-area:1/1/2/3]",
+        position: "50% 38%",
+      },
+      {
+        id: "p-copos",
+        src: asset("media/foto-copos.webp"),
+        alt: "Dois copos azuis da festa brindando com respingo, com o pôr do sol ao fundo",
+        caption: "Brinde com o pôr do sol ao fundo.",
+        className: "row-span-2 md:[grid-area:1/3/3/4]",
+        position: "50% 45%",
       },
       {
         id: "p-pandeiro",
         src: asset("media/foto-pandeiro.webp"),
         alt: "Silhueta de músicos tocando pandeiro contra o sol dourado",
         caption: "Roda de pandeiro contra o sol.",
-        className: "order-6 col-span-2 md:order-none md:col-span-1 md:[grid-area:4/1/5/3]",
-        position: "50% 62%",
-      },
-      {
-        id: "p-arco",
-        src: asset("media/foto-arco.webp"),
-        alt: "Público chegando pela entrada com o letreiro Sun, Bar & Love ao pôr do sol",
-        caption: "A chegada pelo letreiro, com o céu já alaranjado.",
-        className: "order-2 md:order-none md:[grid-area:1/3/3/4]",
+        className: "md:[grid-area:1/4/2/5]",
+        position: "58% 60%",
       },
       {
         id: "p-mural",
         src: asset("media/foto-mural.webp"),
         alt: "Mulher segurando um copo diante do painel do sol com o nome da festa",
         caption: "Foto no painel do sol.",
-        className: "order-4 md:order-none md:[grid-area:1/4/4/5]",
-        position: "62% 50%",
-      },
-      {
-        id: "p-cantor",
-        src: asset("media/foto-cantor.webp"),
-        alt: "Cantor no palco cercado pela banda, com o painel colorido de olhos e luas",
-        caption: "O palco em plena tarde, com o painel de olhos e luas.",
-        className: "order-3 md:order-none md:[grid-area:3/3/5/4]",
-      },
-      {
-        id: "p-sol",
-        src: asset("media/foto-sol.webp"),
-        alt: "Sol de palco aceso na beira do Guaíba com o sol de verdade se pondo ao fundo",
-        caption: "O sol de palco aceso, com o sol de verdade se pondo atrás.",
-        className: "order-5 md:order-none md:[grid-area:4/4/5/5]",
-        position: "50% 50%",
-      },
-    ],
-  },
-  {
-    id: "quintal",
-    label: "Quintal",
-    layout: "masonry",
-    photos: [
-      {
-        id: "q-flyer",
-        src: asset("media/flyer-quintal.webp"),
-        alt: "Cartaz da edição no Quintal, 13 de setembro",
-        caption: "Cartaz da edição no Quintal.",
-      },
-      {
-        id: "q-selfie",
-        src: asset("media/foto-quintal-selfie.webp"),
-        alt: "Amigas fazendo selfie com o pôr do sol atrás, no Quintal",
-        caption: "Selfie com o pôr do sol, no Quintal.",
-      },
-      {
-        id: "q-palco",
-        src: asset("media/foto-palco-amplo.webp"),
-        alt: "Pista lotada diante do palco, com o pôr do sol atrás da cúpula",
-        caption: "Pista lotada diante do palco, com o pôr do sol atrás da cúpula.",
-      },
-      {
-        id: "q-tendas",
-        src: asset("media/foto-tendas.webp"),
-        alt: "Tendas e pista vistas de cima, com o sol baixo sobre o Guaíba",
-        caption: "As tendas vistas de cima, com o sol baixo sobre o Guaíba.",
-      },
-    ],
-  },
-  {
-    id: "rio",
-    label: "From Rio",
-    layout: "masonry",
-    photos: [
-      {
-        id: "r-flyer",
-        src: asset("media/flyer-rio.webp"),
-        alt: "Cartaz da edição Melhor Dia: From Rio com ingressos esgotados",
-        caption: "Cartaz da edição From Rio, com ingressos esgotados.",
+        className: "col-span-2 md:[grid-area:2/1/3/3]",
+        position: "60% 42%",
       },
     ],
   },
@@ -329,6 +284,21 @@ export const PRODUCTS: SbProduct[] = [
   { id: "oculos", name: "Óculos", kind: "glasses", colors: ALL_COLORS },
   { id: "bone-trio", name: "Boné", kind: "cap", colors: [], photo: asset("media/prod-bones.webp") },
 ];
+
+export interface BandInfo {
+  title: string;
+  /** Imagem de capa horizontal (public/media/). Sem ela, usa a arte de nuvens da marca. */
+  poster?: string;
+  /** Vídeo da banda: arquivo mp4 horizontal em public/media/videos/ (ex: "/media/videos/banda.mp4")... */
+  src?: string;
+  /** ...ou ID de vídeo do YouTube. Sem nenhum dos dois, o vídeo mostra "em breve". */
+  youtube?: string;
+}
+
+// TODO: gravar o vídeo da banda tocando (horizontal, 16:9), colocar em public/media/videos/ e preencher `src`.
+export const BAND: BandInfo = {
+  title: "Banda do Sun, Bar & Love ao vivo",
+};
 
 export const SPONSORS = [
   "Aperol Spritz",

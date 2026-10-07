@@ -41,6 +41,8 @@ html {
 
 body {
   margin: 0;
+  /* a faixa de parceiros é inclinada e passa 1 px da borda: sem isso aparece rolagem lateral */
+  overflow-x: clip;
   font-family: var(--font-sans);
   color: var(--color-cream);
   background: var(--color-night);

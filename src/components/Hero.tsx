@@ -20,15 +20,9 @@ function HeroVideo() {
   if (!bg) return null;
   return (
     <>
-      <BackgroundVideo
-        src={bg.src}
-        poster={bg.poster}
-        mobileSrc={bg.mobileSrc}
-        mobilePoster={bg.mobilePoster}
-        className="absolute inset-0 size-full"
-      />
-      <div className="absolute inset-0 bg-[linear-gradient(to_bottom,rgba(7,35,44,0.5),rgba(7,35,44,0.05)_45%,rgba(7,35,44,0.7))]" />
-      <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(7,35,44,0.55),transparent_58%)]" />
+<BackgroundVideo video={bg} className="absolute inset-0 size-full" />
+      <div className="absolute inset-0 bg-[linear-gradient(to_bottom,rgba(7,35,44,0.38),rgba(7,35,44,0)_42%,rgba(7,35,44,0.62))]" />
+      <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(7,35,44,0.5),transparent_55%)]" />
     </>
   );
 }
@@ -72,7 +66,7 @@ export function Hero() {
           </motion.div>
 
           <motion.p
-            className="mt-8 max-w-md text-lg leading-relaxed text-cream/90"
+            className="mt-8 max-w-md text-lg leading-relaxed text-cream/95 [text-shadow:0_1px_14px_rgba(4,23,30,0.75)]"
             initial={{ opacity: 0, y: 20 }}
               animate={revealed ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
             transition={{ duration: 0.8, delay: 0.35, ease }}
@@ -105,8 +99,8 @@ export function Hero() {
             transition={{ duration: 1, delay: 0.25, ease }}
           >
             <img
-              src={asset("media/foto-copos.webp")}
-              alt="Dois copos azuis da festa brindando com respingo, com o pôr do sol ao fundo"
+              src={asset("media/foto-selfie.webp")}
+              alt="Duas amigas tirando selfie na pista do Sun, Bar & Love"
               className="size-full object-cover"
               fetchPriority="high"
             />
