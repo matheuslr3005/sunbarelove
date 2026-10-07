@@ -49,9 +49,26 @@ export function Finale() {
 
       <div className="relative border-t border-cream/15 bg-deep/80 px-5 backdrop-blur-sm md:px-8">
         <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-5 py-8 text-sm text-cream/80 sm:flex-row">
-          <p>
-            &copy; {new Date().getFullYear()} {SITE.name}. Porto Alegre, RS.
-          </p>
+          <div className="text-center sm:text-left">
+            <p>
+              &copy; {new Date().getFullYear()} {SITE.name}. Porto Alegre, RS.
+            </p>
+            <p className="mt-1">
+              Produzido por{" "}
+              {SITE.producer.instagram ? (
+                <a
+                  href={SITE.producer.instagram}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="font-semibold text-cream underline decoration-cream/40 underline-offset-4 hover:text-sun hover:decoration-sun"
+                >
+                  {SITE.producer.name}
+                </a>
+              ) : (
+                <span className="font-semibold text-cream">{SITE.producer.name}</span>
+              )}
+            </p>
+          </div>
           <div className="flex items-center gap-5">
             <a
               href={whatsappLink("Oi! Vim pelo site do Sun, Bar & Love.")}

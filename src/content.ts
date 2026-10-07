@@ -14,6 +14,9 @@ export const SITE = {
   // TODO: ID do Google Analytics 4 (ex: "G-ABC123XYZ"). Vazio = os cliques só são enviados
   // ao dataLayer (útil se o Google Tag Manager for instalado depois).
   analyticsId: "",
+  // Quem produz o site/festa, citado no rodapé ("Produzido por Lax").
+  // Link do Instagram do Lax. Vazio = o nome aparece sem link.
+  producer: { name: "Lax", instagram: "https://www.instagram.com/laxassessoria/" },
 };
 
 export type EventStatus = "upcoming" | "past";
@@ -210,12 +213,6 @@ export const GALLERIES: Gallery[] = [
         caption: "Mão pro alto na pista.",
       },
       {
-        id: "p-camiseta",
-        src: asset("media/foto-camiseta-branca.webp"),
-        alt: "Camiseta branca com a estampa do sol da festa pendurada na arara",
-        caption: "Camiseta com a estampa do sol.",
-      },
-      {
         id: "p-copos",
         src: asset("media/foto-copos.webp"),
         alt: "Dois copos azuis da festa brindando com respingo, com o pôr do sol ao fundo",
@@ -258,22 +255,10 @@ export const GALLERIES: Gallery[] = [
         caption: "Noite de luzes acesas.",
       },
       {
-        id: "p-bones",
-        src: asset("media/foto-bones-mesa.webp"),
-        alt: "Bonés azul-claro, azul-marinho e vermelho com o sol bordado sobre uma mesa laranja",
-        caption: "Os bonés na mesa da loja.",
-      },
-      {
         id: "p-risada",
         src: asset("media/foto-risada.webp"),
         alt: "Mulher loira rindo com um copo azul da festa na mão, sob luz rosa",
         caption: "Sorriso de quem chegou para curtir.",
-      },
-      {
-        id: "p-arara",
-        src: asset("media/foto-arara.webp"),
-        alt: "Arara ao ar livre com camisetas e jaqueta jeans da festa penduradas",
-        caption: "A arara com as camisetas da festa.",
       },
     ],
   },
