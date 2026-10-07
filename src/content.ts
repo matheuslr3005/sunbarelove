@@ -96,8 +96,22 @@ export const EVENTS: SbEvent[] = [
  * Vídeos de fundo (horizontais, sem som, em loop). Cada um é opcional.
  * Dica para trocar: mp4 H.264, até 1280x720, 5 a 15 segundos, até 4 MB, em public/media/videos/.
  */
-export const BG_VIDEOS: Partial<Record<"hero" | "finale" | "videos", { src: string; poster?: string }>> = {
-  hero: { src: asset("media/videos/hero.mp4"), poster: asset("media/hero-poster.webp") },
+export interface BgVideo {
+  src: string;
+  poster?: string;
+  /** Versão vertical para celular (telas até 767 px). Sem ela, o celular usa `src`. */
+  mobileSrc?: string;
+  mobilePoster?: string;
+}
+
+export const BG_VIDEOS: Partial<Record<"hero" | "finale" | "videos", BgVideo>> = {
+  hero: {
+    // Takes de drone em 4K cortados em 1080p (computador) e 720x1280 (celular).
+    src: asset("media/videos/hero-fpv.mp4"),
+    poster: asset("media/hero-poster.webp"),
+    mobileSrc: asset("media/videos/hero-fpv-vertical.mp4"),
+    mobilePoster: asset("media/hero-poster-vertical.webp"),
+  },
   finale: { src: asset("media/videos/finale.mp4"), poster: asset("media/finale-poster.webp") },
   videos: { src: asset("media/videos/fogos-fundo.mp4") },
 };
