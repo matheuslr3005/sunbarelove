@@ -20,11 +20,7 @@ export function Finale() {
   return (
     <footer ref={ref} id="fim" className="relative overflow-clip bg-[linear-gradient(to_bottom,#07232c,#04171e)]">
       {BG_VIDEOS.finale && (
-        <BackgroundVideo
-          src={BG_VIDEOS.finale.src}
-          poster={BG_VIDEOS.finale.poster}
-          className="absolute inset-0 size-full opacity-60"
-        />
+<BackgroundVideo video={BG_VIDEOS.finale} className="absolute inset-0 size-full opacity-60" />
       )}
       <div className="relative grid min-h-[min(150vw,900px)] place-items-center px-5 py-16 md:px-8">
         <motion.div

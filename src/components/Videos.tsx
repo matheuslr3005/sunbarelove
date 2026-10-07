@@ -4,45 +4,8 @@ import { track } from "../analytics";
 import { BG_VIDEOS, VIDEOS, type SbVideo } from "../content";
 import { BackgroundVideo } from "./BackgroundVideo";
 import { Modal } from "./Modal";
+import { VideoPlayer } from "./VideoPlayer";
 import { Reveal } from "./Reveal";
-
-function VideoPlayer({ video }: { video: SbVideo }) {
-  if (video.src) {
-    return (
-      <video
-        src={video.src}
-        poster={video.poster}
-        controls
-        autoPlay
-        playsInline
-        className="mx-auto max-h-[85dvh] w-full bg-deep object-contain"
-      />
-    );
-  }
-  if (video.youtube) {
-    return (
-      <div className="aspect-video w-full">
-        <iframe
-          className="size-full"
-          src={`https://www.youtube-nocookie.com/embed/${video.youtube}?autoplay=1&rel=0`}
-          title={video.title}
-          allow="autoplay; encrypted-media; picture-in-picture"
-          allowFullScreen
-        />
-      </div>
-    );
-  }
-  return (
-    <div className="relative mx-auto aspect-[9/14] max-h-[80dvh]">
-      <img src={video.poster} alt="" className="size-full object-cover opacity-40" />
-      <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 px-8 text-center">
-        <Sun size={44} weight="fill" className="text-sun" />
-        <p className="font-display text-3xl uppercase leading-tight">Vídeo em breve</p>
-        <p className="text-cream/80">Este vídeo entra no ar nos próximos dias.</p>
-      </div>
-    </div>
-  );
-}
 
 /** Card vertical. Com `preview`, um trecho mudo toca enquanto o mouse está em cima. */
 function VideoCard({ video, onPlay }: { video: SbVideo; onPlay: (v: SbVideo) => void }) {
@@ -109,8 +72,7 @@ export function Videos() {
     <section id="videos" className="relative overflow-clip bg-deep py-24 md:py-36">
       {BG_VIDEOS.videos && (
         <BackgroundVideo
-          src={BG_VIDEOS.videos.src}
-          poster={BG_VIDEOS.videos.poster}
+          video={BG_VIDEOS.videos}
           className="absolute inset-x-0 top-0 h-[560px] w-full opacity-30 [mask-image:linear-gradient(to_bottom,black_15%,transparent_85%)]"
         />
       )}
@@ -192,7 +154,7 @@ export function Videos() {
       </div>
 
       <Modal open={!!playing} onClose={close} label={playing?.title ?? "Vídeo"} panelClass={playing?.youtube ? "max-w-3xl" : "max-w-[min(92vw,460px)]"}>
-        {playing && <VideoPlayer video={playing} />}
+        {playing && <VideoPlayer title={playing.title} poster={playing.poster} src={playing.src} youtube={playing.youtube} />}
       </Modal>
     </section>
   );

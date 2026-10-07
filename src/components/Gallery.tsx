@@ -27,6 +27,15 @@ function PhotoButton({ photo, onOpen, className = "", masonry }: { photo: SbPhot
   );
 }
 
+function MoreTile({ className = "" }: { className?: string }) {
+  return (
+    <div className={`flex flex-col items-start justify-end gap-3 rounded-card bg-[linear-gradient(160deg,#19a7c9,#0b3341_70%)] p-5 ring-1 ring-cream/15 ${className}`}>
+      <Camera size={34} weight="fill" className="text-sun" />
+      <p className="font-display text-xl uppercase leading-tight md:text-2xl">Mais fotos em breve</p>
+    </div>
+  );
+}
+
 export function Gallery() {
   const [galleryId, setGalleryId] = useState(GALLERIES[0].id);
   const [index, setIndex] = useState<number | null>(null);
@@ -65,7 +74,7 @@ export function Gallery() {
           </h2>
         </Reveal>
 
-        <Reveal delay={0.1} className="mt-10">
+        {GALLERIES.length > 1 && <Reveal delay={0.1} className="mt-10">
           <div role="tablist" aria-label="Fotos por edição" className="flex w-fit max-w-full overflow-x-auto rounded-full border border-cream/20 bg-deep/50 p-1.5">
             {GALLERIES.map((g) => (
               <button
@@ -93,25 +102,23 @@ export function Gallery() {
               </button>
             ))}
           </div>
-        </Reveal>
+        </Reveal>}
 
         <div ref={containerRef} id="gallery-panel" role="tabpanel" aria-labelledby={`gtab-${galleryId}`} className="relative mt-10">
           <SunWipeOverlay overlayRef={overlayRef} labelRef={labelRef} />
           {gallery.layout === "bento" ? (
-            <div className="grid auto-rows-[170px] grid-cols-2 gap-3 md:auto-rows-[190px] md:grid-cols-4 md:gap-4">
+            <div className="grid auto-rows-[170px] grid-cols-2 gap-3 [grid-auto-flow:dense] md:auto-rows-[240px] md:grid-cols-4 md:gap-4">
               {photos.map((p, i) => (
                 <PhotoButton key={p.id} photo={p} onOpen={() => open(i)} className={p.className} />
               ))}
+              <MoreTile className="md:[grid-area:2/4/3/5]" />
             </div>
           ) : (
             <div className="columns-2 gap-3 md:columns-3 md:gap-4 [&>*]:mb-3 md:[&>*]:mb-4">
               {photos.map((p, i) => (
                 <PhotoButton key={p.id} photo={p} onOpen={() => open(i)} className="w-full break-inside-avoid" masonry />
               ))}
-              <div className="flex min-h-48 break-inside-avoid flex-col items-start justify-end gap-3 rounded-card bg-[linear-gradient(160deg,#19a7c9,#0b3341_70%)] p-6 ring-1 ring-cream/15">
-                <Camera size={36} weight="fill" className="text-sun" />
-                <p className="font-display text-2xl uppercase leading-tight">Mais fotos desta edição em breve</p>
-              </div>
+              <MoreTile className="min-h-48 break-inside-avoid" />
             </div>
           )}
         </div>

@@ -12,6 +12,7 @@ import { Intro, IntroProvider } from "./components/Intro";
 import { Proof } from "./components/Proof";
 import { Faq } from "./components/Faq";
 import { Shop } from "./components/Shop";
+import { Band } from "./components/Band";
 import { FloatingTicket } from "./components/FloatingTicket";
 import { SunCursor } from "./components/SunCursor";
 
@@ -46,6 +47,7 @@ export default function App() {
           <Videos />
           <Gallery />
           <Shop />
+          <Band />
           <Faq />
         </main>
         <Finale />

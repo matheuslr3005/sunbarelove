@@ -6,7 +6,7 @@ import {
   useMotionValue,
   useReducedMotion,
 } from "motion/react";
-import { ArrowLeft, ArrowRight, ArrowUpRight, BaseballCap, Hoodie, Storefront, Sunglasses, TShirt } from "@phosphor-icons/react";
+import { ArrowLeft, ArrowRight, ArrowUpRight, BaseballCap, Hoodie, Sunglasses, TShirt } from "@phosphor-icons/react";
 import { track } from "../analytics";
 import { PRODUCTS, SHOP, SHOP_COLORS, type SbProduct, type ShopColor } from "../content";
 import { starClip, whatsappLink } from "../lib";
@@ -231,9 +231,8 @@ function Conveyor() {
         </motion.div>
       </div>
 
-      <div className="mx-auto mt-8 flex max-w-6xl items-center justify-between gap-4 px-5 md:px-8">
-        <ShopButton />
-        <div className="flex gap-2 max-md:hidden">
+      <div className="mx-auto mt-8 hidden max-w-6xl items-center justify-end gap-4 px-5 md:flex md:px-8">
+        <div className="flex gap-2">
           <button
             type="button"
             onClick={() => step(-1)}
@@ -267,24 +266,7 @@ function StaticRail() {
           </li>
         ))}
       </ul>
-      <div className="mx-auto mt-6 max-w-6xl px-5 md:px-8">
-        <ShopButton />
-      </div>
     </div>
-  );
-}
-
-function ShopButton() {
-  return (
-    <a
-      href={SHOP.url || whatsappLink("Oi! Quero ver a loja do Sun, Bar & Love.")}
-      target="_blank"
-      rel="noopener noreferrer"
-      onClick={() => track("shop_all_click")}
-      className="inline-flex h-12 items-center gap-2 whitespace-nowrap rounded-full border border-cream/45 px-6 font-semibold text-cream transition hover:border-cream hover:bg-cream/10 active:scale-[0.97]"
-    >
-      <Storefront size={20} /> Ver a loja
-    </a>
   );
 }
 
