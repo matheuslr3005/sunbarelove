@@ -27,22 +27,21 @@ const RAYS = starClip(16, 44);
 const SPEED = 38; // pixels por segundo
 const GAP = 20;
 
-function productHref(p: SbProduct, color: ShopColor): string {
-  return (
-    p.url ||
-    SHOP.url ||
-    whatsappLink(`Oi! Quero comprar: ${p.name} ${SHOP_COLORS[color].label.toLowerCase()} do Sun, Bar & Love.`)
-  );
+/** O nome da cor entra na mensagem só quando o cliente pode escolher entre cores. */
+function productHref(p: SbProduct, color: ShopColor | null): string {
+  const colorText = color && p.colors.length > 1 ? ` ${SHOP_COLORS[color].label.toLowerCase()}` : "";
+  return p.url || SHOP.url || whatsappLink(`Oi! Quero comprar: ${p.name}${colorText} do Sun, Bar & Love.`);
 }
 
 function ProductCard({ product, hidden }: { product: SbProduct; hidden?: boolean }) {
-  const [color, setColor] = useState<ShopColor>(product.colors[0]);
-  const tone = SHOP_COLORS[color];
+  const [color, setColor] = useState<ShopColor | null>(product.colors[0] ?? null);
+  const tone = SHOP_COLORS[color ?? "azul"];
+  const choosable = product.colors.length > 1;
   const Icon = KIND_ICON[product.kind];
   const emblem = EMBLEM[product.kind];
-  const photo = product.images?.[color];
+  const photo = product.photo ?? (color ? product.images?.[color] : undefined);
   const href = productHref(product, color);
-  const buy = () => track("shop_click", { product_id: product.id, color });
+  const buy = () => track("shop_click", { product_id: product.id, color: choosable ? color ?? undefined : undefined });
 
   return (
     <div data-product-card className="w-[min(68vw,264px)] shrink-0 select-none">
@@ -53,7 +52,7 @@ function ProductCard({ product, hidden }: { product: SbProduct; hidden?: boolean
         draggable={false}
         tabIndex={hidden ? -1 : undefined}
         onClick={buy}
-        aria-label={`Comprar: ${product.name} ${tone.label.toLowerCase()}`}
+        aria-label={`Comprar: ${product.name}${choosable && color ? ` ${tone.label.toLowerCase()}` : ""}`}
         className="group block"
       >
         <div
@@ -84,8 +83,8 @@ function ProductCard({ product, hidden }: { product: SbProduct; hidden?: boolean
         </div>
       </a>
 
-      <div className="mt-3 flex items-center gap-1" role="group" aria-label={`Cor de ${product.name}`}>
-        {product.colors.map((c) => (
+      <div className="mt-3 flex h-10 items-center gap-1" role={choosable ? "group" : undefined} aria-label={choosable ? `Cor de ${product.name}` : undefined}>
+        {choosable && product.colors.map((c) => (
           <button
             key={c}
             type="button"
@@ -299,7 +298,7 @@ export function Shop() {
             Vista o <span className="text-sun">sol</span>
           </h2>
           <p className="mt-5 max-w-md text-lg leading-relaxed text-cream/85">
-            Moletom, boné, camiseta e óculos da festa, em quatro cores, para levar o pôr do sol com você.
+            Moletom, boné, camiseta e óculos da festa para levar o pôr do sol com você.
           </p>
         </Reveal>
       </div>

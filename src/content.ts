@@ -282,9 +282,11 @@ export interface SbProduct {
   /** Link do produto na loja. Vazio = usa SHOP.url, e se esse também estiver vazio, abre o WhatsApp. */
   url?: string;
   kind: "hoodie" | "tshirt" | "glasses" | "cap";
-  /** Cores disponíveis, na ordem em que aparecem. */
+  /** Cores disponíveis, na ordem em que aparecem. Com menos de duas, o seletor de cor não aparece. */
   colors: ShopColor[];
-  /** Foto por cor (public/media/). Sem foto, o card mostra um desenho da peça na cor escolhida. */
+  /** Foto única do produto (public/media/), igual para qualquer cor. */
+  photo?: string;
+  /** Foto por cor. Sem foto, o card mostra um desenho da peça na cor escolhida. */
   images?: Partial<Record<ShopColor, string>>;
 }
 
@@ -294,13 +296,24 @@ export const SHOP = {
 };
 
 // TODO: trocar pelos produtos reais: preço, link e foto de cada peça e cor.
-// Enquanto não houver foto, cada card mostra um desenho da peça nas cores da marca.
+// As fotos de camiseta e boné são de exemplo (peças do evento) e podem se repetir na esteira.
+// Moletom e óculos ainda não têm foto: o card mostra um desenho da peça nas cores da marca.
 const ALL_COLORS: ShopColor[] = ["azul", "laranja", "branco", "preto"];
 export const PRODUCTS: SbProduct[] = [
+  {
+    id: "camiseta",
+    name: "Camiseta",
+    kind: "tshirt",
+    colors: ["branco", "preto"],
+    images: {
+      branco: asset("media/prod-camiseta-branca.webp"),
+      preto: asset("media/prod-camiseta-preta.webp"),
+    },
+  },
   { id: "moletom", name: "Moletom", kind: "hoodie", colors: ALL_COLORS },
-  { id: "bone", name: "Boné", kind: "cap", colors: ALL_COLORS },
-  { id: "camiseta", name: "Camiseta", kind: "tshirt", colors: ALL_COLORS },
+  { id: "bone-modelo", name: "Boné", kind: "cap", colors: [], photo: asset("media/prod-bone-modelo.webp") },
   { id: "oculos", name: "Óculos", kind: "glasses", colors: ALL_COLORS },
+  { id: "bone-trio", name: "Boné", kind: "cap", colors: [], photo: asset("media/prod-bones.webp") },
 ];
 
 export const SPONSORS = [
