@@ -8,7 +8,7 @@ import { BackgroundVideo } from "./BackgroundVideo";
 import { Button } from "./Button";
 import { Sun } from "./Sun";
 import { TicketButton } from "./TicketButton";
-import { Wordmark } from "./Wordmark";
+import { Anniversary } from "./Anniversary";
 
 const next = EVENTS.find((e) => e.status === "upcoming");
 
@@ -62,7 +62,16 @@ export function Hero() {
               animate={revealed ? { opacity: 1, y: 0 } : { opacity: 0, y: 40 }}
             transition={{ duration: 0.9, delay: 0.1, ease }}
           >
-            <Wordmark className="text-[clamp(4.4rem,10.5vw,9rem)]" />
+            <h1>
+              <img
+                src={asset("media/logo-sun-bar-love.webp")}
+                alt="Sun, Bar & Love"
+                width={1400}
+                height={640}
+                className="w-full max-w-[30rem] drop-shadow-[0_6px_26px_rgba(4,23,30,0.6)] lg:max-w-[38rem]"
+                fetchPriority="high"
+              />
+            </h1>
           </motion.div>
 
           <motion.p
@@ -93,7 +102,7 @@ export function Hero() {
           </div>
 
           <motion.figure
-            className="relative mx-auto aspect-[3/4] w-[78%] overflow-hidden rounded-t-[999px] rounded-b-card border-[5px] border-cream shadow-[0_40px_90px_-30px_rgba(4,23,30,0.9)]"
+            className="relative ml-auto mr-[3%] aspect-[3/4] w-[66%] overflow-hidden rounded-t-[999px] rounded-b-card border-[5px] border-cream shadow-[0_40px_90px_-30px_rgba(4,23,30,0.9)]"
             initial={{ opacity: 0, scale: 0.92, y: 50 }}
               animate={revealed ? { opacity: 1, scale: 1, y: 0 } : { opacity: 0, scale: 0.92, y: 50 }}
             transition={{ duration: 1, delay: 0.25, ease }}
@@ -105,6 +114,11 @@ export function Hero() {
               fetchPriority="high"
             />
           </motion.figure>
+
+          <Anniversary
+            revealed={revealed}
+            className="absolute -bottom-10 -left-3 z-10 w-[68%] max-w-[330px] sm:-left-4 lg:-bottom-12 lg:-left-8 lg:w-[70%] lg:max-w-[420px]"
+          />
         </div>
       </div>
     </section>
