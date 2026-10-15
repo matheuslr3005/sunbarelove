@@ -126,4 +126,15 @@ body {
   .sun-spin {
     animation: sun-spin 20s linear infinite;
   }
+  /* Confete do selo de aniversário: flutua de leve. */
+  .confetti {
+    transform-box: fill-box;
+    transform-origin: center;
+    animation: confetti-bob 3.6s ease-in-out infinite;
+  }
+}
+@keyframes confetti-bob {
+  50% {
+    translate: 0 -7px;
+  }
 }
