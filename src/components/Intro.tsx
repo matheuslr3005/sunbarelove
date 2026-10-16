@@ -1,4 +1,4 @@
-import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState, type ReactNode } from "react";
+import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState, type CSSProperties, type ReactNode } from "react";
 import { animate, motion, useMotionValue, useTransform } from "motion/react";
 import { asset } from "../asset";
 import { Sun } from "./Sun";
@@ -29,6 +29,21 @@ export function IntroProvider({ children }: { children: ReactNode }) {
   return <IntroContext.Provider value={value}>{children}</IntroContext.Provider>;
 }
 
+const BURST_COLORS = ["#ffc21a", "#f0286e", "#19a7c9", "#ff6a2b", "#fff1d6"];
+
+/** Confete que sai do logo: 22 pedaços em volta, com ângulo, alcance e cor repetíveis. */
+const BURST = Array.from({ length: 22 }, (_, i) => {
+  const angle = (i / 22) * Math.PI * 2 + (i % 2) * 0.14;
+  const reach = 150 + ((i * 53) % 90);
+  return {
+    dx: Math.round(Math.cos(angle) * reach),
+    dy: Math.round(Math.sin(angle) * reach),
+    rotate: 90 + ((i * 71) % 300),
+    color: BURST_COLORS[i % BURST_COLORS.length],
+    round: i % 3 === 0,
+  };
+});
+
 const EASE_IN = [0.7, 0, 0.84, 0] as const;
 const EASE_OUT = [0.2, 0.7, 0.2, 1] as const;
 const wait = (ms: number) => new Promise<void>((r) => window.setTimeout(r, ms));
@@ -45,6 +60,8 @@ export function Intro() {
   const sunOpacity = useMotionValue(0);
   const sunScale = useMotionValue(0.85);
   const glow = useMotionValue(0);
+  const partyOpacity = useMotionValue(0);
+  const partyScale = useMotionValue(0.6);
   const hole = useMotionValue(0);
   const skipped = useRef(false);
   const holeSize = useRef(0);
@@ -81,8 +98,12 @@ export function Intro() {
       animate(glow, 1, { duration: 1.2, ease: "easeOut" });
       animate(logoScale, 1, { duration: 0.9, ease: EASE_OUT });
       await animate(logoOpacity, 1, { duration: 0.6, ease: "easeOut" });
-      await wait(650);
+      // os 7 anos pulam embaixo do logo, junto com o confete
+      animate(partyScale, 1, { type: "spring", stiffness: 260, damping: 13 });
+      animate(partyOpacity, 1, { duration: 0.25 });
+      await wait(1500);
       if (!alive || skipped.current) return;
+      animate(partyOpacity, 0, { duration: 0.35 });
       // o logo vira o sol: os raios abrem para fora do selo
       animate(sunScale, 1.2, { duration: 0.5, ease: EASE_OUT });
       animate(sunOpacity, 1, { duration: 0.4 });
@@ -98,7 +119,7 @@ export function Intro() {
       alive = false;
       html.style.overflow = previous;
     };
-  }, [phase, badge, glow, logoOpacity, logoScale, reveal, scale, sunOpacity, sunScale]);
+  }, [phase, badge, glow, logoOpacity, logoScale, partyOpacity, partyScale, reveal, scale, sunOpacity, sunScale]);
 
   // devolve a rolagem quando a abertura termina
   useEffect(() => {
@@ -153,7 +174,34 @@ export function Intro() {
             style={{ opacity: logoOpacity, scale: logoScale }}
             fetchPriority="high"
           />
+          {BURST.map((p, i) => (
+            <span
+              key={i}
+              aria-hidden="true"
+              className="intro-burst absolute left-1/2 top-1/2 block rounded-[2px]"
+              style={
+                {
+                  width: p.round ? 9 : 7,
+                  height: p.round ? 9 : 14,
+                  borderRadius: p.round ? 999 : 2,
+                  background: p.color,
+                  "--dx": `${p.dx}px`,
+                  "--dy": `${p.dy}px`,
+                  "--r": `${p.rotate}deg`,
+                  "--d": `${0.62 + (i % 4) * 0.04}s`,
+                } as CSSProperties
+              }
+            />
+          ))}
         </div>
+      </motion.div>
+
+      <motion.div
+        className="absolute left-1/2 top-1/2 text-center"
+        style={{ x: "-50%", y: badge / 2 + 18, opacity: partyOpacity, scale: partyScale }}
+      >
+        <p className="wordmark whitespace-nowrap text-[clamp(3.4rem,15vw,5.4rem)]">7 anos</p>
+        <p className="mt-3 text-xs font-semibold uppercase tracking-[0.3em] text-sun">7 de novembro</p>
       </motion.div>
 
       <button

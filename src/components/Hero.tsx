@@ -8,7 +8,7 @@ import { BackgroundVideo } from "./BackgroundVideo";
 import { Button } from "./Button";
 import { Sun } from "./Sun";
 import { TicketButton } from "./TicketButton";
-import { Anniversary } from "./Anniversary";
+import { Celebration } from "./Celebration";
 
 const next = EVENTS.find((e) => e.status === "upcoming");
 
@@ -43,6 +43,7 @@ export function Hero() {
       <HeroVideo />
       {/* horizonte do pôr do sol */}
       <div className="pointer-events-none absolute inset-x-0 bottom-0 h-2/5 bg-[linear-gradient(to_top,rgba(255,106,43,0.7),rgba(240,40,110,0.3)_45%,transparent)]" />
+      <Celebration revealed={revealed} />
 
       <div className="relative mx-auto grid min-h-[100dvh] max-w-7xl grid-cols-1 items-center gap-8 px-5 pb-24 pt-24 lg:grid-cols-12 md:px-8">
         <div className="relative z-10 lg:col-span-7">
@@ -102,7 +103,7 @@ export function Hero() {
           </div>
 
           <motion.figure
-            className="relative ml-auto mr-[3%] aspect-[3/4] w-[66%] overflow-hidden rounded-t-[999px] rounded-b-card border-[5px] border-cream shadow-[0_40px_90px_-30px_rgba(4,23,30,0.9)]"
+            className="relative mx-auto aspect-[3/4] w-[78%] overflow-hidden rounded-t-[999px] rounded-b-card border-[5px] border-cream shadow-[0_40px_90px_-30px_rgba(4,23,30,0.9)]"
             initial={{ opacity: 0, scale: 0.92, y: 50 }}
               animate={revealed ? { opacity: 1, scale: 1, y: 0 } : { opacity: 0, scale: 0.92, y: 50 }}
             transition={{ duration: 1, delay: 0.25, ease }}
@@ -114,11 +115,6 @@ export function Hero() {
               fetchPriority="high"
             />
           </motion.figure>
-
-          <Anniversary
-            revealed={revealed}
-            className="absolute -bottom-10 -left-3 z-10 w-[68%] max-w-[330px] sm:-left-4 lg:-bottom-12 lg:-left-8 lg:w-[70%] lg:max-w-[420px]"
-          />
         </div>
       </div>
     </section>
