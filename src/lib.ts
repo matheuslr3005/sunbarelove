@@ -15,12 +15,17 @@ export function whatsappLink(message: string): string {
   return `https://wa.me/${SITE.whatsapp}?text=${encodeURIComponent(message)}`;
 }
 
+/** " no Cenna", ou nada enquanto o local não foi divulgado. */
+export function atVenue(event: SbEvent): string {
+  return event.venue ? ` no ${event.venue}` : "";
+}
+
 /**
  * Link de ingressos do evento, ou WhatsApp como alternativa enquanto não houver link.
  * Na página de venda, acrescenta UTMs para a plataforma de vendas saber de qual botão veio a compra.
  */
 export function ticketLink(event: SbEvent, location = "site"): string {
-  if (!event.ticketUrl) return whatsappLink(`Oi! Quero ingressos para o ${event.title} no ${event.venue}.`);
+  if (!event.ticketUrl) return whatsappLink(`Oi! Quero ingressos para o ${event.title}${atVenue(event)}.`);
   try {
     const url = new URL(event.ticketUrl);
     url.searchParams.set("utm_source", "site");

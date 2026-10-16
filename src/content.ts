@@ -39,6 +39,7 @@ export interface SbEvent {
   /** Texto de data para exibir quando não há startsAt. */
   dateLabel?: string;
   time?: string;
+  /** Pode ficar vazio enquanto o local não for divulgado. */
   venue: string;
   address?: string;
   city: string;
@@ -53,21 +54,32 @@ export interface SbEvent {
 
 export const EVENTS: SbEvent[] = [
   {
-    id: "cenna-10-out",
+    id: "aniversario-7-anos",
     status: "upcoming",
-    title: "Sun, Bar & Love",
-    startsAt: "2026-10-10T17:00:00-03:00",
-    time: "17h",
-    venue: "Cenna",
-    address: "Rua João Moreira Maciel, 470, Beira do Guaíba",
+    title: "7 anos de Sun, Bar & Love",
+    startsAt: "2026-11-07T17:00:00-03:00",
+    // TODO: informar o horário de abertura (ex: "17h"), o local, o endereço e a cidade. Enquanto estiverem vazios, o site mostra "em breve".
+    venue: "",
     city: "Porto Alegre, RS",
-    flyer: asset("media/flyer-cenna.webp"),
-    blurb:
-      "Sábado de sol, música boa e o pôr do sol na beira do Guaíba. Chama a galera e garante o seu ingresso.",
+    // Cartaz provisório, feito pelo site. Troque pelo cartaz oficial em public/media/ quando houver.
+    flyer: asset("media/flyer-7anos.webp"),
+    blurb: "A festa de aniversário do Sun, Bar & Love: sete anos de pôr do sol, música boa e gente que a gente ama. Dia 7 de novembro.",
     ticketUrl: "",
-    // TODO: informar o lote atual e quando ele vira, ex: { status: "onsale", lot: "2º lote", lotEndsAt: "2026-10-09T12:00:00-03:00" }
+    // TODO: informar o lote atual e quando ele vira, ex: { status: "onsale", lot: "1º lote", lotEndsAt: "2026-11-05T12:00:00-03:00" }
     sale: { status: "onsale" },
     lineup: [],
+  },
+  {
+    id: "cenna-10-out",
+    status: "past",
+    title: "Sun, Bar & Love",
+    dateLabel: "10 de outubro",
+    venue: "Cenna",
+    city: "Porto Alegre, RS",
+    flyer: asset("media/flyer-cenna.webp"),
+    blurb: "Um sábado de sol, música boa e pôr do sol na beira do Guaíba, no Cenna.",
+    ticketUrl: "",
+    sale: { status: "closed" },
   },
   {
     id: "quintal-13-set",
@@ -375,11 +387,11 @@ export const FAQ: { q: string; a: string }[] = [
   },
   {
     q: "A que horas começa?",
-    a: "A edição do Cenna abre às 17h, para você pegar o pôr do sol com a pista cheia.",
+    a: "A festa de 7 anos acontece no sábado, 7 de novembro. O horário de abertura será divulgado em breve, e a gente avisa por aqui e pelo WhatsApp.",
   },
   {
-    q: "Onde fica o Cenna?",
-    a: "Na Rua João Moreira Maciel, 470, Beira do Guaíba, em Porto Alegre. No detalhe do evento, o botão Como chegar abre a rota no Google Maps.",
+    q: "Onde vai ser?",
+    a: "O local da festa de 7 anos será divulgado em breve. Assim que sair, o botão Como chegar, no detalhe do evento, abre a rota no Google Maps.",
   },
   {
     q: "O lote acabou. E agora?",

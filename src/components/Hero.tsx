@@ -3,7 +3,7 @@ import { ArrowDown } from "@phosphor-icons/react";
 import { asset } from "../asset";
 import { BG_VIDEOS, EVENTS } from "../content";
 import { useIntro } from "./Intro";
-import { eventDate } from "../lib";
+import { atVenue, eventDate } from "../lib";
 import { BackgroundVideo } from "./BackgroundVideo";
 import { Button } from "./Button";
 import { Sun } from "./Sun";
@@ -54,7 +54,7 @@ export function Hero() {
               animate={revealed ? { opacity: 1, y: 0 } : { opacity: 0, y: 16 }}
               transition={{ duration: 0.7, ease }}
             >
-              {date.weekday}, {date.day} no {next?.venue}
+              {date.weekday}, {date.day}{next && atVenue(next)}
             </motion.p>
           )}
 
