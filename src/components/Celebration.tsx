@@ -28,7 +28,7 @@ const CONFETTI = Array.from({ length: 24 }, (_, i) => ({
   tall: 10 + (i % 3) * 4,
 }));
 
-const RIBBON_PHRASES = ["7 anos de Sun, Bar & Love", "7 de novembro", "Parabéns pra gente"];
+const RIBBON_PHRASES = ["7 anos de Sun, Bar & Love", "7 de novembro"];
 
 function RoundBalloon({ color }: { color: string }) {
   const id = useId().replace(/:/g, "");
@@ -116,7 +116,7 @@ export function Celebration({ revealed }: { revealed: boolean }) {
         aria-hidden={reduce ? undefined : "true"}
       >
         <ul className="ribbon-track">
-          {[0, 1, 2, 3].flatMap((round) =>
+          {[0, 1, 2, 3, 4, 5, 6, 7].flatMap((round) =>
             RIBBON_PHRASES.map((phrase) => (
               <li
                 key={`${round}-${phrase}`}
