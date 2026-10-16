@@ -1,7 +1,7 @@
-import { Ticket } from "@phosphor-icons/react";
+import { Bell, Ticket } from "@phosphor-icons/react";
 import { track } from "../analytics";
 import type { SbEvent } from "../content";
-import { ticketLink } from "../lib";
+import { atVenue, ticketLink, whatsappLink } from "../lib";
 
 interface Props {
   event: SbEvent;
@@ -17,6 +17,21 @@ interface Props {
 export function TicketButton({ event, location, size = "md", tone = "sun", className = "" }: Props) {
   const sizing = size === "sm" ? "h-10 px-5 text-sm" : "h-12 px-6 text-[15px]";
   const base = `inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-full font-semibold ${sizing} ${className}`;
+
+  if (event.sale.status === "soon") {
+    return (
+      <a
+        href={whatsappLink(`Oi! Quero ser avisado quando abrirem os ingressos do ${event.title}${atVenue(event)}.`)}
+        target="_blank"
+        rel="noopener noreferrer"
+        onClick={() => track("whatsapp_click", { location: `${location}_ingressos_em_breve`, event_id: event.id })}
+        className={`${base} border border-sun/70 text-sun transition-[background-color,transform] duration-300 ease-out-expo hover:bg-sun/10 active:scale-[0.97]`}
+      >
+        <Bell size={size === "sm" ? 18 : 20} weight="fill" />
+        Avisar quando abrir
+      </a>
+    );
+  }
 
   if (event.sale.status !== "onsale") {
     return (
