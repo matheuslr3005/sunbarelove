@@ -93,6 +93,28 @@ function UpcomingFeature({ event, onOpen }: { event: SbEvent; onOpen: (e: SbEven
   );
 }
 
+/** Data já marcada, mas ainda sem venda: cartão horizontal (miniatura + data + local) dentro de "Novas datas". */
+function SaveTheDateTile({ event, onOpen }: { event: SbEvent; onOpen: (e: SbEvent) => void }) {
+  const date = eventDate(event);
+  const place = [event.venue, event.city].filter(Boolean).join(" · ");
+  return (
+    <button
+      type="button"
+      onClick={() => onOpen(event)}
+      aria-label={`Ver detalhes: ${date.weekday ? `${date.weekday}, ` : ""}${date.day}, ${place}`}
+      className="group flex w-full items-center gap-4 rounded-card bg-deep p-3 pr-5 text-left text-cream shadow-[0_18px_40px_-18px_rgba(4,23,30,0.8)] transition duration-300 ease-out-expo hover:-translate-y-1 active:scale-[0.98]"
+    >
+      <img src={event.flyer} alt="" loading="lazy" className="size-20 shrink-0 rounded-[20px] object-cover ring-1 ring-cream/20" />
+      <span className="grid gap-0.5">
+        {date.weekday && <span className="text-xs font-semibold uppercase tracking-[0.16em] text-sun">{date.weekday}</span>}
+        <span className="font-display text-xl uppercase leading-tight md:text-2xl">{date.day}</span>
+        <span className="text-sm text-cream/80">{place}</span>
+        <span className="mt-1 text-xs font-semibold text-cream/60">Ingressos em breve</span>
+      </span>
+    </button>
+  );
+}
+
 function PastCard({ event, onOpen }: { event: SbEvent; onOpen: (e: SbEvent) => void }) {
   const date = eventDate(event);
   return (
@@ -228,7 +250,8 @@ export function Events() {
   const close = useCallback(() => setSelected(null), []);
   const { containerRef, overlayRef, labelRef, go } = useSunWipe<Tab>(setTab);
 
-  const upcoming = EVENTS.filter((e) => e.status === "upcoming");
+  const upcoming = EVENTS.filter((e) => e.status === "upcoming" && !e.saveTheDate);
+  const saveTheDates = EVENTS.filter((e) => e.status === "upcoming" && e.saveTheDate);
   const past = EVENTS.filter((e) => e.status === "past");
 
   return (
@@ -280,20 +303,35 @@ export function Events() {
                 ))}
 
                 <div className="overflow-hidden rounded-card bg-[linear-gradient(120deg,#f0286e,#ff6a2b_60%,#ffc21a)] p-8 text-deep md:p-12">
-                  <h3 className="max-w-md font-display text-3xl uppercase leading-tight md:text-4xl">
-                    Novas datas saem em breve
-                  </h3>
-                  <p className="mt-3 max-w-md text-deep/85">Chama no WhatsApp e seja o primeiro a saber.</p>
-                  <div className="mt-6">
-                    <a
-                      href={whatsappLink("Oi! Quero ser avisado das próximas edições do Sun, Bar & Love.")}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      onClick={() => track("whatsapp_click", { location: "novas_datas" })}
-                      className="inline-flex h-12 items-center gap-2 whitespace-nowrap rounded-full bg-deep px-6 font-semibold text-cream transition hover:bg-night active:scale-[0.97]"
-                    >
-                      <WhatsappLogo size={20} weight="fill" /> Chamar no WhatsApp
-                    </a>
+                  <div className="grid items-center gap-8 lg:grid-cols-[minmax(0,26rem)_1fr] lg:gap-12">
+                    <div>
+                      <h3 className="max-w-md font-display text-3xl uppercase leading-tight md:text-4xl">
+                        Novas datas saem em breve
+                      </h3>
+                      <p className="mt-3 max-w-md text-deep/85">
+                        {saveTheDates.length > 0
+                          ? "Já pode marcar na agenda. Chama no WhatsApp e seja o primeiro a saber dos ingressos."
+                          : "Chama no WhatsApp e seja o primeiro a saber."}
+                      </p>
+                      <div className="mt-6">
+                        <a
+                          href={whatsappLink("Oi! Quero ser avisado das próximas edições do Sun, Bar & Love.")}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          onClick={() => track("whatsapp_click", { location: "novas_datas" })}
+                          className="inline-flex h-12 items-center gap-2 whitespace-nowrap rounded-full bg-deep px-6 font-semibold text-cream transition hover:bg-night active:scale-[0.97]"
+                        >
+                          <WhatsappLogo size={20} weight="fill" /> Chamar no WhatsApp
+                        </a>
+                      </div>
+                    </div>
+                    {saveTheDates.length > 0 && (
+                      <div className="grid gap-4 sm:grid-cols-2">
+                        {saveTheDates.map((e) => (
+                          <SaveTheDateTile key={e.id} event={e} onOpen={setSelected} />
+                        ))}
+                      </div>
+                    )}
                   </div>
                 </div>
               </div>

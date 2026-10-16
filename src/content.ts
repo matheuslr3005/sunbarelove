@@ -38,6 +38,8 @@ export interface SbEvent {
   startsAt?: string;
   /** Texto de data para exibir quando não há startsAt. */
   dateLabel?: string;
+  /** true = aparece como cartão pequeno no bloco "Novas datas saem em breve" (save the date), em vez de destaque grande. */
+  saveTheDate?: boolean;
   /** Linha pequena acima da data quando não há startsAt (no lugar do dia da semana), ex: "Sábado" ou "Carnaval". */
   kicker?: string;
   time?: string;
@@ -74,6 +76,7 @@ export const EVENTS: SbEvent[] = [
   {
     id: "deck22-9-jan",
     status: "upcoming",
+    saveTheDate: true,
     title: "Sun, Bar & Love no Deck 22",
     dateLabel: "9 de janeiro",
     kicker: "Sábado",
@@ -88,6 +91,7 @@ export const EVENTS: SbEvent[] = [
   {
     id: "deck22-7-fev",
     status: "upcoming",
+    saveTheDate: true,
     title: "Sun, Bar & Love no Deck 22",
     dateLabel: "7 de fevereiro",
     kicker: "Carnaval",
