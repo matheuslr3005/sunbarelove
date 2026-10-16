@@ -23,6 +23,14 @@ export function SaleBadge({ sale }: { sale: Sale }) {
 
   if (sale.status === "closed") return null;
 
+  if (sale.status === "soon") {
+    return (
+      <span className="inline-flex h-9 items-center rounded-full border border-cream/40 px-4 text-sm font-semibold text-cream/90">
+        Ingressos em breve
+      </span>
+    );
+  }
+
   if (sale.status === "soldout") {
     return (
       <span className="inline-flex h-9 items-center rounded-full bg-rose px-4 text-sm font-bold uppercase tracking-wider text-cream">

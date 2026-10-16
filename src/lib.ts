@@ -52,5 +52,5 @@ export function eventDate(event: SbEvent): { weekday?: string; day: string } {
     const weekday = weekdayFmt.format(d);
     return { weekday: weekday.charAt(0).toUpperCase() + weekday.slice(1), day: dayFmt.format(d) };
   }
-  return { day: event.dateLabel ?? "" };
+  return { weekday: event.kicker, day: event.dateLabel ?? "" };
 }

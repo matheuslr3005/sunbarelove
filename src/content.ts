@@ -22,8 +22,8 @@ export const SITE = {
 export type EventStatus = "upcoming" | "past";
 
 export interface Sale {
-  /** "onsale" = à venda, "soldout" = esgotado, "closed" = edição encerrada. */
-  status: "onsale" | "soldout" | "closed";
+  /** "soon" = ingressos ainda não abriram, "onsale" = à venda, "soldout" = esgotado, "closed" = edição encerrada. */
+  status: "soon" | "onsale" | "soldout" | "closed";
   /** Nome do lote atual, ex: "2º lote". Vazio = mostra só "Ingressos à venda". */
   lot?: string;
   /** Quando o lote vira (data com fuso). Se preenchido, aparece "Vira em ...". */
@@ -38,6 +38,8 @@ export interface SbEvent {
   startsAt?: string;
   /** Texto de data para exibir quando não há startsAt. */
   dateLabel?: string;
+  /** Linha pequena acima da data quando não há startsAt (no lugar do dia da semana), ex: "Sábado" ou "Carnaval". */
+  kicker?: string;
   time?: string;
   /** Pode ficar vazio enquanto o local não for divulgado. */
   venue: string;
@@ -68,6 +70,33 @@ export const EVENTS: SbEvent[] = [
     // TODO: informar o lote atual e quando ele vira, ex: { status: "onsale", lot: "1º lote", lotEndsAt: "2026-11-05T12:00:00-03:00" }
     sale: { status: "onsale" },
     lineup: [],
+  },
+  {
+    id: "deck22-9-jan",
+    status: "upcoming",
+    title: "Sun, Bar & Love no Deck 22",
+    dateLabel: "9 de janeiro",
+    kicker: "Sábado",
+    venue: "Deck 22",
+    city: "Atlântida, RS",
+    flyer: asset("media/flyer-deck22.webp"),
+    blurb: "Save the date! O Sun, Bar & Love vai ao Deck 22, em Atlântida, no litoral gaúcho. Horário e ingressos saem em breve.",
+    ticketUrl: "",
+    // TODO: quando abrir a venda, troque para { status: "onsale", lot: "1º lote" } e preencha ticketUrl, time e endereço.
+    sale: { status: "soon" },
+  },
+  {
+    id: "deck22-7-fev",
+    status: "upcoming",
+    title: "Sun, Bar & Love no Deck 22",
+    dateLabel: "7 de fevereiro",
+    kicker: "Carnaval",
+    venue: "Deck 22",
+    city: "Atlântida, RS",
+    flyer: asset("media/flyer-deck22.webp"),
+    blurb: "Save the date! O Sun, Bar & Love vai ao Deck 22, em Atlântida, no Carnaval. Horário e ingressos saem em breve.",
+    ticketUrl: "",
+    sale: { status: "soon" },
   },
   {
     id: "cenna-10-out",
