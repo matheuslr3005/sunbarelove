@@ -3,7 +3,7 @@ import { LayoutGroup, motion } from "motion/react";
 import { ArrowUpRight, CalendarBlank, Check, Clock, MapPin, ShareNetwork, WhatsappLogo } from "@phosphor-icons/react";
 import { track } from "../analytics";
 import { EVENTS, SITE, type SbEvent } from "../content";
-import { eventDate, mapsLink, whatsappLink } from "../lib";
+import { atVenue, eventDate, mapsLink, whatsappLink } from "../lib";
 import { Button } from "./Button";
 import { Countdown } from "./Countdown";
 import { Modal } from "./Modal";
@@ -23,13 +23,13 @@ function FlyerButton({ event, onOpen }: { event: SbEvent; onOpen: () => void }) 
     <button
       type="button"
       onClick={onOpen}
-      aria-label={`Ver detalhes: ${event.title} no ${event.venue}`}
+      aria-label={`Ver detalhes: ${event.title}${atVenue(event)}`}
       className="group block w-full cursor-pointer rounded-card text-left"
     >
       <motion.img
         layoutId={`flyer-${event.id}`}
         src={event.flyer}
-        alt={`Cartaz: ${event.title}, ${event.venue}`}
+        alt={`Cartaz: ${event.title}${event.venue ? `, ${event.venue}` : ""}`}
         className="aspect-[6/7] w-full rounded-card object-cover shadow-[0_30px_70px_-25px_rgba(240,40,110,0.55)] ring-1 ring-cream/20 transition-transform duration-500 ease-out-expo group-hover:-translate-y-1.5"
       />
     </button>
@@ -68,12 +68,12 @@ function UpcomingFeature({ event, onOpen }: { event: SbEvent; onOpen: (e: SbEven
         </div>
         <ul className="grid gap-3 text-cream/90">
           <li className="flex items-center gap-3">
-            <Clock size={22} className="text-sun" /> Abertura às {event.time}
+            <Clock size={22} className="text-sun" /> {event.time ? `Abertura às ${event.time}` : "Horário em breve"}
           </li>
           <li className="flex items-center gap-3">
             <MapPin size={22} className="text-sun" />
             <span>
-              {event.venue}, {event.city}
+              {event.venue ? [event.venue, event.city].filter(Boolean).join(", ") : "Local em breve"}
             </span>
           </li>
         </ul>
@@ -116,7 +116,7 @@ function EventModalBody({ event, onClose }: { event: SbEvent; onClose: () => voi
 
   const share = async () => {
     track("share_click", { event_id: event.id });
-    const data = { title: event.title, text: `${event.title} no ${event.venue}`, url: window.location.href };
+    const data = { title: event.title, text: `${event.title}${atVenue(event)}`, url: window.location.href };
     try {
       if (navigator.share) await navigator.share(data);
       else {
@@ -134,7 +134,7 @@ function EventModalBody({ event, onClose }: { event: SbEvent; onClose: () => voi
       <motion.img
         layoutId={`flyer-${event.id}`}
         src={event.flyer}
-        alt={`Cartaz: ${event.title}, ${event.venue}`}
+        alt={`Cartaz: ${event.title}${event.venue ? `, ${event.venue}` : ""}`}
         className="aspect-[6/7] w-full object-cover max-md:aspect-auto max-md:h-[30dvh] max-md:object-[50%_42%] md:aspect-auto md:h-full"
       />
       <div className="flex flex-col justify-center gap-6 p-6 md:p-10">
@@ -184,16 +184,18 @@ function EventModalBody({ event, onClose }: { event: SbEvent; onClose: () => voi
           {upcoming ? (
             <>
               <TicketButton event={event} location="modal" />
-              <Button
-                variant="ghost"
-                href={mapsLink(event)}
-                external
-                className="max-md:px-4"
-                icon={<MapPin size={18} />}
-                trackEvent={["maps_click", { event_id: event.id }]}
-              >
-                Como chegar
-              </Button>
+              {(event.venue || event.address) && (
+                <Button
+                  variant="ghost"
+                  href={mapsLink(event)}
+                  external
+                  className="max-md:px-4"
+                  icon={<MapPin size={18} />}
+                  trackEvent={["maps_click", { event_id: event.id }]}
+                >
+                  Como chegar
+                </Button>
+              )}
               <Button variant="ghost" onClick={share} className="max-md:px-4" icon={copied ? <Check size={18} /> : <ShareNetwork size={18} />}>
                 {copied ? "Link copiado" : "Compartilhar"}
               </Button>
@@ -304,7 +306,7 @@ export function Events() {
             )}
           </div>
 
-          <Modal open={!!selected} onClose={close} label={selected ? `${selected.title} no ${selected.venue}` : "Evento"}>
+          <Modal open={!!selected} onClose={close} label={selected ? `${selected.title}${atVenue(selected)}` : "Evento"}>
             {selected && <EventModalBody event={selected} onClose={close} />}
           </Modal>
         </LayoutGroup>
