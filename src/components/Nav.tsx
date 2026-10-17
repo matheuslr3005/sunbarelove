@@ -3,7 +3,7 @@ import { AnimatePresence, motion } from "motion/react";
 import { List, WhatsappLogo, X } from "@phosphor-icons/react";
 import { asset } from "../asset";
 import { EVENTS } from "../content";
-import { whatsappLink } from "../lib";
+import { hasWhatsapp, whatsappLink } from "../lib";
 import { track } from "../analytics";
 import { TicketButton } from "./TicketButton";
 
@@ -127,15 +127,17 @@ export function Nav() {
               transition={{ delay: 0.08 + LINKS.length * 0.07, duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
             >
               {next && <TicketButton event={next} location="menu" />}
-              <a
-                href={whatsappLink("Oi! Vim pelo site do Sun, Bar & Love.")}
-                target="_blank"
-                rel="noopener noreferrer"
-                onClick={() => track("whatsapp_click", { location: "menu" })}
-                className="inline-flex h-12 items-center gap-2 whitespace-nowrap rounded-full border border-cream/45 px-6 font-semibold text-cream transition hover:border-cream hover:bg-cream/10 active:scale-[0.97]"
-              >
-                <WhatsappLogo size={20} weight="fill" /> WhatsApp
-              </a>
+              {hasWhatsapp && (
+                <a
+                  href={whatsappLink("Oi! Vim pelo site do Sun, Bar & Love.")}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={() => track("whatsapp_click", { location: "menu" })}
+                  className="inline-flex h-12 items-center gap-2 whitespace-nowrap rounded-full border border-cream/45 px-6 font-semibold text-cream transition hover:border-cream hover:bg-cream/10 active:scale-[0.97]"
+                >
+                  <WhatsappLogo size={20} weight="fill" /> WhatsApp
+                </a>
+              )}
             </motion.div>
           </motion.div>
         )}

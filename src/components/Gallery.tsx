@@ -139,8 +139,7 @@ export function Gallery() {
                 transition={{ duration: 0.2 }}
               />
             </AnimatePresence>
-            <div className="flex items-center justify-between gap-4 p-4 md:px-6">
-              <p className="text-sm text-cream/85">{current.caption}</p>
+            <div className="flex items-center justify-center gap-4 p-4 md:px-6">
               {photos.length > 1 && (
                 <div className="flex shrink-0 gap-2">
                   <button

@@ -35,7 +35,7 @@ Tudo fica em `src/content.ts`.
 - **Loja** (`PRODUCTS`, `SHOP_COLORS` e `SHOP`): a esteira de produtos. Cada produto tem `name`, `kind` (moletom, boné, camiseta ou óculos), `colors` (azul, laranja, branco, preto) e, quando houver, `price`, `url` (link do produto) e foto: `photo` (uma foto para qualquer cor) ou `images` (uma foto por cor, em `public/media/`). Sem foto, o card mostra um desenho da peça na cor escolhida. O seletor de cor só aparece com duas ou mais cores. Sem `url`, usa `SHOP.url` (link da loja, a Shopify quando existir), e sem esse abre o WhatsApp com o nome do produto (e a cor, quando há escolha). Fotos podem se repetir na esteira. Para trocar o sentido da esteira, mude o sinal em `Shop.tsx` (`next += ...`).
 - **Banda** (`BAND`): a seção com o vídeo horizontal da banda de pagode. Preencha `src` (mp4 em `public/media/videos/`) ou `youtube` (ID), e `poster` se quiser uma capa própria; sem vídeo, mostra "Vídeo em breve" sobre a arte de nuvens da marca. O botão "Contratar a banda" abre o WhatsApp (remova em `src/components/Band.tsx` se não quiser).
 - **Parceiros** (`SPONSORS`): textos da faixa amarela. Para usar logos, troque o conteúdo de `src/components/Marquee.tsx`.
-- **Contato** (`SITE`): WhatsApp, link do Instagram e ID do Google Analytics.
+- **Contato** (`SITE`): WhatsApp, link do Instagram e ID do Google Analytics. Com `whatsapp` vazio, todos os botões e links de WhatsApp somem do site; "Ingressos" e "Comprar" mostram "em breve" até haver link de venda.
 
 ## Rastreamento de cliques
 

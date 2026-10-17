@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
 import { AnimatePresence, motion, useMotionValueEvent, useScroll } from "motion/react";
 import { EVENTS } from "../content";
+import { ticketLink } from "../lib";
 import { TicketButton } from "./TicketButton";
 
-const next = EVENTS.find((e) => e.status === "upcoming" && e.sale.status === "onsale");
+const next = EVENTS.find((e) => e.status === "upcoming" && e.sale.status === "onsale" && ticketLink(e));
 
 /** Depois do hero, o botão de ingressos continua por perto em tamanho pequeno. */
 export function FloatingTicket() {

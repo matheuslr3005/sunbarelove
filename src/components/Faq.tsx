@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Plus, WhatsappLogo } from "@phosphor-icons/react";
 import { track } from "../analytics";
 import { FAQ } from "../content";
-import { whatsappLink } from "../lib";
+import { hasWhatsapp, whatsappLink } from "../lib";
 import { Reveal } from "./Reveal";
 
 export function Faq() {
@@ -15,15 +15,17 @@ export function Faq() {
           <h2 className="font-display text-[clamp(2.8rem,8vw,6.5rem)] uppercase leading-[0.95] tracking-tight text-balance">
             Ficou com <span className="text-sun">dúvida?</span>
           </h2>
-          <a
-            href={whatsappLink("Oi! Tenho uma dúvida sobre o Sun, Bar & Love.")}
-            target="_blank"
-            rel="noopener noreferrer"
-            onClick={() => track("whatsapp_click", { location: "faq" })}
-            className="mt-8 inline-flex h-12 items-center gap-2 whitespace-nowrap rounded-full border border-cream/45 px-6 font-semibold transition hover:border-cream hover:bg-cream/10 active:scale-[0.97]"
-          >
-            <WhatsappLogo size={20} weight="fill" /> Chamar no WhatsApp
-          </a>
+          {hasWhatsapp && (
+            <a
+              href={whatsappLink("Oi! Tenho uma dúvida sobre o Sun, Bar & Love.")}
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={() => track("whatsapp_click", { location: "faq" })}
+              className="mt-8 inline-flex h-12 items-center gap-2 whitespace-nowrap rounded-full border border-cream/45 px-6 font-semibold transition hover:border-cream hover:bg-cream/10 active:scale-[0.97]"
+            >
+              <WhatsappLogo size={20} weight="fill" /> Chamar no WhatsApp
+            </a>
+          )}
         </Reveal>
 
         <ul>

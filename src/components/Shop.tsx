@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState, type MouseEvent } from "react";
 import {
   animate,
   motion,
@@ -9,7 +9,7 @@ import {
 import { ArrowLeft, ArrowRight, ArrowUpRight, BaseballCap, Hoodie, Sunglasses, TShirt } from "@phosphor-icons/react";
 import { track } from "../analytics";
 import { PRODUCTS, SHOP, SHOP_COLORS, type SbProduct, type ShopColor } from "../content";
-import { starClip, whatsappLink } from "../lib";
+import { hasWhatsapp, starClip, whatsappLink } from "../lib";
 import { Reveal } from "./Reveal";
 import { Sun } from "./Sun";
 
@@ -30,7 +30,7 @@ const GAP = 20;
 /** O nome da cor entra na mensagem só quando o cliente pode escolher entre cores. */
 function productHref(p: SbProduct, color: ShopColor | null): string {
   const colorText = color && p.colors.length > 1 ? ` ${SHOP_COLORS[color].label.toLowerCase()}` : "";
-  return p.url || SHOP.url || whatsappLink(`Oi! Quero comprar: ${p.name}${colorText} do Sun, Bar & Love.`);
+  return p.url || SHOP.url || (hasWhatsapp ? whatsappLink(`Oi! Quero comprar: ${p.name}${colorText} do Sun, Bar & Love.`) : "");
 }
 
 function ProductCard({ product, hidden }: { product: SbProduct; hidden?: boolean }) {
@@ -41,14 +41,18 @@ function ProductCard({ product, hidden }: { product: SbProduct; hidden?: boolean
   const emblem = EMBLEM[product.kind];
   const photo = product.photo ?? (color ? product.images?.[color] : undefined);
   const href = productHref(product, color);
-  const buy = () => track("shop_click", { product_id: product.id, color: choosable ? color ?? undefined : undefined });
+  // sem link da loja e sem WhatsApp, o produto aparece mas a compra fica "em breve"
+  const buy = (e: MouseEvent) => {
+    if (!href) return e.preventDefault();
+    track("shop_click", { product_id: product.id, color: choosable ? color ?? undefined : undefined });
+  };
 
   return (
     <div data-product-card className="w-[min(68vw,264px)] shrink-0 select-none">
       <a
-        href={href}
-        target="_blank"
-        rel="noopener noreferrer"
+        href={href || undefined}
+        target={href ? "_blank" : undefined}
+        rel={href ? "noopener noreferrer" : undefined}
         draggable={false}
         tabIndex={hidden ? -1 : undefined}
         onClick={buy}
@@ -109,17 +113,23 @@ function ProductCard({ product, hidden }: { product: SbProduct; hidden?: boolean
           <h3 className="font-display text-xl uppercase leading-tight">{product.name}</h3>
           {product.price && <p className="mt-0.5 text-cream/75">{product.price}</p>}
         </div>
-        <a
-          href={href}
-          target="_blank"
-          rel="noopener noreferrer"
-          draggable={false}
-          tabIndex={hidden ? -1 : undefined}
-          onClick={buy}
-          className="flex h-10 shrink-0 items-center gap-1.5 rounded-full bg-sun px-4 text-sm font-semibold text-deep transition hover:bg-[#ffd24d] active:scale-[0.97]"
-        >
-          Comprar <ArrowUpRight size={16} />
-        </a>
+        {href ? (
+          <a
+            href={href}
+            target="_blank"
+            rel="noopener noreferrer"
+            draggable={false}
+            tabIndex={hidden ? -1 : undefined}
+            onClick={buy}
+            className="flex h-10 shrink-0 items-center gap-1.5 rounded-full bg-sun px-4 text-sm font-semibold text-deep transition hover:bg-[#ffd24d] active:scale-[0.97]"
+          >
+            Comprar <ArrowUpRight size={16} />
+          </a>
+        ) : (
+          <span aria-disabled="true" className="flex h-10 shrink-0 cursor-not-allowed items-center rounded-full border border-cream/25 px-4 text-sm font-semibold text-cream/60">
+            Em breve
+          </span>
+        )}
       </div>
     </div>
   );

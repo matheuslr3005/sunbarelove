@@ -3,7 +3,7 @@ import { LayoutGroup, motion } from "motion/react";
 import { ArrowUpRight, CalendarBlank, Check, Clock, MapPin, ShareNetwork, WhatsappLogo } from "@phosphor-icons/react";
 import { track } from "../analytics";
 import { EVENTS, SITE, type SbEvent } from "../content";
-import { atVenue, eventDate, mapsLink, whatsappLink } from "../lib";
+import { atVenue, eventDate, hasWhatsapp, mapsLink, whatsappLink } from "../lib";
 import { Button } from "./Button";
 import { Countdown } from "./Countdown";
 import { Modal } from "./Modal";
@@ -227,15 +227,17 @@ function EventModalBody({ event, onClose }: { event: SbEvent; onClose: () => voi
               <Button href="#videos" onClick={onClose} icon={<ArrowUpRight size={18} />}>
                 Ver vídeos
               </Button>
-              <Button
-                variant="ghost"
-                href={whatsappLink("Oi! Quero saber da próxima edição do Sun, Bar & Love.")}
-                external
-                icon={<WhatsappLogo size={18} />}
-                trackEvent={["whatsapp_click", { location: "evento_encerrado" }]}
-              >
-                Próxima edição
-              </Button>
+              {hasWhatsapp && (
+                <Button
+                  variant="ghost"
+                  href={whatsappLink("Oi! Quero saber da próxima edição do Sun, Bar & Love.")}
+                  external
+                  icon={<WhatsappLogo size={18} />}
+                  trackEvent={["whatsapp_click", { location: "evento_encerrado" }]}
+                >
+                  Próxima edição
+                </Button>
+              )}
             </>
           )}
         </div>
@@ -309,21 +311,24 @@ export function Events() {
                         Novas datas saem em breve
                       </h3>
                       <p className="mt-3 max-w-md text-deep/85">
-                        {saveTheDates.length > 0
-                          ? "Já pode marcar na agenda. Chama no WhatsApp e seja o primeiro a saber dos ingressos."
-                          : "Chama no WhatsApp e seja o primeiro a saber."}
+                        {saveTheDates.length > 0 ? "Já pode marcar na agenda. " : ""}
+                        {hasWhatsapp
+                          ? "Chama no WhatsApp e seja o primeiro a saber."
+                          : "Fique de olho: a gente avisa por aqui assim que tiver novidade."}
                       </p>
-                      <div className="mt-6">
-                        <a
-                          href={whatsappLink("Oi! Quero ser avisado das próximas edições do Sun, Bar & Love.")}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          onClick={() => track("whatsapp_click", { location: "novas_datas" })}
-                          className="inline-flex h-12 items-center gap-2 whitespace-nowrap rounded-full bg-deep px-6 font-semibold text-cream transition hover:bg-night active:scale-[0.97]"
-                        >
-                          <WhatsappLogo size={20} weight="fill" /> Chamar no WhatsApp
-                        </a>
-                      </div>
+                      {hasWhatsapp && (
+                        <div className="mt-6">
+                          <a
+                            href={whatsappLink("Oi! Quero ser avisado das próximas edições do Sun, Bar & Love.")}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            onClick={() => track("whatsapp_click", { location: "novas_datas" })}
+                            className="inline-flex h-12 items-center gap-2 whitespace-nowrap rounded-full bg-deep px-6 font-semibold text-cream transition hover:bg-night active:scale-[0.97]"
+                          >
+                            <WhatsappLogo size={20} weight="fill" /> Chamar no WhatsApp
+                          </a>
+                        </div>
+                      )}
                     </div>
                     {saveTheDates.length > 0 && (
                       <div className="grid gap-4 sm:grid-cols-2">
