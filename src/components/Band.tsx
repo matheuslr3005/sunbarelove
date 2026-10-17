@@ -3,7 +3,7 @@ import { Play, WhatsappLogo } from "@phosphor-icons/react";
 import { asset } from "../asset";
 import { track } from "../analytics";
 import { BAND } from "../content";
-import { whatsappLink } from "../lib";
+import { hasWhatsapp, whatsappLink } from "../lib";
 import { Modal } from "./Modal";
 import { Reveal } from "./Reveal";
 import { Sun } from "./Sun";
@@ -64,15 +64,17 @@ export function Band() {
         </Reveal>
 
         <Reveal delay={0.15} className="mt-8">
-          <a
-            href={whatsappLink("Oi! Quero saber mais sobre a banda do Sun, Bar & Love.")}
-            target="_blank"
-            rel="noopener noreferrer"
-            onClick={() => track("band_booking_click")}
-            className="inline-flex h-12 items-center gap-2 whitespace-nowrap rounded-full border border-cream/45 px-6 font-semibold transition hover:border-cream hover:bg-cream/10 active:scale-[0.97]"
-          >
-            <WhatsappLogo size={20} weight="fill" /> Contratar a banda
-          </a>
+          {hasWhatsapp && (
+            <a
+              href={whatsappLink("Oi! Quero saber mais sobre a banda do Sun, Bar & Love.")}
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={() => track("band_booking_click")}
+              className="inline-flex h-12 items-center gap-2 whitespace-nowrap rounded-full border border-cream/45 px-6 font-semibold transition hover:border-cream hover:bg-cream/10 active:scale-[0.97]"
+            >
+              <WhatsappLogo size={20} weight="fill" /> Contratar a banda
+            </a>
+          )}
         </Reveal>
       </div>
 

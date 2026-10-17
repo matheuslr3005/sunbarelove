@@ -7,8 +7,9 @@ import { asset } from "./asset";
 
 export const SITE = {
   name: "Sun, Bar & Love",
-  // WhatsApp que aparece nos cartazes: (51) 98206-0372
-  whatsapp: "5551982060372",
+  // TODO: número do WhatsApp com DDI e DDD, só dígitos, ex: "5551999999999". Enquanto estiver vazio,
+  // todos os botões e links de WhatsApp somem do site e "Ingressos"/"Comprar" ficam como "em breve" até haver link de venda.
+  whatsapp: "",
   // TODO: coloque o link do perfil quando tiver, ex: "https://instagram.com/seuperfil"
   instagram: "",
   // TODO: ID do Google Analytics 4 (ex: "G-ABC123XYZ"). Vazio = os cliques só são enviados
@@ -49,7 +50,7 @@ export interface SbEvent {
   city: string;
   flyer: string;
   blurb: string;
-  /** Link da página de venda. Vazio = o botão cai no WhatsApp. TODO: preencher. */
+  /** Link da página de venda. Vazio = o botão cai no WhatsApp (ou fica "Ingressos em breve" se também não houver WhatsApp). TODO: preencher. */
   ticketUrl: string;
   sale: Sale;
   /** Atrações. Vazio = o bloco não aparece. Ex: ["DJ Fulano", "Banda X"]. */
@@ -223,7 +224,8 @@ export interface SbPhoto {
   id: string;
   src: string;
   alt: string;
-  caption: string;
+  /** Legenda da foto. Não é mostrada no site hoje (o modal só mostra a foto e as setas). */
+  caption?: string;
   /** Posição da célula no bento (desktop). Formato CSS grid-area: linha/coluna/linha/coluna. */
   className?: string;
   position?: string;
@@ -420,7 +422,7 @@ export const FAQ: { q: string; a: string }[] = [
   },
   {
     q: "A que horas começa?",
-    a: "A festa de 7 anos acontece no sábado, 7 de novembro. O horário de abertura será divulgado em breve, e a gente avisa por aqui e pelo WhatsApp.",
+    a: "A festa de 7 anos acontece no sábado, 7 de novembro. O horário de abertura será divulgado em breve, e a gente avisa por aqui.",
   },
   {
     q: "Onde vai ser?",
@@ -428,10 +430,10 @@ export const FAQ: { q: string; a: string }[] = [
   },
   {
     q: "O lote acabou. E agora?",
-    a: "Chame no WhatsApp para saber se vai abrir um novo lote ou a próxima virada.",
+    a: "Fique de olho no site: é por aqui que a gente avisa quando abrir um novo lote ou a próxima virada.",
   },
   {
     q: "Qual a idade mínima e o que levar na entrada?",
-    a: "A regra de idade e de documentos é definida por edição. Confirme pelo WhatsApp antes de ir.",
+    a: "A regra de idade e de documentos é definida por edição e sai junto com as informações do evento. Confira aqui antes de ir.",
   },
 ];

@@ -11,6 +11,9 @@ export function starClip(rays: number, inner: number): string {
   return `polygon(${pts.join(",")})`;
 }
 
+/** O WhatsApp só aparece no site quando SITE.whatsapp estiver preenchido. */
+export const hasWhatsapp = Boolean(SITE.whatsapp);
+
 export function whatsappLink(message: string): string {
   return `https://wa.me/${SITE.whatsapp}?text=${encodeURIComponent(message)}`;
 }
@@ -22,10 +25,11 @@ export function atVenue(event: SbEvent): string {
 
 /**
  * Link de ingressos do evento, ou WhatsApp como alternativa enquanto não houver link.
+ * Sem link de venda e sem WhatsApp, devolve "" (o botão vira "Ingressos em breve").
  * Na página de venda, acrescenta UTMs para a plataforma de vendas saber de qual botão veio a compra.
  */
 export function ticketLink(event: SbEvent, location = "site"): string {
-  if (!event.ticketUrl) return whatsappLink(`Oi! Quero ingressos para o ${event.title}${atVenue(event)}.`);
+  if (!event.ticketUrl) return hasWhatsapp ? whatsappLink(`Oi! Quero ingressos para o ${event.title}${atVenue(event)}.`) : "";
   try {
     const url = new URL(event.ticketUrl);
     url.searchParams.set("utm_source", "site");

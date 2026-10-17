@@ -3,7 +3,7 @@ import { motion, useReducedMotion, useScroll, useTransform } from "motion/react"
 import { InstagramLogo, WhatsappLogo } from "@phosphor-icons/react";
 import { BG_VIDEOS, EVENTS, SITE } from "../content";
 import { track } from "../analytics";
-import { whatsappLink } from "../lib";
+import { hasWhatsapp, whatsappLink } from "../lib";
 import { BackgroundVideo } from "./BackgroundVideo";
 import { Sun } from "./Sun";
 import { TicketButton } from "./TicketButton";
@@ -70,15 +70,17 @@ export function Finale() {
             </p>
           </div>
           <div className="flex items-center gap-5">
-            <a
-              href={whatsappLink("Oi! Vim pelo site do Sun, Bar & Love.")}
-              target="_blank"
-              rel="noopener noreferrer"
-              onClick={() => track("whatsapp_click", { location: "rodape" })}
-              className="flex items-center gap-2 py-3 hover:text-sun"
-            >
-              <WhatsappLogo size={22} weight="fill" /> WhatsApp
-            </a>
+            {hasWhatsapp && (
+              <a
+                href={whatsappLink("Oi! Vim pelo site do Sun, Bar & Love.")}
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={() => track("whatsapp_click", { location: "rodape" })}
+                className="flex items-center gap-2 py-3 hover:text-sun"
+              >
+                <WhatsappLogo size={22} weight="fill" /> WhatsApp
+              </a>
+            )}
             {SITE.instagram && (
               <a href={SITE.instagram} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 hover:text-sun">
                 <InstagramLogo size={22} /> Instagram

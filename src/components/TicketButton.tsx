@@ -1,7 +1,7 @@
 import { Bell, Ticket } from "@phosphor-icons/react";
 import { track } from "../analytics";
 import type { SbEvent } from "../content";
-import { atVenue, ticketLink, whatsappLink } from "../lib";
+import { atVenue, hasWhatsapp, ticketLink, whatsappLink } from "../lib";
 
 interface Props {
   event: SbEvent;
@@ -19,6 +19,7 @@ export function TicketButton({ event, location, size = "md", tone = "sun", class
   const base = `inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-full font-semibold ${sizing} ${className}`;
 
   if (event.sale.status === "soon") {
+    if (!hasWhatsapp) return null;
     return (
       <a
         href={whatsappLink(`Oi! Quero ser avisado quando abrirem os ingressos do ${event.title}${atVenue(event)}.`)}
@@ -41,9 +42,18 @@ export function TicketButton({ event, location, size = "md", tone = "sun", class
     );
   }
 
+  const href = ticketLink(event, location);
+  if (!href) {
+    return (
+      <span aria-disabled="true" className={`${base} cursor-not-allowed border border-cream/25 text-cream/60`}>
+        Ingressos em breve
+      </span>
+    );
+  }
+
   return (
     <a
-      href={ticketLink(event, location)}
+      href={href}
       target="_blank"
       rel="noopener noreferrer"
       onClick={() =>
