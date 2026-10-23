@@ -1,12 +1,17 @@
-import { Camera, DownloadSimple } from "@phosphor-icons/react";
+import { useState } from "react";
+import { Camera, DownloadSimple, Plus } from "@phosphor-icons/react";
 import { track } from "../analytics";
 import type { SbEvent } from "../content";
 
 /** Álbum de fotos de uma edição que já rolou: toque na foto para ver em tamanho cheio e baixe com o botão. */
-export function Album({ event }: { event: SbEvent }) {
-  const photos = event.album ?? [];
+const PAGE = 48;
 
-  if (!photos.length) {
+export function Album({ event }: { event: SbEvent }) {
+  const all = event.album ?? [];
+  const [shown, setShown] = useState(PAGE);
+  const photos = all.slice(0, shown);
+
+  if (!all.length) {
     return (
       <div className="flex items-center gap-3 rounded-card border border-cream/20 bg-deep/50 p-5">
         <Camera size={28} weight="fill" className="shrink-0 text-sun" />
@@ -18,7 +23,7 @@ export function Album({ event }: { event: SbEvent }) {
   return (
     <div>
       <div className="flex flex-wrap items-center justify-between gap-3">
-        <h4 className="text-sm font-semibold uppercase tracking-[0.16em] text-flame">Álbum · {photos.length} fotos</h4>
+        <h4 className="text-sm font-semibold uppercase tracking-[0.16em] text-flame">Álbum · {all.length} fotos</h4>
         {event.albumUrl && (
           <a
             href={event.albumUrl}
@@ -31,9 +36,9 @@ export function Album({ event }: { event: SbEvent }) {
           </a>
         )}
       </div>
-      <ul className="mt-4 grid grid-cols-2 gap-2 sm:grid-cols-3 md:gap-3">
+      <ul className="mt-4 columns-2 gap-2 sm:columns-3 md:gap-3 [&>li]:mb-2 md:[&>li]:mb-3">
         {photos.map((p, i) => (
-          <li key={p.id} className="group relative overflow-hidden rounded-[20px] bg-night-2 ring-1 ring-cream/15">
+          <li key={p.id} className="group relative break-inside-avoid overflow-hidden rounded-[20px] bg-night-2 ring-1 ring-cream/15">
             <a
               href={p.src}
               target="_blank"
@@ -49,7 +54,8 @@ export function Album({ event }: { event: SbEvent }) {
                 height={p.height}
                 loading="lazy"
                 decoding="async"
-                className="aspect-[4/5] w-full object-cover transition-transform duration-500 ease-out-expo group-hover:scale-[1.05]"
+                className="h-auto w-full object-cover transition-transform duration-500 ease-out-expo group-hover:scale-[1.05]"
+                style={{ aspectRatio: `${p.width} / ${p.height}` }}
               />
             </a>
             <a
@@ -64,6 +70,17 @@ export function Album({ event }: { event: SbEvent }) {
           </li>
         ))}
       </ul>
+      {shown < all.length && (
+        <div className="mt-5 flex justify-center">
+          <button
+            type="button"
+            onClick={() => setShown((n) => n + PAGE)}
+            className="inline-flex h-12 items-center gap-2 rounded-full border border-cream/45 px-6 font-semibold transition hover:border-cream hover:bg-cream/10 active:scale-[0.97]"
+          >
+            <Plus size={18} weight="bold" /> Ver mais fotos ({all.length - shown})
+          </button>
+        </div>
+      )}
     </div>
   );
 }

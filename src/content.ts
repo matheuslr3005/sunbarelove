@@ -1,4 +1,5 @@
 import { asset } from "./asset";
+import { QUINTAL_29_MAR_THUMBS } from "./albumData";
 
 /**
  * Todo o conteúdo editável do site mora aqui.
@@ -176,17 +177,18 @@ export const EVENTS: SbEvent[] = [
     blurb: "A 28ª edição do Sun, Bar & Love, no Quintal Lounge, com pôr do sol, música boa e gente que a gente ama.",
     ticketUrl: "",
     sale: { status: "closed" },
-    album: [
-      { id: "q29-01", thumb: asset("media/albuns/quintal-29-mar/t01.webp"), src: asset("media/albuns/quintal-29-mar/01.jpg"), width: 427, height: 640 },
-      { id: "q29-02", thumb: asset("media/albuns/quintal-29-mar/t02.webp"), src: asset("media/albuns/quintal-29-mar/02.jpg"), width: 427, height: 640 },
-      { id: "q29-03", thumb: asset("media/albuns/quintal-29-mar/t03.webp"), src: asset("media/albuns/quintal-29-mar/03.jpg"), width: 427, height: 640 },
-      { id: "q29-04", thumb: asset("media/albuns/quintal-29-mar/t04.webp"), src: asset("media/albuns/quintal-29-mar/04.jpg"), width: 427, height: 640 },
-      { id: "q29-05", thumb: asset("media/albuns/quintal-29-mar/t05.webp"), src: asset("media/albuns/quintal-29-mar/05.jpg"), width: 427, height: 640 },
-      { id: "q29-06", thumb: asset("media/albuns/quintal-29-mar/t06.webp"), src: asset("media/albuns/quintal-29-mar/06.jpg"), width: 427, height: 640 },
-      { id: "q29-07", thumb: asset("media/albuns/quintal-29-mar/t07.webp"), src: asset("media/albuns/quintal-29-mar/07.jpg"), width: 427, height: 640 },
-      { id: "q29-08", thumb: asset("media/albuns/quintal-29-mar/t08.webp"), src: asset("media/albuns/quintal-29-mar/08.jpg"), width: 427, height: 640 },
-      { id: "q29-09", thumb: asset("media/albuns/quintal-29-mar/t09.webp"), src: asset("media/albuns/quintal-29-mar/09.jpg"), width: 640, height: 427 },
-    ],
+    album: QUINTAL_29_MAR_THUMBS.map(([width, height], i) => {
+      const n = String(i + 1).padStart(3, "0");
+      return {
+        id: `q29-${n}`,
+        thumb: asset(`media/albuns/quintal-29-mar/t${n}.webp`),
+        src: asset(`media/albuns/quintal-29-mar/${n}.jpg`),
+        width,
+        height,
+      };
+    }),
+    // Pasta do Drive com as fotos originais em alta resolução (precisa estar com "qualquer pessoa com o link").
+    albumUrl: "https://drive.google.com/drive/folders/1ceJnpa9Kc0peJ6T3zdBDzFuIzVaDkgIH",
   },
   {
     id: "rio-melhor-dia",
