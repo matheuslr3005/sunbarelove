@@ -279,18 +279,14 @@ export interface SbPhoto {
   id: string;
   src: string;
   alt: string;
-  /** Legenda da foto. Não é mostrada no site hoje (o modal só mostra a foto e as setas). */
-  caption?: string;
-  /** Posição da célula no bento (desktop). Formato CSS grid-area: linha/coluna/linha/coluna. */
-  className?: string;
-  position?: string;
+  /** Medidas do arquivo: reservam o espaço antes de a foto carregar e evitam a grade pular. */
+  width: number;
+  height: number;
 }
 
 export interface Gallery {
   id: string;
   label: string;
-  /** "bento": grade de 4 colunas e 2 linhas (4 fotos com className + o cartão de "mais fotos"). "masonry" aceita qualquer quantidade. */
-  layout: "bento" | "masonry";
   photos: SbPhoto[];
 }
 
@@ -300,68 +296,63 @@ export const GALLERIES: Gallery[] = [
   {
     id: "destaques",
     label: "Destaques",
-    layout: "masonry",
     photos: [
-      {
-        id: "p-brinde",
-        src: asset("media/foto-brinde.webp"),
-        alt: "Grupo de amigos rindo e brindando com copos amarelos da festa",
-        caption: "Brinde com os copos amarelos da festa.",
-      },
-      {
-        id: "p-danca",
-        src: asset("media/foto-danca.webp"),
-        alt: "Mulher dançando com os braços para o alto, ao lado de uma amiga, sob luzes quentes",
-        caption: "Mão pro alto na pista.",
-      },
-      {
-        id: "p-copos",
-        src: asset("media/foto-copos.webp"),
-        alt: "Dois copos azuis da festa brindando com respingo, com o pôr do sol ao fundo",
-        caption: "Brinde com o pôr do sol ao fundo.",
-      },
-      {
-        id: "p-por-do-sol-cabelo",
-        src: asset("media/foto-por-do-sol-cabelo.webp"),
-        alt: "Mulher sorrindo com as mãos no cabelo diante do rio ao pôr do sol",
-        caption: "Pôr do sol na beira do rio.",
-      },
-      {
-        id: "p-bone-vermelho",
-        src: asset("media/foto-bone-vermelho.webp"),
-        alt: "Mulher sorrindo com o boné vermelho do Sun, Bar & Love sob luzes rosa",
-        caption: "O boné vermelho da festa.",
-      },
-      {
-        id: "p-mural",
-        src: asset("media/foto-mural.webp"),
-        alt: "Mulher segurando um copo diante do painel do sol com o nome da festa",
-        caption: "Foto no painel do sol.",
-      },
-      {
-        id: "p-trio-palmeira",
-        src: asset("media/foto-trio-palmeira.webp"),
-        alt: "Três amigos posando sob uma palmeira com o céu azul de fim de tarde",
-        caption: "Amigos sob a palmeira.",
-      },
-      {
-        id: "p-pandeiro",
-        src: asset("media/foto-pandeiro.webp"),
-        alt: "Silhueta de músicos tocando pandeiro contra o sol dourado",
-        caption: "Roda de pandeiro contra o sol.",
-      },
-      {
-        id: "p-retrato-copo",
-        src: asset("media/foto-retrato-copo.webp"),
-        alt: "Retrato de mulher loira com um copo azul da festa, com luzes de lâmpadas ao fundo",
-        caption: "Noite de luzes acesas.",
-      },
-      {
-        id: "p-risada",
-        src: asset("media/foto-risada.webp"),
-        alt: "Mulher loira rindo com um copo azul da festa na mão, sob luz rosa",
-        caption: "Sorriso de quem chegou para curtir.",
-      },
+      { id: "g01", src: asset("media/galeria/g01.webp"), alt: "Palco ao pôr do sol com a pista cheia", width: 1400, height: 933 },
+      { id: "g02", src: asset("media/galeria/g02.webp"), alt: "Duas amigas brindando diante do letreiro Vibe Infinita e do pôr do sol", width: 1024, height: 1024 },
+      { id: "g03", src: asset("media/galeria/g03.webp"), alt: "Escadaria de madeira até o letreiro Vibe Infinita, com o céu em chamas", width: 1024, height: 1024 },
+      { id: "g04", src: asset("media/galeria/g04.webp"), alt: "Amigas brindando em contraluz com o sol ao fundo", width: 1120, height: 1400 },
+      { id: "g05", src: asset("media/galeria/g05.webp"), alt: "Moça posando na moldura de neon Sun, Bar & Love com girassóis", width: 933, height: 1400 },
+      { id: "g06", src: asset("media/galeria/g06.webp"), alt: "Banda tocando em silhueta com o sol atrás", width: 933, height: 1400 },
+      { id: "g07", src: asset("media/galeria/g07.webp"), alt: "Palco com painel de LED colorido e luzes azuis", width: 1400, height: 933 },
+      { id: "g08", src: asset("media/galeria/g08.webp"), alt: "Público em silhueta diante do arco Sol Cerveza ao pôr do sol", width: 933, height: 1400 },
+      { id: "g09", src: asset("media/galeria/g09.webp"), alt: "Amigas se abraçando diante do sol de luz", width: 933, height: 1400 },
+      { id: "g10", src: asset("media/galeria/g10.webp"), alt: "Três amigas rindo com glitter no ar", width: 1400, height: 933 },
+      { id: "g11", src: asset("media/galeria/g11.webp"), alt: "Grupo de amigos brindando com copos amarelos", width: 1000, height: 668 },
+      { id: "g12", src: asset("media/galeria/g12.webp"), alt: "Copos erguidos em brinde com o sol dourado ao fundo", width: 934, height: 1400 },
+      { id: "g13", src: asset("media/galeria/g13.webp"), alt: "Moça na moldura de girassóis à beira do Guaíba", width: 933, height: 1400 },
+      { id: "g14", src: asset("media/galeria/g14.webp"), alt: "DJ no palco em arco com luzes e o lago ao fundo", width: 1400, height: 933 },
+      { id: "g15", src: asset("media/galeria/g15.webp"), alt: "Show ao pôr do sol no palco em arco", width: 1400, height: 933 },
+      { id: "g16", src: asset("media/galeria/g16.webp"), alt: "Moça soprando glitter sob o neon Sun, Bar & Love", width: 933, height: 1400 },
+      { id: "g17", src: asset("media/galeria/g17.webp"), alt: "Pista com bandeiras e fumaça diante do DJ", width: 1400, height: 933 },
+      { id: "g18", src: asset("media/galeria/g18.webp"), alt: "Moça bebendo no copo da festa diante de um mural colorido", width: 853, height: 1280 },
+      { id: "g19", src: asset("media/galeria/g19.webp"), alt: "Letreiro Sun, Bar & Love ao pôr do sol, em lente olho de peixe", width: 1400, height: 933 },
+      { id: "g20", src: asset("media/galeria/g20.webp"), alt: "Quatro amigas fazendo selfie com o céu alaranjado", width: 933, height: 1400 },
+    ],
+  },
+  {
+    id: "mais",
+    label: "Mais fotos",
+    photos: [
+      { id: "g21", src: asset("media/galeria/g21.webp"), alt: "Moça bebendo no copo diante do painel azul Sun, Bar & Love", width: 1400, height: 933 },
+      { id: "g22", src: asset("media/galeria/g22.webp"), alt: "Músicos tocando pandeiro em silhueta no pôr do sol", width: 1400, height: 933 },
+      { id: "g23", src: asset("media/galeria/g23.webp"), alt: "Banda tocando no palco com o lago ao fundo", width: 1400, height: 933 },
+      { id: "g24", src: asset("media/galeria/g24.webp"), alt: "Duas amigas sorrindo sob luzes quentes à noite", width: 933, height: 1400 },
+      { id: "g25", src: asset("media/galeria/g25.webp"), alt: "Brinde com copos coloridos entre amigos", width: 1400, height: 933 },
+      { id: "g26", src: asset("media/galeria/g26.webp"), alt: "Duas amigas bebendo drinks vermelhos diante do letreiro Vibe Infinita", width: 933, height: 1400 },
+      { id: "g27", src: asset("media/galeria/g27.webp"), alt: "Moça de braços para o alto à noite", width: 933, height: 1400 },
+      { id: "g28", src: asset("media/galeria/g28.webp"), alt: "Moça posando na estrutura azul com flores amarelas", width: 1400, height: 933 },
+      { id: "g29", src: asset("media/galeria/g29.webp"), alt: "Três amigas de óculos escuros sorrindo", width: 1400, height: 933 },
+      { id: "g30", src: asset("media/galeria/g30.webp"), alt: "Duas amigas posando diante do painel de nuvens", width: 1400, height: 932 },
+      { id: "g31", src: asset("media/galeria/g31.webp"), alt: "Amigas pulando no pôr do sol diante do mural", width: 933, height: 1400 },
+      { id: "g32", src: asset("media/galeria/g32.webp"), alt: "Moça de rabo de cavalo ao pôr do sol", width: 933, height: 1400 },
+      { id: "g33", src: asset("media/galeria/g33.webp"), alt: "Pista cheia ao pôr do sol com o palco ao fundo", width: 1400, height: 933 },
+      { id: "g34", src: asset("media/galeria/g34.webp"), alt: "Casal dançando diante das letras coloridas Sun, Bar & Love", width: 1400, height: 933 },
+      { id: "g35", src: asset("media/galeria/g35.webp"), alt: "Brinde em silhueta com o sol por trás", width: 933, height: 1400 },
+      { id: "g36", src: asset("media/galeria/g36.webp"), alt: "Moça de jaqueta posando diante do mural colorido", width: 933, height: 1400 },
+      { id: "g37", src: asset("media/galeria/g37.webp"), alt: "Moça de braço erguido com o copo na pista", width: 933, height: 1400 },
+      { id: "g38", src: asset("media/galeria/g38.webp"), alt: "Duas amigas caminhando pelo deck da festa", width: 933, height: 1400 },
+      { id: "g39", src: asset("media/galeria/g39.webp"), alt: "Moça fazendo selfie sob o sol de luz", width: 933, height: 1400 },
+      { id: "g40", src: asset("media/galeria/g40.webp"), alt: "Quatro amigas brindando à beira do lago", width: 933, height: 1400 },
+      { id: "g41", src: asset("media/galeria/g41.webp"), alt: "Pista cheia com bandeiras sob luzes azuis", width: 1400, height: 933 },
+      { id: "g42", src: asset("media/galeria/g42.webp"), alt: "Bandeira Sun, Bar & Love balançando sobre a pista", width: 1400, height: 933 },
+      { id: "g43", src: asset("media/galeria/g43.webp"), alt: "Moça posando diante do sol amarelo Sol Cerveza", width: 933, height: 1400 },
+      { id: "g44", src: asset("media/galeria/g44.webp"), alt: "Três amigas de mãos dadas entre as luzinhas", width: 1400, height: 932 },
+      { id: "g45", src: asset("media/galeria/g45.webp"), alt: "Amigos abraçados vendo o sol se pôr", width: 668, height: 1000 },
+      { id: "g46", src: asset("media/galeria/g46.webp"), alt: "Amigos brindando de frente para o lago", width: 1400, height: 933 },
+      { id: "g47", src: asset("media/galeria/g47.webp"), alt: "Moça com o copo erguido diante do sol colorido", width: 933, height: 1400 },
+      { id: "g48", src: asset("media/galeria/g48.webp"), alt: "Duas amigas erguendo copos sob a cobertura", width: 933, height: 1400 },
+      { id: "g49", src: asset("media/galeria/g49.webp"), alt: "Moça dançando diante da banda de pagode", width: 933, height: 1400 },
+      { id: "g50", src: asset("media/galeria/g50.webp"), alt: "Grupo de amigas se abraçando e rindo", width: 933, height: 1400 },
     ],
   },
 ];
