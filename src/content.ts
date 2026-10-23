@@ -211,8 +211,7 @@ export const SPOTLIGHT_ID = "aniversario-7-anos";
  */
 export const COLLAB = {
   partner: "Approve",
-  blurb:
-    "Somos um festival itinerante que celebra o sol, a música e a felicidade. Criamos experiências únicas, onde a energia contagia, as conexões acontecem e cada detalhe transforma o dia em uma memória inesquecível.",
+  blurb: "Uma coleção de roupas feita em parceria com a Approve.",
   image: asset("media/collab-approve.webp"),
   imageAlt: "Proposta da collab Sun, Bar & Love × Approve: camiseta e cropped, frente e costas, em off-white com o sol amarelo e as marcas em azul",
   launch: "Lançamento em breve",
