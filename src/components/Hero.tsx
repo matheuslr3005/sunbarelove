@@ -65,11 +65,11 @@ export function Hero() {
           >
             <h1>
               <img
-                src={asset("media/logo-sun-bar-love.webp")}
+                src={asset("media/logo-sol.webp")}
                 alt="Sun, Bar & Love"
                 width={1400}
-                height={640}
-                className="w-full max-w-[30rem] drop-shadow-[0_6px_26px_rgba(4,23,30,0.6)] lg:max-w-[38rem]"
+                height={798}
+                className="-ml-4 w-full max-w-[26rem] drop-shadow-[0_8px_28px_rgba(4,23,30,0.55)] lg:-ml-8 lg:max-w-[34rem]"
                 fetchPriority="high"
               />
             </h1>
