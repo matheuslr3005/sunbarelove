@@ -1,11 +1,12 @@
 import { useCallback, useState } from "react";
 import { LayoutGroup, motion } from "motion/react";
-import { ArrowUpRight, CalendarBlank, Check, Clock, MapPin, ShareNetwork, WhatsappLogo } from "@phosphor-icons/react";
+import { ArrowUpRight, CalendarBlank, Check, Clock, Images, MapPin, ShareNetwork, WhatsappLogo } from "@phosphor-icons/react";
 import { track } from "../analytics";
 import { EVENTS, SITE, SPOTLIGHT_ID, type SbEvent } from "../content";
 import { atVenue, eventDate, hasWhatsapp, mapsLink, whatsappLink } from "../lib";
 import { Button } from "./Button";
 import { Countdown } from "./Countdown";
+import { Album } from "./Album";
 import { Lineup } from "./Lineup";
 import { Modal } from "./Modal";
 import { Reveal } from "./Reveal";
@@ -19,7 +20,7 @@ const TABS: { id: Tab; label: string }[] = [
   { id: "past", label: "Já rolou" },
 ];
 
-function FlyerButton({ event, onOpen }: { event: SbEvent; onOpen: () => void }) {
+function FlyerButton({ event, onOpen, aspect = "aspect-[6/7]" }: { event: SbEvent; onOpen: () => void; aspect?: string }) {
   return (
     <button
       type="button"
@@ -31,7 +32,7 @@ function FlyerButton({ event, onOpen }: { event: SbEvent; onOpen: () => void }) 
         layoutId={`flyer-${event.id}`}
         src={event.flyer}
         alt={`Cartaz: ${event.title}${event.venue ? `, ${event.venue}` : ""}`}
-        className="aspect-[6/7] w-full rounded-card object-cover shadow-[0_30px_70px_-25px_rgba(240,40,110,0.55)] ring-1 ring-cream/20 transition-transform duration-500 ease-out-expo group-hover:-translate-y-1.5"
+        className={`${aspect} w-full rounded-card object-cover object-[50%_45%] shadow-[0_30px_70px_-25px_rgba(240,40,110,0.55)] ring-1 ring-cream/20 transition-transform duration-500 ease-out-expo group-hover:-translate-y-1.5`}
       />
     </button>
   );
@@ -104,11 +105,14 @@ function PastCard({ event, onOpen }: { event: SbEvent; onOpen: (e: SbEvent) => v
   const date = eventDate(event);
   return (
     <div>
-      <FlyerButton event={event} onOpen={() => onOpen(event)} />
+      <FlyerButton event={event} onOpen={() => onOpen(event)} aspect="aspect-[4/5]" />
       <div className="mt-5 flex items-start justify-between gap-4">
         <div>
           <h3 className="font-display text-2xl uppercase leading-tight">{event.title === SITE.name ? event.venue : event.title}</h3>
           <p className="mt-1 text-cream/75">{date.day}</p>
+          <p className="mt-2 inline-flex items-center gap-1.5 text-sm font-semibold text-sun">
+            <Images size={16} weight="fill" /> {event.album?.length ? `Ver ${event.album.length} fotos` : "Fotos em breve"}
+          </p>
         </div>
         <SaleBadge sale={event.sale} />
       </div>
@@ -184,6 +188,11 @@ function EventModalBody({ event, onClose }: { event: SbEvent; onClose: () => voi
         {upcoming && event.startsAt && (
           <div className="max-md:order-5">
             <Countdown startsAt={event.startsAt} />
+          </div>
+        )}
+        {!upcoming && (
+          <div className="max-md:order-5">
+            <Album event={event} />
           </div>
         )}
 

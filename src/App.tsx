@@ -2,7 +2,6 @@ import { MotionConfig, motion, useScroll, useSpring } from "motion/react";
 import { IconContext } from "@phosphor-icons/react";
 import { Nav } from "./components/Nav";
 import { Hero } from "./components/Hero";
-import { Marquee } from "./components/Marquee";
 import { BarraStrip } from "./components/BarraStrip";
 import { EventSpotlight } from "./components/EventSpotlight";
 import { EventMap3D } from "./components/EventMap3D";
@@ -13,7 +12,6 @@ import { Videos } from "./components/Videos";
 import { Gallery } from "./components/Gallery";
 import { Finale } from "./components/Finale";
 import { Intro, IntroProvider } from "./components/Intro";
-import { Proof } from "./components/Proof";
 import { Faq } from "./components/Faq";
 import { Shop } from "./components/Shop";
 import { Band } from "./components/Band";
@@ -48,9 +46,7 @@ export default function App() {
           <EventSpotlight />
           <EventMap3D />
           <Collab />
-          <Marquee />
           <Manifesto />
-          <Proof />
           <Events />
           <Videos />
           <Gallery />
