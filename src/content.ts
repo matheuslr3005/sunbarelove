@@ -1,5 +1,5 @@
 import { asset } from "./asset";
-import { QUINTAL_17_MAI_THUMBS, QUINTAL_29_MAR_THUMBS } from "./albumData";
+import { MADE_IN_BRASIL_THUMBS, QUINTAL_17_MAI_THUMBS, QUINTAL_29_MAR_THUMBS } from "./albumData";
 
 /**
  * Todo o conteúdo editável do site mora aqui.
@@ -165,6 +165,30 @@ export const EVENTS: SbEvent[] = [
     blurb: "Uma tarde de música, drinks e pôr do sol no Quintal.",
     ticketUrl: "",
     sale: { status: "closed" },
+  },
+  {
+    id: "made-in-brasil-05-jul",
+    status: "past",
+    title: "30º Sun, Bar & Love: Made in Brasil",
+    dateLabel: "5 de julho",
+    venue: "Casa Vetro",
+    city: "Porto Alegre, RS",
+    flyer: asset("media/flyer-made-in-brasil.webp"),
+    blurb: "A 30ª edição, Made in Brasil: um domingo verde e amarelo na Casa Vetro, com open bar, atrações e muito pôr do sol.",
+    ticketUrl: "",
+    sale: { status: "closed" },
+    album: MADE_IN_BRASIL_THUMBS.map(([width, height], i) => {
+      const n = String(i + 1).padStart(3, "0");
+      return {
+        id: `mib-${n}`,
+        thumb: asset(`media/albuns/casa-vetro-05-jul/t${n}.webp`),
+        src: asset(`media/albuns/casa-vetro-05-jul/${n}.jpg`),
+        width,
+        height,
+      };
+    }),
+    // Pasta do Drive com as fotos originais em alta resolução (precisa estar com "qualquer pessoa com o link").
+    albumUrl: "https://drive.google.com/drive/folders/1XVxPLfvxeBTmzx9yAHjDL1UrnYf698rW",
   },
   {
     id: "quintal-17-mai",
