@@ -19,7 +19,13 @@ export function TicketButton({ event, location, size = "md", tone = "sun", class
   const base = `inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-full font-semibold ${sizing} ${className}`;
 
   if (event.sale.status === "soon") {
-    if (!hasWhatsapp) return null;
+    if (!hasWhatsapp) {
+      return (
+        <span aria-disabled="true" className={`${base} cursor-not-allowed border border-cream/25 text-cream/60`}>
+          Ingressos em breve
+        </span>
+      );
+    }
     return (
       <a
         href={whatsappLink(`Oi! Quero ser avisado quando abrirem os ingressos do ${event.title}${atVenue(event)}.`)}

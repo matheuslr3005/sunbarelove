@@ -9,6 +9,8 @@ import { TicketButton } from "./TicketButton";
 
 const LINKS = [
   { id: "eventos", label: "Eventos" },
+  { id: "mapa", label: "Mapa" },
+  { id: "collab", label: "Collab" },
   { id: "videos", label: "Vídeos" },
   { id: "fotos", label: "Fotos" },
   { id: "loja", label: "Loja" },
@@ -52,19 +54,19 @@ export function Nav() {
       <header className="fixed inset-x-0 top-3 flex justify-center px-3" style={{ zIndex: "var(--z-nav)" }}>
         <nav
           aria-label="Principal"
-          className="flex h-14 w-full max-w-4xl items-center justify-between gap-2 rounded-full border border-cream/15 bg-night/60 py-2 pl-2 pr-2 shadow-[inset_0_1px_0_rgba(255,241,214,0.12),0_18px_50px_-20px_rgba(4,23,30,0.9)] backdrop-blur-xl"
+          className="flex h-14 w-full max-w-5xl items-center justify-between gap-2 rounded-full border border-cream/15 bg-night/60 py-2 pl-2 pr-2 shadow-[inset_0_1px_0_rgba(255,241,214,0.12),0_18px_50px_-20px_rgba(4,23,30,0.9)] backdrop-blur-xl"
         >
           <a href="#top" className="flex items-center gap-2.5 rounded-full pr-2" aria-label="Sun, Bar & Love, início">
-            <img src={asset("media/logo.webp")} alt="" width={40} height={40} className="size-10 rounded-full" />
-            <span className="font-display text-base uppercase leading-none tracking-tight sm:text-lg">Sun,Bar &amp; Love</span>
+            <img src={asset("media/logo-icone.webp")} alt="" width={40} height={40} className="size-10" />
+            <span className="whitespace-nowrap font-display text-base uppercase leading-none tracking-tight sm:text-lg">Sun,Bar &amp; Love</span>
           </a>
 
-          <ul className="hidden items-center gap-1 md:flex">
+          <ul className="hidden items-center gap-0.5 lg:flex xl:gap-1">
             {LINKS.map((l) => (
               <li key={l.id}>
                 <a
                   href={`#${l.id}`}
-                  className="relative block rounded-full px-4 py-2.5 text-sm font-medium text-cream/80 transition-colors hover:text-cream"
+                  className="relative block rounded-full px-2.5 py-2.5 text-sm font-medium text-cream/80 transition-colors hover:text-cream xl:px-4"
                 >
                   {active === l.id && (
                     <motion.span
@@ -81,7 +83,7 @@ export function Nav() {
 
           <div className="flex items-center gap-2">
             {next && (
-              <div className="hidden md:block">
+              <div className="hidden lg:block">
                 <TicketButton event={next} location="nav" size="sm" />
               </div>
             )}
@@ -90,7 +92,7 @@ export function Nav() {
               aria-label={open ? "Fechar menu" : "Abrir menu"}
               aria-expanded={open}
               onClick={() => setOpen((v) => !v)}
-              className="flex size-11 items-center justify-center rounded-full border border-cream/25 transition hover:bg-cream/10 md:hidden"
+              className="flex size-11 items-center justify-center rounded-full border border-cream/25 transition hover:bg-cream/10 lg:hidden"
             >
               {open ? <X size={20} /> : <List size={20} />}
             </button>
@@ -101,7 +103,7 @@ export function Nav() {
       <AnimatePresence>
         {open && (
           <motion.div
-            className="fixed inset-0 flex flex-col justify-center gap-2 bg-deep/95 px-8 backdrop-blur-lg md:hidden"
+            className="fixed inset-0 flex flex-col justify-center gap-2 bg-deep/95 px-8 backdrop-blur-lg lg:hidden"
             style={{ zIndex: "calc(var(--z-nav) - 1)" }}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}

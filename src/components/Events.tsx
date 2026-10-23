@@ -2,10 +2,11 @@ import { useCallback, useState } from "react";
 import { LayoutGroup, motion } from "motion/react";
 import { ArrowUpRight, CalendarBlank, Check, Clock, MapPin, ShareNetwork, WhatsappLogo } from "@phosphor-icons/react";
 import { track } from "../analytics";
-import { EVENTS, SITE, type SbEvent } from "../content";
+import { EVENTS, SITE, SPOTLIGHT_ID, type SbEvent } from "../content";
 import { atVenue, eventDate, hasWhatsapp, mapsLink, whatsappLink } from "../lib";
 import { Button } from "./Button";
 import { Countdown } from "./Countdown";
+import { Lineup } from "./Lineup";
 import { Modal } from "./Modal";
 import { Reveal } from "./Reveal";
 import { SaleBadge } from "./SaleBadge";
@@ -33,22 +34,6 @@ function FlyerButton({ event, onOpen }: { event: SbEvent; onOpen: () => void }) 
         className="aspect-[6/7] w-full rounded-card object-cover shadow-[0_30px_70px_-25px_rgba(240,40,110,0.55)] ring-1 ring-cream/20 transition-transform duration-500 ease-out-expo group-hover:-translate-y-1.5"
       />
     </button>
-  );
-}
-
-function Lineup({ names }: { names?: string[] }) {
-  if (!names?.length) return null;
-  return (
-    <div>
-      <h4 className="text-sm font-semibold uppercase tracking-[0.16em] text-flame">Line-up</h4>
-      <ul className="mt-3 flex flex-wrap gap-2">
-        {names.map((n) => (
-          <li key={n} className="rounded-full border border-cream/30 px-4 py-1.5 font-semibold">
-            {n}
-          </li>
-        ))}
-      </ul>
-    </div>
   );
 }
 
@@ -80,7 +65,7 @@ function UpcomingFeature({ event, onOpen }: { event: SbEvent; onOpen: (e: SbEven
         <div>
           <SaleBadge sale={event.sale} />
         </div>
-        <Lineup names={event.lineup} />
+        <Lineup groups={event.lineup} />
         {event.startsAt && <Countdown startsAt={event.startsAt} />}
         <div className="flex flex-wrap gap-3">
           <TicketButton event={event} location="evento" />
@@ -194,7 +179,7 @@ function EventModalBody({ event, onClose }: { event: SbEvent; onClose: () => voi
           </div>
         )}
         <div className="max-md:order-5">
-          <Lineup names={event.lineup} />
+          <Lineup groups={event.lineup} />
         </div>
         {upcoming && event.startsAt && (
           <div className="max-md:order-5">
@@ -252,12 +237,12 @@ export function Events() {
   const close = useCallback(() => setSelected(null), []);
   const { containerRef, overlayRef, labelRef, go } = useSunWipe<Tab>(setTab);
 
-  const upcoming = EVENTS.filter((e) => e.status === "upcoming" && !e.saveTheDate);
+  const upcoming = EVENTS.filter((e) => e.status === "upcoming" && !e.saveTheDate && e.id !== SPOTLIGHT_ID);
   const saveTheDates = EVENTS.filter((e) => e.status === "upcoming" && e.saveTheDate);
   const past = EVENTS.filter((e) => e.status === "past");
 
   return (
-    <section id="eventos" className="relative overflow-clip bg-[linear-gradient(to_bottom,#07232c,#0b3341_60%,#07232c)] px-5 py-24 md:px-8 md:py-36">
+    <section id="agenda" className="relative overflow-clip bg-[linear-gradient(to_bottom,#07232c,#0b3341_60%,#07232c)] px-5 py-24 md:px-8 md:py-36">
       <div className="mx-auto max-w-6xl">
         <Reveal>
           <h2 className="font-display text-[clamp(2.8rem,8vw,6.5rem)] uppercase leading-[0.95] tracking-tight text-balance">

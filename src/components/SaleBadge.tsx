@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import type { Sale } from "../content";
+import { hasWhatsapp } from "../lib";
 
 function remaining(endsAt: string, now: number): string | null {
   const ms = new Date(endsAt).getTime() - now;
@@ -24,6 +25,8 @@ export function SaleBadge({ sale }: { sale: Sale }) {
   if (sale.status === "closed") return null;
 
   if (sale.status === "soon") {
+    // sem WhatsApp o botão já diz "Ingressos em breve"; o selo só repetiria
+    if (!hasWhatsapp) return null;
     return (
       <span className="inline-flex h-9 items-center rounded-full border border-cream/40 px-4 text-sm font-semibold text-cream/90">
         Ingressos em breve
