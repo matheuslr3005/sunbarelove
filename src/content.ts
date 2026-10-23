@@ -261,32 +261,32 @@ export interface SbVideo {
   preview?: string;
 }
 
-// Cortes verticais (9:16) dos takes de drone. `src` abre no modal; `preview` toca no card ao passar o mouse.
-// TODO: confirmar a edição de cada vídeo e trocar o campo `edition`.
+// After Movies verticais (9:16, com som) da pasta "after moovies" do Drive. `src` abre no modal; `preview` é um trecho mudo de 5 s que toca no card ao passar o mouse.
+// TODO: confirmar o nome e a edição de cada vídeo (os títulos abaixo vieram dos nomes dos arquivos).
 export const VIDEOS: SbVideo[] = [
   {
-    id: "v-pista-palco",
-    title: "Pista e palco no pôr do sol",
+    id: "v-aftermovie-v2",
+    title: "After Movie V2",
     edition: "Sun, Bar & Love",
-    poster: asset("media/poster-pista-palco.webp"),
-    src: asset("media/videos/pista-palco.mp4"),
-    preview: asset("media/videos/pista-palco.mp4"),
+    poster: asset("media/poster-aftermovie-sbl-v2.webp"),
+    src: asset("media/videos/aftermovie-sbl-v2.mp4"),
+    preview: asset("media/videos/aftermovie-sbl-v2-preview.mp4"),
   },
   {
-    id: "v-chegada",
-    title: "Da entrada ao pôr do sol",
+    id: "v-aftermovie-sbl6",
+    title: "After Movie SBL 6",
     edition: "Sun, Bar & Love",
-    poster: asset("media/poster-chegada.webp"),
-    src: asset("media/videos/chegada.mp4"),
-    preview: asset("media/videos/chegada.mp4"),
+    poster: asset("media/poster-aftermovie-sbl6.webp"),
+    src: asset("media/videos/aftermovie-sbl6.mp4"),
+    preview: asset("media/videos/aftermovie-sbl6-preview.mp4"),
   },
   {
-    id: "v-fogos",
-    title: "Fogos para fechar",
+    id: "v-aftermovie-29-mar",
+    title: "After Movie 29 de março",
     edition: "Sun, Bar & Love",
-    poster: asset("media/poster-fogos.webp"),
-    src: asset("media/videos/fogos.mp4"),
-    preview: asset("media/videos/fogos.mp4"),
+    poster: asset("media/poster-aftermovie-29-mar.webp"),
+    src: asset("media/videos/aftermovie-29-mar.mp4"),
+    preview: asset("media/videos/aftermovie-29-mar-preview.mp4"),
   },
 ];
 
