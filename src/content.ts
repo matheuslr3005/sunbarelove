@@ -1,5 +1,5 @@
 import { asset } from "./asset";
-import { QUINTAL_29_MAR_THUMBS } from "./albumData";
+import { QUINTAL_17_MAI_THUMBS, QUINTAL_29_MAR_THUMBS } from "./albumData";
 
 /**
  * Todo o conteúdo editável do site mora aqui.
@@ -165,6 +165,30 @@ export const EVENTS: SbEvent[] = [
     blurb: "Uma tarde de música, drinks e pôr do sol no Quintal.",
     ticketUrl: "",
     sale: { status: "closed" },
+  },
+  {
+    id: "quintal-17-mai",
+    status: "past",
+    title: "29º Sun, Bar & Love",
+    dateLabel: "17 de maio",
+    venue: "Quintal Lounge",
+    city: "Porto Alegre, RS",
+    flyer: asset("media/flyer-quintal-17-mai.webp"),
+    blurb: "A 29ª edição do Sun, Bar & Love, num domingo de pôr do sol no Quintal Lounge.",
+    ticketUrl: "",
+    sale: { status: "closed" },
+    album: QUINTAL_17_MAI_THUMBS.map(([width, height], i) => {
+      const n = String(i + 1).padStart(3, "0");
+      return {
+        id: `q17-${n}`,
+        thumb: asset(`media/albuns/quintal-17-mai/t${n}.webp`),
+        src: asset(`media/albuns/quintal-17-mai/${n}.jpg`),
+        width,
+        height,
+      };
+    }),
+    // Pasta do Drive com as fotos originais em alta resolução (precisa estar com "qualquer pessoa com o link").
+    albumUrl: "https://drive.google.com/drive/folders/1at6qPA6rbL8dUhg_pwOjJaAVznIoJFIz",
   },
   {
     id: "quintal-29-mar",
