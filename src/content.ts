@@ -81,6 +81,8 @@ export interface SbEvent {
   album?: AlbumPhoto[];
   /** Link para baixar o álbum inteiro (zip ou pasta compartilhada). Vazio = o botão não aparece. */
   albumUrl?: string;
+  /** Quantas fotos existem no total na pasta do Drive. Se for maior que `album.length`, o álbum mostra um botão para ver o resto no Drive. */
+  albumTotal?: number;
 }
 
 export const EVENTS: SbEvent[] = [
@@ -167,6 +169,19 @@ export const EVENTS: SbEvent[] = [
     sale: { status: "closed" },
   },
   {
+    id: "rio-melhor-dia",
+    status: "past",
+    title: "Melhor Dia: From Rio",
+    dateLabel: "15 de agosto",
+    venue: "Casa Vetro",
+    city: "Porto Alegre, RS",
+    flyer: asset("media/flyer-rio.webp"),
+    blurb: "A edição com sotaque carioca, com Davi Quaresma e a vibe do Rio no pôr do sol. Os ingressos esgotaram antes do grande dia.",
+    ticketUrl: "",
+    sale: { status: "soldout" },
+    // TODO: fotos da edição. Salve em public/media/albuns/casa-vetro-15-ago/ (até 150, 1200 px) e preencha `album`, `albumTotal` e `albumUrl` como nas outras edições.
+  },
+  {
     id: "made-in-brasil-05-jul",
     status: "past",
     title: "30º Sun, Bar & Love: Made in Brasil",
@@ -189,6 +204,7 @@ export const EVENTS: SbEvent[] = [
     }),
     // Pasta do Drive com as fotos originais em alta resolução (precisa estar com "qualquer pessoa com o link").
     albumUrl: "https://drive.google.com/drive/folders/1XVxPLfvxeBTmzx9yAHjDL1UrnYf698rW",
+    albumTotal: 399,
   },
   {
     id: "quintal-17-mai",
@@ -213,6 +229,7 @@ export const EVENTS: SbEvent[] = [
     }),
     // Pasta do Drive com as fotos originais em alta resolução (precisa estar com "qualquer pessoa com o link").
     albumUrl: "https://drive.google.com/drive/folders/1at6qPA6rbL8dUhg_pwOjJaAVznIoJFIz",
+    albumTotal: 90,
   },
   {
     id: "quintal-29-mar",
@@ -237,18 +254,7 @@ export const EVENTS: SbEvent[] = [
     }),
     // Pasta do Drive com as fotos originais em alta resolução (precisa estar com "qualquer pessoa com o link").
     albumUrl: "https://drive.google.com/drive/folders/1ceJnpa9Kc0peJ6T3zdBDzFuIzVaDkgIH",
-  },
-  {
-    id: "rio-melhor-dia",
-    status: "past",
-    title: "Melhor Dia: From Rio",
-    dateLabel: "Edição From Rio",
-    venue: "",
-    city: "",
-    flyer: asset("media/flyer-rio.webp"),
-    blurb: "A edição que esgotou os ingressos antes do grande dia.",
-    ticketUrl: "",
-    sale: { status: "soldout" },
+    albumTotal: 453,
   },
 ];
 
