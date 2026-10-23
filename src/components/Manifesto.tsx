@@ -2,8 +2,8 @@ import { useRef } from "react";
 import { motion, useReducedMotion, useScroll, useTransform, type MotionValue } from "motion/react";
 
 const TEXT =
-  "Pôr do sol, música boa e gente que você ama. É assim que a gente gosta de ver o dia acabar.";
-const HIGHLIGHT = new Set(["sol,", "música", "ama.", "dia"]);
+  "Somos um festival itinerante que celebra o sol, a música e a felicidade. Criamos experiências únicas, onde a energia contagia, as conexões acontecem e cada detalhe transforma o dia em uma memória inesquecível.";
+const HIGHLIGHT = new Set(["sol,", "música", "felicidade.", "memória", "inesquecível."]);
 
 function Word({
   word,
@@ -34,7 +34,7 @@ export function Manifesto() {
 
   return (
     <section ref={ref} id="sobre" className="relative overflow-clip bg-night px-5 pb-20 pt-32 md:px-8 md:pb-28 md:pt-48">
-      <p className="mx-auto max-w-6xl font-display text-[clamp(2.2rem,6.2vw,5.6rem)] uppercase leading-[1.02] tracking-tight md:pl-[8vw]">
+      <p className="mx-auto max-w-6xl font-display text-[clamp(1.75rem,4.3vw,3.9rem)] uppercase leading-[1.08] tracking-tight md:pl-[8vw]">
         {words.map((w, i) => {
           const start = i / words.length;
           const end = start + 1 / words.length;
