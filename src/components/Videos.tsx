@@ -1,5 +1,5 @@
 import { useCallback, useRef, useState } from "react";
-import { ArrowLeft, ArrowRight, Play, Sun } from "@phosphor-icons/react";
+import { ArrowLeft, ArrowRight, Play } from "@phosphor-icons/react";
 import { track } from "../analytics";
 import { BG_VIDEOS, VIDEOS, type SbVideo } from "../content";
 import { BackgroundVideo } from "./BackgroundVideo";
@@ -124,13 +124,6 @@ export function Videos() {
               <VideoCard video={v} onPlay={play} />
             </li>
           ))}
-
-          <li className="w-[68vw] max-w-[300px] shrink-0 snap-start">
-            <div className="flex aspect-[9/16] flex-col items-start justify-end gap-3 rounded-card bg-[linear-gradient(160deg,#19a7c9,#0b3341_70%)] p-6 ring-1 ring-cream/15">
-              <Sun size={40} weight="fill" className="text-sun" />
-              <p className="font-display text-3xl uppercase leading-tight">Mais vídeos a caminho</p>
-            </div>
-          </li>
         </ul>
 
         <div className="mx-auto mt-4 flex max-w-6xl justify-end gap-2 px-5 md:px-8">

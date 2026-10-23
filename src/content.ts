@@ -31,6 +31,17 @@ export interface Sale {
   lotEndsAt?: string;
 }
 
+/** Foto de álbum de uma edição que já rolou: abre e baixa em alta qualidade. */
+export interface AlbumPhoto {
+  id: string;
+  /** Imagem leve para a grade. */
+  thumb: string;
+  /** Arquivo para ver e baixar (maior). */
+  src: string;
+  width: number;
+  height: number;
+}
+
 /** Um bloco do line-up: um rótulo opcional (ex: "DJ Set Rayo") e os nomes. */
 export interface LineupGroup {
   label?: string;
@@ -65,6 +76,10 @@ export interface SbEvent {
   perk?: { title: string; items: string[] };
   /** Marcas de apoio da edição. */
   supporters?: string[];
+  /** Só em edições que já rolaram: fotos do álbum (salve em public/media/albuns/<id-do-evento>/). Vazio = "Fotos em breve". */
+  album?: AlbumPhoto[];
+  /** Link para baixar o álbum inteiro (zip ou pasta compartilhada). Vazio = o botão não aparece. */
+  albumUrl?: string;
 }
 
 export const EVENTS: SbEvent[] = [
@@ -81,9 +96,9 @@ export const EVENTS: SbEvent[] = [
     flyer: asset("media/flyer-7anos-oficial.webp"),
     blurb:
       "A festa de aniversário do Sun, Bar & Love: sete anos de pôr do sol, música boa e gente que a gente ama, com open bar, banda, DJs e palco 360.",
-    ticketUrl: "",
-    // TODO: quando abrir a venda, troque para { status: "onsale", lot: "1º lote" } e preencha ticketUrl.
-    sale: { status: "soon" },
+    ticketUrl: "https://www.bilheteriadigital.com/sun-bar-e-love-7-anos-07-de-novembro",
+    // TODO: informar o lote atual e quando ele vira, ex: { status: "onsale", lot: "1º lote", lotEndsAt: "2026-11-05T12:00:00-03:00" }
+    sale: { status: "onsale" },
     lineup: [
       { label: "Nasty by ATO", names: ["DJ Kessel"] },
       { label: "Banda Sun, Bar & Love, com participações", names: ["Sambary", "Jader Lewis", "Denilson", "Júnior Paixão"] },
@@ -423,42 +438,6 @@ export interface BandInfo {
 export const BAND: BandInfo = {
   title: "Banda do Sun, Bar & Love ao vivo",
 };
-
-export const SPONSORS = [
-  "Aperol Spritz",
-  "Bar Mate",
-  "Belvedere",
-  "Chandon",
-  "FYS",
-  "Don Julio",
-  "Heineken",
-  "Johnnie Walker",
-  "Mamba Water",
-  "Moët & Chandon",
-  "Tanqueray",
-  "Laghetto Hotel",
-];
-
-export interface Stat {
-  value: number;
-  /** Exibido antes do número, ex: "+". */
-  prefix?: string;
-  label: string;
-  /** Texto para quando o valor é 1. */
-  labelOne?: string;
-}
-
-// PLACEHOLDER: o primeiro número é um valor de exemplo. Troque pelo público real antes de divulgar.
-// Os outros dois vêm dos próprios dados do site (edição esgotada e marcas parceiras).
-export const STATS: Stat[] = [
-  { value: 2500, prefix: "+", label: "pessoas nas últimas edições" },
-  {
-    value: EVENTS.filter((e) => e.sale.status === "soldout").length,
-    label: "edições com ingressos esgotados",
-    labelOne: "edição com ingressos esgotados",
-  },
-  { value: SPONSORS.length, label: "marcas parceiras" },
-];
 
 // TODO: revisar as respostas com a equipe (regras de idade e entrada, política de lotes).
 export const FAQ: { q: string; a: string }[] = [
