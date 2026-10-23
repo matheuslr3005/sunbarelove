@@ -146,7 +146,7 @@ function EventModalBody({ event, onClose }: { event: SbEvent; onClose: () => voi
         layoutId={`flyer-${event.id}`}
         src={event.flyer}
         alt={`Cartaz: ${event.title}${event.venue ? `, ${event.venue}` : ""}`}
-        className="aspect-[6/7] w-full object-cover max-md:aspect-auto max-md:h-[30dvh] max-md:object-[50%_42%] md:aspect-auto md:h-full"
+        className="aspect-[6/7] w-full object-cover max-md:aspect-auto max-md:h-[30dvh] max-md:object-[50%_42%] md:sticky md:top-0 md:aspect-auto md:h-auto md:max-h-[92dvh] md:self-start"
       />
       <div className="flex flex-col justify-center gap-6 p-6 md:p-10">
         <div className="max-md:order-1">
