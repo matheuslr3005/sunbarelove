@@ -1,5 +1,5 @@
 import { asset } from "./asset";
-import { MADE_IN_BRASIL_THUMBS, QUINTAL_17_MAI_THUMBS, QUINTAL_29_MAR_THUMBS } from "./albumData";
+import { FROM_RIO_THUMBS, MADE_IN_BRASIL_THUMBS, QUINTAL_17_MAI_THUMBS, QUINTAL_29_MAR_THUMBS } from "./albumData";
 
 /**
  * Todo o conteúdo editável do site mora aqui.
@@ -179,7 +179,18 @@ export const EVENTS: SbEvent[] = [
     blurb: "A edição com sotaque carioca, com Davi Quaresma e a vibe do Rio no pôr do sol. Os ingressos esgotaram antes do grande dia.",
     ticketUrl: "",
     sale: { status: "soldout" },
-    // TODO: fotos da edição. Salve em public/media/albuns/casa-vetro-15-ago/ (até 150, 1200 px) e preencha `album`, `albumTotal` e `albumUrl` como nas outras edições.
+    album: FROM_RIO_THUMBS.map(([width, height], i) => {
+      const n = String(i + 1).padStart(3, "0");
+      return {
+        id: `rio-${n}`,
+        thumb: asset(`media/albuns/casa-vetro-15-ago/t${n}.webp`),
+        src: asset(`media/albuns/casa-vetro-15-ago/${n}.jpg`),
+        width,
+        height,
+      };
+    }),
+    albumUrl: "https://drive.google.com/drive/folders/1CHo_Ci5-8LXfSpoKYquL31k4nGPMD4AF",
+    albumTotal: 308,
   },
   {
     id: "made-in-brasil-05-jul",
