@@ -1,38 +1,32 @@
 import { useCallback, useEffect, useState } from "react";
 import { AnimatePresence, motion } from "motion/react";
-import { ArrowLeft, ArrowRight, Camera } from "@phosphor-icons/react";
+import { ArrowLeft, ArrowRight, ArrowUp, Images } from "@phosphor-icons/react";
 import { track } from "../analytics";
 import { GALLERIES, type SbPhoto } from "../content";
 import { Modal } from "./Modal";
 import { Reveal } from "./Reveal";
 import { SunWipeOverlay, useSunWipe } from "./SunWipe";
 
-function PhotoButton({ photo, onOpen, className = "", masonry }: { photo: SbPhoto; onOpen: () => void; className?: string; masonry?: boolean }) {
+function PhotoButton({ photo, onOpen }: { photo: SbPhoto; onOpen: () => void }) {
   return (
     <button
       type="button"
       onClick={onOpen}
       aria-label={`Ampliar foto: ${photo.alt}`}
-      className={`group relative block overflow-hidden rounded-card ring-1 ring-cream/15 ${className}`}
+      className="group relative block w-full break-inside-avoid overflow-hidden rounded-card bg-night-2 ring-1 ring-cream/15"
     >
       <img
         src={photo.src}
         alt={photo.alt}
+        width={photo.width}
+        height={photo.height}
         loading="lazy"
+        decoding="async"
         draggable={false}
-        className={`w-full object-cover transition-transform duration-700 ease-out-expo group-hover:scale-[1.05] ${masonry ? "h-auto" : "size-full"}`}
-        style={{ objectPosition: photo.position }}
+        className="h-auto w-full object-cover transition-transform duration-700 ease-out-expo group-hover:scale-[1.05]"
+        style={{ aspectRatio: `${photo.width} / ${photo.height}` }}
       />
     </button>
-  );
-}
-
-function MoreTile({ className = "" }: { className?: string }) {
-  return (
-    <div className={`flex flex-col items-start justify-end gap-3 rounded-card bg-[linear-gradient(160deg,#19a7c9,#0b3341_70%)] p-5 ring-1 ring-cream/15 ${className}`}>
-      <Camera size={34} weight="fill" className="text-sun" />
-      <p className="font-display text-xl uppercase leading-tight md:text-2xl">Mais fotos em breve</p>
-    </div>
   );
 }
 
@@ -106,19 +100,39 @@ export function Gallery() {
 
         <div ref={containerRef} id="gallery-panel" role="tabpanel" aria-labelledby={`gtab-${galleryId}`} className="relative mt-10">
           <SunWipeOverlay overlayRef={overlayRef} labelRef={labelRef} />
-          {gallery.layout === "bento" ? (
-            <div className="grid auto-rows-[170px] grid-cols-2 gap-3 [grid-auto-flow:dense] md:auto-rows-[240px] md:grid-cols-4 md:gap-4">
-              {photos.map((p, i) => (
-                <PhotoButton key={p.id} photo={p} onOpen={() => open(i)} className={p.className} />
-              ))}
-              <MoreTile className="md:[grid-area:2/4/3/5]" />
-            </div>
-          ) : (
-            <div className="columns-2 gap-3 md:columns-3 md:gap-4 [&>*]:mb-3 md:[&>*]:mb-4">
-              {photos.map((p, i) => (
-                <PhotoButton key={p.id} photo={p} onOpen={() => open(i)} className="w-full break-inside-avoid" masonry />
-              ))}
-              <MoreTile className="min-h-48 break-inside-avoid" />
+          <div className="columns-2 gap-3 md:columns-3 md:gap-4 [&>*]:mb-3 md:[&>*]:mb-4">
+            {photos.map((p, i) => (
+              <PhotoButton key={p.id} photo={p} onOpen={() => open(i)} />
+            ))}
+          </div>
+
+          {GALLERIES.length > 1 && (
+            <div className="mt-6 flex justify-center">
+              {galleryId === GALLERIES[0].id ? (
+                <button
+                  type="button"
+                  onClick={(e) => {
+                    const other = GALLERIES[1];
+                    track("tab_change", { area: "fotos", tab: other.id });
+                    void go(other.id, other.label, e.currentTarget);
+                  }}
+                  className="inline-flex h-12 items-center gap-2 rounded-full bg-sun px-6 font-semibold text-deep transition hover:bg-[#ffd24d] active:scale-[0.97]"
+                >
+                  <Images size={20} weight="fill" /> Ver mais fotos ({GALLERIES[1].photos.length})
+                </button>
+              ) : (
+                <button
+                  type="button"
+                  onClick={(e) => {
+                    const first = GALLERIES[0];
+                    track("tab_change", { area: "fotos", tab: first.id });
+                    void go(first.id, first.label, e.currentTarget);
+                  }}
+                  className="inline-flex h-12 items-center gap-2 rounded-full border border-cream/45 px-6 font-semibold transition hover:border-cream hover:bg-cream/10 active:scale-[0.97]"
+                >
+                  <ArrowUp size={20} /> Voltar aos destaques
+                </button>
+              )}
             </div>
           )}
         </div>

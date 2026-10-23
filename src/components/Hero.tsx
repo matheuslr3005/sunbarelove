@@ -109,8 +109,8 @@ export function Hero() {
             transition={{ duration: 1, delay: 0.25, ease }}
           >
             <img
-              src={asset("media/foto-selfie.webp")}
-              alt="Duas amigas tirando selfie na pista do Sun, Bar & Love"
+              src={asset("media/foto-hero.webp")}
+              alt="Moça de rabo de cavalo sorrindo ao pôr do sol no Sun, Bar & Love"
               className="size-full object-cover"
               fetchPriority="high"
             />
