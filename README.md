@@ -38,7 +38,7 @@ Tudo fica em `src/content.ts`.
 - **Destaque do evento** (`SPOTLIGHT_ID` e o evento com esse `id` em `EVENTS`): aparece logo abaixo do Hero, com cartaz, data, local, contagem, `perk` (open bar), `lineup` em blocos e `supporters`. Esse evento não repete na agenda.
 - **Mapa 3D** (`src/components/EventMap3D.tsx`): desenhado em CSS a partir do mapa do cartaz. As posições dos bares, camarotes (1 a 12), mesas (1 a 12), palco e entrada estão no próprio arquivo. A imagem original fica em `public/media/mapa-evento.webp`.
 - **Álbum dos eventos que já rolaram** (`album` e `albumUrl` em cada evento `past`): salve as fotos em `public/media/albuns/<id-do-evento>/` (uma versão leve para a grade e uma maior para baixar) e liste em `album`. Sem fotos, aparece "Fotos em breve". `albumUrl` cria o botão "Baixar todas".
-- **Collab** (`COLLAB`): coleção de roupas em parceria. Preencha `partner`, `pieces` (com `photo`) e `url`; sem peças, aparecem três peças-mistério "em breve".
+- **Collab** (`COLLAB`): parceria de roupas com a Approve. Troque `image` (em `public/media/`), `blurb` e preencha `url` quando houver link de compra.
 - **Contato** (`SITE`): WhatsApp, link do Instagram e ID do Google Analytics. Com `whatsapp` vazio, todos os botões e links de WhatsApp somem do site; "Ingressos" e "Comprar" mostram "em breve" até haver link de venda.
 
 ## Rastreamento de cliques
