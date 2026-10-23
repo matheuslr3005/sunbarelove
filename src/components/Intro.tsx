@@ -69,8 +69,11 @@ export function Intro() {
   // a borda macia fica DENTRO do raio (r-2 → r): com r=0 a máscara é toda opaca, sem furinho no centro
   const mask = useTransform(hole, (r) => `radial-gradient(circle at 50% 50%, transparent ${r - 2}px, #000 ${r}px)`);
 
-  // largura do selo do logo; o sol de CSS é desenhado para o disco coincidir com o do logo
-  const badge = typeof window === "undefined" ? 240 : Math.min(window.innerWidth * 0.58, 250);
+  // O logo é largo (1400x798). O sol de CSS é dimensionado para o disco dele coincidir com o disco do logo:
+  // o disco do logo mede 24,3% da largura e o disco do sol, 46% da largura do sol.
+  const logoW = typeof window === "undefined" ? 340 : Math.min(window.innerWidth * 0.92, 600);
+  const logoH = (logoW * 798) / 1400;
+  const sunW = logoW * 0.528;
 
   const reveal = useCallback(async () => {
     setPhase("revealing");
@@ -90,7 +93,7 @@ export function Intro() {
     const vh = window.innerHeight;
     const diag = Math.hypot(vw, vh);
     holeSize.current = diag * 0.62;
-    const disc = badge * 0.8 * 1.2 * 0.46; // diâmetro do disco do sol no fim do fade
+    const disc = sunW * 1.2 * 0.46; // diâmetro do disco do sol no fim do fade
     const zoom = (diag / disc) * 1.15;
 
     let alive = true;
@@ -119,7 +122,7 @@ export function Intro() {
       alive = false;
       html.style.overflow = previous;
     };
-  }, [phase, badge, glow, logoOpacity, logoScale, partyOpacity, partyScale, reveal, scale, sunOpacity, sunScale]);
+  }, [phase, sunW, glow, logoOpacity, logoScale, partyOpacity, partyScale, reveal, scale, sunOpacity, sunScale]);
 
   // devolve a rolagem quando a abertura termina
   useEffect(() => {
@@ -158,19 +161,19 @@ export function Intro() {
       />
 
       <motion.div className="absolute left-1/2 top-1/2 will-change-transform" style={{ scale, x: "-50%", y: "-50%" }}>
-        <div className="relative" style={{ width: badge, height: badge }}>
+        <div className="relative" style={{ width: logoW, height: logoH }}>
           <motion.div
             className="absolute left-1/2 top-1/2"
-            style={{ width: badge * 0.8, x: "-50%", y: "-50%", scale: sunScale, opacity: sunOpacity }}
+            style={{ width: sunW, x: "-50%", y: "-50%", scale: sunScale, opacity: sunOpacity }}
           >
             <Sun />
           </motion.div>
           <motion.img
-            src={asset("media/logo.webp")}
+            src={asset("media/logo-sol.webp")}
             alt="Sun, Bar & Love"
-            width={badge}
-            height={badge}
-            className="absolute inset-0 size-full rounded-full"
+            width={1400}
+            height={798}
+            className="absolute inset-0 size-full"
             style={{ opacity: logoOpacity, scale: logoScale }}
             fetchPriority="high"
           />
@@ -198,7 +201,7 @@ export function Intro() {
 
       <motion.div
         className="absolute left-1/2 top-1/2 text-center"
-        style={{ x: "-50%", y: badge / 2 + 18, opacity: partyOpacity, scale: partyScale }}
+        style={{ x: "-50%", y: logoH / 2 + 12, opacity: partyOpacity, scale: partyScale }}
       >
         <p className="wordmark whitespace-nowrap text-[clamp(3.4rem,15vw,5.4rem)]">7 anos</p>
         <p className="mt-3 text-xs font-semibold uppercase tracking-[0.3em] text-sun">7 de novembro</p>

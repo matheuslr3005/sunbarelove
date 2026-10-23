@@ -3,6 +3,10 @@ import { IconContext } from "@phosphor-icons/react";
 import { Nav } from "./components/Nav";
 import { Hero } from "./components/Hero";
 import { Marquee } from "./components/Marquee";
+import { BarraStrip } from "./components/BarraStrip";
+import { EventSpotlight } from "./components/EventSpotlight";
+import { EventMap3D } from "./components/EventMap3D";
+import { Collab } from "./components/Collab";
 import { Manifesto } from "./components/Manifesto";
 import { Events } from "./components/Events";
 import { Videos } from "./components/Videos";
@@ -40,6 +44,10 @@ export default function App() {
         <FloatingTicket />
         <main>
           <Hero />
+          <BarraStrip />
+          <EventSpotlight />
+          <EventMap3D />
+          <Collab />
           <Marquee />
           <Manifesto />
           <Proof />

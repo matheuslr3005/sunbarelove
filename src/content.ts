@@ -31,6 +31,12 @@ export interface Sale {
   lotEndsAt?: string;
 }
 
+/** Um bloco do line-up: um rótulo opcional (ex: "DJ Set Rayo") e os nomes. */
+export interface LineupGroup {
+  label?: string;
+  names: string[];
+}
+
 export interface SbEvent {
   id: string;
   status: EventStatus;
@@ -53,8 +59,12 @@ export interface SbEvent {
   /** Link da página de venda. Vazio = o botão cai no WhatsApp (ou fica "Ingressos em breve" se também não houver WhatsApp). TODO: preencher. */
   ticketUrl: string;
   sale: Sale;
-  /** Atrações. Vazio = o bloco não aparece. Ex: ["DJ Fulano", "Banda X"]. */
-  lineup?: string[];
+  /** Atrações em blocos. Vazio = o bloco não aparece. Ex: [{ label: "DJ Set", names: ["Fulano"] }]. */
+  lineup?: LineupGroup[];
+  /** Destaque de bebida/benefício, ex: open bar com horário e o que está incluso. */
+  perk?: { title: string; items: string[] };
+  /** Marcas de apoio da edição. */
+  supporters?: string[];
 }
 
 export const EVENTS: SbEvent[] = [
@@ -62,17 +72,30 @@ export const EVENTS: SbEvent[] = [
     id: "aniversario-7-anos",
     status: "upcoming",
     title: "7 anos de Sun, Bar & Love",
-    startsAt: "2026-11-07T17:00:00-03:00",
-    // TODO: informar o horário de abertura (ex: "17h"), o local, o endereço e a cidade. Enquanto estiverem vazios, o site mostra "em breve".
-    venue: "",
+    // O open bar começa às 15h; usamos esse horário como abertura. TODO: confirmar a abertura dos portões.
+    startsAt: "2026-11-07T15:00:00-03:00",
+    time: "15h",
+    venue: "Quintal Lounge",
+    // TODO: informar o endereço do Quintal Lounge.
     city: "Porto Alegre, RS",
-    // Cartaz provisório, feito pelo site. Troque pelo cartaz oficial em public/media/ quando houver.
-    flyer: asset("media/flyer-7anos.webp"),
-    blurb: "A festa de aniversário do Sun, Bar & Love: sete anos de pôr do sol, música boa e gente que a gente ama. Dia 7 de novembro.",
+    flyer: asset("media/flyer-7anos-oficial.webp"),
+    blurb:
+      "A festa de aniversário do Sun, Bar & Love: sete anos de pôr do sol, música boa e gente que a gente ama, com open bar, banda, DJs e palco 360.",
     ticketUrl: "",
-    // TODO: informar o lote atual e quando ele vira, ex: { status: "onsale", lot: "1º lote", lotEndsAt: "2026-11-05T12:00:00-03:00" }
-    sale: { status: "onsale" },
-    lineup: [],
+    // TODO: quando abrir a venda, troque para { status: "onsale", lot: "1º lote" } e preencha ticketUrl.
+    sale: { status: "soon" },
+    lineup: [
+      { label: "Nasty by ATO", names: ["DJ Kessel"] },
+      { label: "Banda Sun, Bar & Love, com participações", names: ["Sambary", "Jader Lewis", "Denilson", "Júnior Paixão"] },
+      { names: ["Millbeatz", "Saulit"] },
+      { label: "BDS Crew", names: ["Pava", "Santos", "Class"] },
+      { label: "DJ Set Rayo", names: ["Gabriel R", "Nicky", "Thalles"] },
+    ],
+    perk: {
+      title: "Open bar das 15h às 16h30",
+      items: ["Cerveja Sol", "Caipa da Sun", "Drinks de vodka e gin", "Welcome shot de bananinha"],
+    },
+    supporters: ["Meep", "BDS", "ATO", "Rayo"],
   },
   {
     id: "deck22-9-jan",
@@ -140,6 +163,38 @@ export const EVENTS: SbEvent[] = [
     sale: { status: "soldout" },
   },
 ];
+
+/** Evento em destaque logo abaixo do Hero (some da agenda para não repetir). */
+export const SPOTLIGHT_ID = "aniversario-7-anos";
+
+/**
+ * Coleção de roupas em parceria com outra marca, em destaque abaixo do evento.
+ * TODO: quando os materiais chegarem, preencha `partner`, `launch`, `pieces` (com `photo`) e `url`.
+ * Sem `pieces`, aparecem três peças-mistério (moletom, camiseta e boné) com "em breve".
+ */
+export interface CollabPiece {
+  name: string;
+  kind: "moletom" | "camiseta" | "bone";
+  /** Foto da peça em public/media/. */
+  photo?: string;
+  price?: string;
+}
+
+export const COLLAB: {
+  partner: string;
+  title: string;
+  blurb: string;
+  launch: string;
+  pieces: CollabPiece[];
+  url: string;
+} = {
+  partner: "",
+  title: "Coleção collab",
+  blurb: "Uma coleção de roupas feita em parceria com outra marca para celebrar os 7 anos do Sun, Bar & Love.",
+  launch: "Lançamento em breve",
+  pieces: [],
+  url: "",
+};
 
 /**
  * Vídeos de fundo (horizontais, sem som, em loop). Cada um é opcional.
@@ -422,11 +477,11 @@ export const FAQ: { q: string; a: string }[] = [
   },
   {
     q: "A que horas começa?",
-    a: "A festa de 7 anos acontece no sábado, 7 de novembro. O horário de abertura será divulgado em breve, e a gente avisa por aqui.",
+    a: "A festa de 7 anos é no sábado, 7 de novembro. O open bar rola das 15h às 16h30, então chegue cedo para aproveitar.",
   },
   {
     q: "Onde vai ser?",
-    a: "O local da festa de 7 anos será divulgado em breve. Assim que sair, o botão Como chegar, no detalhe do evento, abre a rota no Google Maps.",
+    a: "No Quintal Lounge, em Porto Alegre. No detalhe do evento, o botão Como chegar abre a rota no Google Maps.",
   },
   {
     q: "O lote acabou. E agora?",
