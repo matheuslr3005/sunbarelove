@@ -206,31 +206,16 @@ export const EVENTS: SbEvent[] = [
 export const SPOTLIGHT_ID = "aniversario-7-anos";
 
 /**
- * Coleção de roupas em parceria com outra marca, em destaque abaixo do evento.
- * TODO: quando os materiais chegarem, preencha `partner`, `launch`, `pieces` (com `photo`) e `url`.
- * Sem `pieces`, aparecem três peças-mistério (moletom, camiseta e boné) com "em breve".
+ * Coleção de roupas em parceria com a Approve, em destaque abaixo do evento.
+ * TODO: quando o link de compra existir, preencha `url` (o botão vira "Ver a coleção").
  */
-export interface CollabPiece {
-  name: string;
-  kind: "moletom" | "camiseta" | "bone";
-  /** Foto da peça em public/media/. */
-  photo?: string;
-  price?: string;
-}
-
-export const COLLAB: {
-  partner: string;
-  title: string;
-  blurb: string;
-  launch: string;
-  pieces: CollabPiece[];
-  url: string;
-} = {
-  partner: "",
-  title: "Coleção collab",
-  blurb: "Uma coleção de roupas feita em parceria com outra marca para celebrar os 7 anos do Sun, Bar & Love.",
+export const COLLAB = {
+  partner: "Approve",
+  blurb:
+    "Somos um festival itinerante que celebra o sol, a música e a felicidade. Criamos experiências únicas, onde a energia contagia, as conexões acontecem e cada detalhe transforma o dia em uma memória inesquecível.",
+  image: asset("media/collab-approve.webp"),
+  imageAlt: "Proposta da collab Sun, Bar & Love × Approve: camiseta e cropped, frente e costas, em off-white com o sol amarelo e as marcas em azul",
   launch: "Lançamento em breve",
-  pieces: [],
   url: "",
 };
 
