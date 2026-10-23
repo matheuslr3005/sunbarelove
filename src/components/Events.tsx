@@ -111,7 +111,7 @@ function PastCard({ event, onOpen }: { event: SbEvent; onOpen: (e: SbEvent) => v
           <h3 className="font-display text-2xl uppercase leading-tight">{event.title === SITE.name ? event.venue : event.title}</h3>
           <p className="mt-1 text-cream/75">{date.day}</p>
           <p className="mt-2 inline-flex items-center gap-1.5 text-sm font-semibold text-sun">
-            <Images size={16} weight="fill" /> {event.album?.length ? `Ver ${event.album.length} fotos` : "Fotos em breve"}
+            <Images size={16} weight="fill" /> {event.album?.length ? `Ver ${event.albumTotal ?? event.album.length} fotos` : "Fotos em breve"}
           </p>
         </div>
         <SaleBadge sale={event.sale} />

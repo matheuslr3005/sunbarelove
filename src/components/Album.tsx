@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Camera, DownloadSimple, Plus } from "@phosphor-icons/react";
+import { ArrowUpRight, Camera, DownloadSimple, Plus } from "@phosphor-icons/react";
 import { track } from "../analytics";
 import type { SbEvent } from "../content";
 
@@ -23,7 +23,7 @@ export function Album({ event }: { event: SbEvent }) {
   return (
     <div>
       <div className="flex flex-wrap items-center justify-between gap-3">
-        <h4 className="text-sm font-semibold uppercase tracking-[0.16em] text-flame">Álbum · {all.length} fotos</h4>
+        <h4 className="text-sm font-semibold uppercase tracking-[0.16em] text-flame">Álbum · {event.albumTotal && event.albumTotal > all.length ? `${all.length} de ${event.albumTotal}` : all.length} fotos</h4>
         {event.albumUrl && (
           <a
             href={event.albumUrl}
@@ -70,6 +70,23 @@ export function Album({ event }: { event: SbEvent }) {
           </li>
         ))}
       </ul>
+      {shown >= all.length && event.albumUrl && event.albumTotal && event.albumTotal > all.length && (
+        <a
+          href={event.albumUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          onClick={() => track("album_drive_open", { event_id: event.id })}
+          className="mt-5 flex items-center justify-between gap-4 rounded-card bg-[linear-gradient(120deg,#f0286e,#ff6a2b_60%,#ffc21a)] p-5 text-deep transition hover:brightness-105 active:scale-[0.99]"
+        >
+          <span>
+            <span className="block font-display text-xl uppercase leading-tight md:text-2xl">
+              Ver as outras {event.albumTotal - all.length} fotos
+            </span>
+            <span className="mt-1 block text-sm font-medium text-deep/80">O álbum completo, em alta qualidade, está no Google Drive.</span>
+          </span>
+          <ArrowUpRight size={28} weight="bold" className="shrink-0" />
+        </a>
+      )}
       {shown < all.length && (
         <div className="mt-5 flex justify-center">
           <button
