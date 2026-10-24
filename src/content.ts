@@ -1,5 +1,5 @@
 import { asset } from "./asset";
-import { FROM_RIO_THUMBS, MADE_IN_BRASIL_THUMBS, QUINTAL_17_MAI_THUMBS, QUINTAL_29_MAR_THUMBS } from "./albumData";
+import { FROM_RIO_THUMBS, MADE_IN_BRASIL_THUMBS, QUINTAL_17_MAI_THUMBS, QUINTAL_20_SET_THUMBS, QUINTAL_29_MAR_THUMBS } from "./albumData";
 
 /**
  * Todo o conteúdo editável do site mora aqui.
@@ -155,6 +155,30 @@ export const EVENTS: SbEvent[] = [
     blurb: "Um sábado de sol, música boa e pôr do sol na beira do Guaíba, no Cenna.",
     ticketUrl: "",
     sale: { status: "closed" },
+  },
+  {
+    id: "quintal-20-set",
+    status: "past",
+    title: "32º Sun, Bar & Love",
+    dateLabel: "20 de setembro",
+    venue: "Quintal Lounge",
+    city: "Porto Alegre, RS",
+    flyer: asset("media/flyer-quintal-20-set.webp"),
+    blurb: "A 32ª edição, no Quintal Lounge: música boa, drinks e o pôr do sol de sempre.",
+    ticketUrl: "",
+    sale: { status: "closed" },
+    album: QUINTAL_20_SET_THUMBS.map(([width, height], i) => {
+      const n = String(i + 1).padStart(3, "0");
+      return {
+        id: `q20-${n}`,
+        thumb: asset(`media/albuns/quintal-20-set/t${n}.webp`),
+        src: asset(`media/albuns/quintal-20-set/${n}.jpg`),
+        width,
+        height,
+      };
+    }),
+    albumUrl: "https://drive.google.com/drive/folders/16UWWX_o9s8w-aLjYSiimArRB5KMMi50R",
+    albumTotal: 454,
   },
   {
     id: "quintal-13-set",
