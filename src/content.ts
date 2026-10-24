@@ -1,5 +1,5 @@
 import { asset } from "./asset";
-import { FROM_RIO_THUMBS, MADE_IN_BRASIL_THUMBS, QUINTAL_17_MAI_THUMBS, QUINTAL_20_SET_THUMBS, QUINTAL_29_MAR_THUMBS } from "./albumData";
+import { CENNA_10_OUT_THUMBS, FROM_RIO_THUMBS, MADE_IN_BRASIL_THUMBS, QUINTAL_17_MAI_THUMBS, QUINTAL_20_SET_THUMBS, QUINTAL_29_MAR_THUMBS } from "./albumData";
 
 /**
  * Todo o conteúdo editável do site mora aqui.
@@ -147,7 +147,7 @@ export const EVENTS: SbEvent[] = [
   {
     id: "cenna-10-out",
     status: "past",
-    title: "Sun, Bar & Love",
+    title: "33º Sun, Bar & Love",
     dateLabel: "10 de outubro",
     venue: "Cenna",
     city: "Porto Alegre, RS",
@@ -155,6 +155,18 @@ export const EVENTS: SbEvent[] = [
     blurb: "Um sábado de sol, música boa e pôr do sol na beira do Guaíba, no Cenna.",
     ticketUrl: "",
     sale: { status: "closed" },
+    album: CENNA_10_OUT_THUMBS.map(([width, height], i) => {
+      const n = String(i + 1).padStart(3, "0");
+      return {
+        id: `cenna-${n}`,
+        thumb: asset(`media/albuns/cenna-10-out/t${n}.webp`),
+        src: asset(`media/albuns/cenna-10-out/${n}.jpg`),
+        width,
+        height,
+      };
+    }),
+    albumUrl: "https://drive.google.com/drive/folders/1Uf5xZ7E2oCO7J9X-AyWb0KmlfcQ4_LPh",
+    albumTotal: 282,
   },
   {
     id: "quintal-20-set",
