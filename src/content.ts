@@ -193,18 +193,6 @@ export const EVENTS: SbEvent[] = [
     albumTotal: 454,
   },
   {
-    id: "quintal-13-set",
-    status: "past",
-    title: "Sun, Bar & Love",
-    dateLabel: "13 de setembro",
-    venue: "Quintal",
-    city: "Porto Alegre, RS",
-    flyer: asset("media/flyer-quintal.webp"),
-    blurb: "Uma tarde de música, drinks e pôr do sol no Quintal.",
-    ticketUrl: "",
-    sale: { status: "closed" },
-  },
-  {
     id: "rio-melhor-dia",
     status: "past",
     title: "Melhor Dia: From Rio",
