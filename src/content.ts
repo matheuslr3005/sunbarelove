@@ -96,7 +96,7 @@ export const EVENTS: SbEvent[] = [
     venue: "Quintal Lounge",
     // TODO: informar o endereço do Quintal Lounge.
     city: "Porto Alegre, RS",
-    flyer: asset("media/flyer-7anos-oficial.webp"),
+    flyer: asset("media/flyer-7anos-oficial-v2.webp"),
     blurb:
       "A festa de aniversário do Sun, Bar & Love: sete anos de pôr do sol, música boa e gente que a gente ama, com open bar, banda, DJs e palco 360.",
     ticketUrl: "https://www.bilheteriadigital.com/sun-bar-e-love-7-anos-07-de-novembro",
