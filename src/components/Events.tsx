@@ -1,42 +1,17 @@
 import { useCallback, useState } from "react";
-import { LayoutGroup, motion } from "motion/react";
-import { ArrowUpRight, CalendarBlank, Check, Clock, Images, MapPin, ShareNetwork, WhatsappLogo } from "@phosphor-icons/react";
+import { LayoutGroup } from "motion/react";
+import { ArrowUpRight, Clock, MapPin, WhatsappLogo } from "@phosphor-icons/react";
 import { track } from "../analytics";
-import { EVENTS, SITE, SPOTLIGHT_ID, type SbEvent } from "../content";
-import { atVenue, eventDate, hasWhatsapp, mapsLink, whatsappLink } from "../lib";
+import { EVENTS, SPOTLIGHT_ID, type SbEvent } from "../content";
+import { atVenue, eventDate, hasWhatsapp, whatsappLink } from "../lib";
 import { Button } from "./Button";
 import { Countdown } from "./Countdown";
-import { Album } from "./Album";
+import { EventModalBody, FlyerButton } from "./EventModal";
 import { Lineup } from "./Lineup";
 import { Modal } from "./Modal";
 import { Reveal } from "./Reveal";
 import { SaleBadge } from "./SaleBadge";
-import { SunWipeOverlay, useSunWipe } from "./SunWipe";
 import { TicketButton } from "./TicketButton";
-
-type Tab = "upcoming" | "past";
-const TABS: { id: Tab; label: string }[] = [
-  { id: "upcoming", label: "Próximos" },
-  { id: "past", label: "Já rolou" },
-];
-
-function FlyerButton({ event, onOpen, aspect = "aspect-[6/7]" }: { event: SbEvent; onOpen: () => void; aspect?: string }) {
-  return (
-    <button
-      type="button"
-      onClick={onOpen}
-      aria-label={`Ver detalhes: ${event.title}${atVenue(event)}`}
-      className="group block w-full cursor-pointer rounded-card text-left"
-    >
-      <motion.img
-        layoutId={`flyer-${event.id}`}
-        src={event.flyer}
-        alt={`Cartaz: ${event.title}${event.venue ? `, ${event.venue}` : ""}`}
-        className={`${aspect} w-full rounded-card object-cover object-[50%_45%] shadow-[0_30px_70px_-25px_rgba(240,40,110,0.55)] ring-1 ring-cream/20 transition-transform duration-500 ease-out-expo group-hover:-translate-y-1.5`}
-      />
-    </button>
-  );
-}
 
 function UpcomingFeature({ event, onOpen }: { event: SbEvent; onOpen: (e: SbEvent) => void }) {
   const date = eventDate(event);
@@ -101,246 +76,64 @@ function SaveTheDateTile({ event, onOpen }: { event: SbEvent; onOpen: (e: SbEven
   );
 }
 
-function PastCard({ event, onOpen }: { event: SbEvent; onOpen: (e: SbEvent) => void }) {
-  const date = eventDate(event);
-  return (
-    <div>
-      <FlyerButton event={event} onOpen={() => onOpen(event)} aspect="aspect-[4/5]" />
-      <div className="mt-5 flex items-start justify-between gap-4">
-        <div>
-          <h3 className="font-display text-2xl uppercase leading-tight">{event.title === SITE.name ? event.venue : event.title}</h3>
-          <p className="mt-1 text-cream/75">{date.day}</p>
-          <p className="mt-2 inline-flex items-center gap-1.5 text-sm font-semibold text-sun">
-            <Images size={16} weight="fill" /> {event.album?.length ? `Ver ${event.albumTotal ?? event.album.length} fotos` : "Fotos em breve"}
-          </p>
-        </div>
-        <SaleBadge sale={event.sale} />
-      </div>
-    </div>
-  );
-}
-
-function EventModalBody({ event, onClose }: { event: SbEvent; onClose: () => void }) {
-  const [copied, setCopied] = useState(false);
-  const date = eventDate(event);
-  const upcoming = event.status === "upcoming";
-
-  const share = async () => {
-    track("share_click", { event_id: event.id });
-    const data = { title: event.title, text: `${event.title}${atVenue(event)}`, url: window.location.href };
-    try {
-      if (navigator.share) await navigator.share(data);
-      else {
-        await navigator.clipboard.writeText(window.location.href);
-        setCopied(true);
-        window.setTimeout(() => setCopied(false), 2000);
-      }
-    } catch {
-      /* usuário cancelou */
-    }
-  };
-
-  return (
-    <div className="grid md:grid-cols-[minmax(0,380px)_1fr]">
-      <motion.img
-        layoutId={`flyer-${event.id}`}
-        src={event.flyer}
-        alt={`Cartaz: ${event.title}${event.venue ? `, ${event.venue}` : ""}`}
-        className="aspect-[6/7] w-full object-cover max-md:aspect-auto max-md:h-[30dvh] max-md:object-[50%_42%] md:sticky md:top-0 md:aspect-auto md:h-auto md:max-h-[92dvh] md:self-start"
-      />
-      <div className="flex flex-col justify-center gap-6 p-6 md:p-10">
-        <div className="max-md:order-1">
-          <p className="text-sm font-semibold uppercase tracking-[0.16em] text-flame">
-            {upcoming ? "Próximo evento" : event.sale.status === "soldout" ? "Ingressos esgotados" : "Edição encerrada"}
-          </p>
-          <h3 className="mt-2 font-display text-4xl uppercase leading-[0.98] tracking-tight md:text-5xl">
-            {event.title}
-          </h3>
-        </div>
-
-        <p className="max-w-prose leading-relaxed text-cream/85 max-md:order-3">{event.blurb}</p>
-
-        <ul className="grid gap-3 max-md:order-4">
-          <li className="flex items-start gap-3">
-            <CalendarBlank size={22} className="mt-0.5 shrink-0 text-sun" />
-            <span>
-              {date.weekday ? `${date.weekday}, ` : ""}
-              {date.day}
-              {event.time ? `, ${event.time}` : ""}
-            </span>
-          </li>
-          {(event.venue || event.city) && (
-            <li className="flex items-start gap-3">
-              <MapPin size={22} className="mt-0.5 shrink-0 text-sun" />
-              <span>{[event.venue, event.address, event.city].filter(Boolean).join(". ")}</span>
-            </li>
-          )}
-        </ul>
-
-        {upcoming && (
-          <div className="max-md:order-5">
-            <SaleBadge sale={event.sale} />
-          </div>
-        )}
-        <div className="max-md:order-5">
-          <Lineup groups={event.lineup} />
-        </div>
-        {upcoming && event.startsAt && (
-          <div className="max-md:order-5">
-            <Countdown startsAt={event.startsAt} />
-          </div>
-        )}
-        {!upcoming && (
-          <div className="max-md:order-5">
-            <Album event={event} />
-          </div>
-        )}
-
-        <div className="flex flex-wrap gap-2 md:gap-3 max-md:order-2">
-          {upcoming ? (
-            <>
-              <TicketButton event={event} location="modal" />
-              {(event.venue || event.address) && (
-                <Button
-                  variant="ghost"
-                  href={mapsLink(event)}
-                  external
-                  className="max-md:px-4"
-                  icon={<MapPin size={18} />}
-                  trackEvent={["maps_click", { event_id: event.id }]}
-                >
-                  Como chegar
-                </Button>
-              )}
-              <Button variant="ghost" onClick={share} className="max-md:px-4" icon={copied ? <Check size={18} /> : <ShareNetwork size={18} />}>
-                {copied ? "Link copiado" : "Compartilhar"}
-              </Button>
-            </>
-          ) : (
-            <>
-              <Button href="#videos" onClick={onClose} icon={<ArrowUpRight size={18} />}>
-                Ver vídeos
-              </Button>
-              {hasWhatsapp && (
-                <Button
-                  variant="ghost"
-                  href={whatsappLink("Oi! Quero saber da próxima edição do Sun, Bar & Love.")}
-                  external
-                  icon={<WhatsappLogo size={18} />}
-                  trackEvent={["whatsapp_click", { location: "evento_encerrado" }]}
-                >
-                  Próxima edição
-                </Button>
-              )}
-            </>
-          )}
-        </div>
-      </div>
-    </div>
-  );
-}
-
 export function Events() {
-  const [tab, setTab] = useState<Tab>("upcoming");
   const [selected, setSelected] = useState<SbEvent | null>(null);
   const close = useCallback(() => setSelected(null), []);
-  const { containerRef, overlayRef, labelRef, go } = useSunWipe<Tab>(setTab);
 
   const upcoming = EVENTS.filter((e) => e.status === "upcoming" && !e.saveTheDate && e.id !== SPOTLIGHT_ID);
   const saveTheDates = EVENTS.filter((e) => e.status === "upcoming" && e.saveTheDate);
-  const past = EVENTS.filter((e) => e.status === "past");
 
   return (
     <section id="agenda" className="relative overflow-clip bg-[linear-gradient(to_bottom,#07232c,#0b3341_60%,#07232c)] px-5 py-24 md:px-8 md:py-36">
       <div className="mx-auto max-w-6xl">
         <Reveal>
-          <h2 className="font-display text-[clamp(2.8rem,8vw,6.5rem)] uppercase leading-[0.95] tracking-tight text-balance">
+          <p className="text-sm font-semibold uppercase tracking-[0.16em] text-flame">Próximos eventos</p>
+          <h2 className="mt-3 font-display text-[clamp(2.8rem,8vw,6.5rem)] uppercase leading-[0.95] tracking-tight text-balance">
             Marca na <span className="text-rose">agenda</span>
           </h2>
         </Reveal>
 
-        <Reveal delay={0.1} className="mt-10">
-          <div role="tablist" aria-label="Eventos" className="inline-flex rounded-full border border-cream/20 bg-deep/50 p-1.5">
-            {TABS.map((t) => (
-              <button
-                key={t.id}
-                role="tab"
-                type="button"
-                id={`tab-${t.id}`}
-                aria-selected={tab === t.id}
-                aria-controls="events-panel"
-                onClick={(e) => {
-                  if (t.id === tab) return;
-                  track("tab_change", { area: "eventos", tab: t.id });
-                  void go(t.id, t.label, e.currentTarget);
-                }}
-                className="relative h-11 rounded-full px-6 text-[15px] font-semibold"
-              >
-                {tab === t.id && (
-                  <motion.span
-                    layoutId="events-tab"
-                    className="absolute inset-0 rounded-full bg-sun"
-                    transition={{ type: "spring", stiffness: 380, damping: 30 }}
-                  />
-                )}
-                <span className={`relative transition-colors ${tab === t.id ? "text-deep" : "text-cream/80"}`}>{t.label}</span>
-              </button>
-            ))}
-          </div>
-        </Reveal>
-
         <LayoutGroup>
-          <div ref={containerRef} className="relative mt-12" role="tabpanel" id="events-panel" aria-labelledby={`tab-${tab}`}>
-            <SunWipeOverlay overlayRef={overlayRef} labelRef={labelRef} />
-            {tab === "upcoming" ? (
-              <div className="grid gap-16">
-                {upcoming.map((e) => (
-                  <UpcomingFeature key={e.id} event={e} onOpen={setSelected} />
-                ))}
+          <div className="mt-12 grid gap-16">
+            {upcoming.map((e) => (
+              <UpcomingFeature key={e.id} event={e} onOpen={setSelected} />
+            ))}
 
-                <div className="overflow-hidden rounded-card bg-[linear-gradient(120deg,#f0286e,#ff6a2b_60%,#ffc21a)] p-8 text-deep md:p-12">
-                  <div className="grid items-center gap-8 lg:grid-cols-[minmax(0,26rem)_1fr] lg:gap-12">
-                    <div>
-                      <h3 className="max-w-md font-display text-3xl uppercase leading-tight md:text-4xl">
-                        Novas datas saem em breve
-                      </h3>
-                      <p className="mt-3 max-w-md text-deep/85">
-                        {saveTheDates.length > 0 ? "Já pode marcar na agenda. " : ""}
-                        {hasWhatsapp
-                          ? "Chama no WhatsApp e seja o primeiro a saber."
-                          : "Fique de olho: a gente avisa por aqui assim que tiver novidade."}
-                      </p>
-                      {hasWhatsapp && (
-                        <div className="mt-6">
-                          <a
-                            href={whatsappLink("Oi! Quero ser avisado das próximas edições do Sun, Bar & Love.")}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            onClick={() => track("whatsapp_click", { location: "novas_datas" })}
-                            className="inline-flex h-12 items-center gap-2 whitespace-nowrap rounded-full bg-deep px-6 font-semibold text-cream transition hover:bg-night active:scale-[0.97]"
-                          >
-                            <WhatsappLogo size={20} weight="fill" /> Chamar no WhatsApp
-                          </a>
-                        </div>
-                      )}
+            <div className="overflow-hidden rounded-card bg-[linear-gradient(120deg,#f0286e,#ff6a2b_60%,#ffc21a)] p-8 text-deep md:p-12">
+              <div className="grid items-center gap-8 lg:grid-cols-[minmax(0,26rem)_1fr] lg:gap-12">
+                <div>
+                  <h3 className="max-w-md font-display text-3xl uppercase leading-tight md:text-4xl">
+                    Novas datas saem em breve
+                  </h3>
+                  <p className="mt-3 max-w-md text-deep/85">
+                    {saveTheDates.length > 0 ? "Já pode marcar na agenda. " : ""}
+                    {hasWhatsapp
+                      ? "Chama no WhatsApp e seja o primeiro a saber."
+                      : "Fique de olho: a gente avisa por aqui assim que tiver novidade."}
+                  </p>
+                  {hasWhatsapp && (
+                    <div className="mt-6">
+                      <a
+                        href={whatsappLink("Oi! Quero ser avisado das próximas edições do Sun, Bar & Love.")}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        onClick={() => track("whatsapp_click", { location: "novas_datas" })}
+                        className="inline-flex h-12 items-center gap-2 whitespace-nowrap rounded-full bg-deep px-6 font-semibold text-cream transition hover:bg-night active:scale-[0.97]"
+                      >
+                        <WhatsappLogo size={20} weight="fill" /> Chamar no WhatsApp
+                      </a>
                     </div>
-                    {saveTheDates.length > 0 && (
-                      <div className="grid gap-4 sm:grid-cols-2">
-                        {saveTheDates.map((e) => (
-                          <SaveTheDateTile key={e.id} event={e} onOpen={setSelected} />
-                        ))}
-                      </div>
-                    )}
-                  </div>
+                  )}
                 </div>
+                {saveTheDates.length > 0 && (
+                  <div className="grid gap-4 sm:grid-cols-2">
+                    {saveTheDates.map((e) => (
+                      <SaveTheDateTile key={e.id} event={e} onOpen={setSelected} />
+                    ))}
+                  </div>
+                )}
               </div>
-            ) : (
-              <div className="grid gap-10 sm:grid-cols-2 md:max-w-3xl">
-                {past.map((e) => (
-                  <PastCard key={e.id} event={e} onOpen={setSelected} />
-                ))}
-              </div>
-            )}
+            </div>
           </div>
 
           <Modal open={!!selected} onClose={close} label={selected ? `${selected.title}${atVenue(selected)}` : "Evento"}>
