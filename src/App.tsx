@@ -8,6 +8,7 @@ import { EventMap3D } from "./components/EventMap3D";
 import { Collab } from "./components/Collab";
 import { Manifesto } from "./components/Manifesto";
 import { Events } from "./components/Events";
+import { PastEditions } from "./components/PastEditions";
 import { Videos } from "./components/Videos";
 import { Gallery } from "./components/Gallery";
 import { Finale } from "./components/Finale";
@@ -48,6 +49,7 @@ export default function App() {
           <Collab />
           <Manifesto />
           <Events />
+          <PastEditions />
           <Videos />
           <Gallery />
           <Shop />

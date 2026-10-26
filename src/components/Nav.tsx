@@ -12,7 +12,8 @@ const LINKS = [
   { id: "mapa", label: "Mapa" },
   { id: "collab", label: "Collab" },
   { id: "videos", label: "Vídeos" },
-  { id: "fotos", label: "Fotos" },
+  { id: "edicoes", label: "Suas fotos" },
+  { id: "fotos", label: "Galeria" },
   { id: "loja", label: "Loja" },
   { id: "banda", label: "Banda" },
   { id: "duvidas", label: "Dúvidas" },
@@ -66,7 +67,7 @@ export function Nav() {
               <li key={l.id}>
                 <a
                   href={`#${l.id}`}
-                  className="relative block rounded-full px-2.5 py-2.5 text-sm font-medium text-cream/80 transition-colors hover:text-cream xl:px-4"
+                  className="relative block whitespace-nowrap rounded-full px-2.5 py-2.5 text-sm font-medium text-cream/80 transition-colors hover:text-cream xl:px-4"
                 >
                   {active === l.id && (
                     <motion.span
@@ -103,7 +104,7 @@ export function Nav() {
       <AnimatePresence>
         {open && (
           <motion.div
-            className="fixed inset-0 flex flex-col justify-center gap-2 bg-deep/95 px-8 backdrop-blur-lg lg:hidden"
+            className="fixed inset-0 flex flex-col justify-center gap-1 overflow-y-auto bg-deep/95 px-8 pb-8 pt-24 backdrop-blur-lg lg:hidden"
             style={{ zIndex: "calc(var(--z-nav) - 1)" }}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -114,7 +115,7 @@ export function Nav() {
                 key={l.id}
                 href={`#${l.id}`}
                 onClick={() => setOpen(false)}
-                className="font-display text-6xl uppercase leading-tight text-cream hover:text-sun"
+                className="font-display text-[clamp(2.25rem,10.5vw,3.75rem)] uppercase leading-[1.08] text-cream hover:text-sun"
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.08 + i * 0.07, duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
