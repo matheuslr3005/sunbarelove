@@ -17,7 +17,7 @@ npm run preview  # testa o build
 
 Tudo fica em `src/content.ts`.
 
-- **Eventos** (`EVENTS`): `status: "upcoming"` aparece em "Marca na agenda" (seção própria, com contagem regressiva); `"past"` aparece na seção "Ache a sua foto" (edições passadas, logo abaixo da agenda), onde cada card abre o álbum de fotos. Preencha `ticketUrl` com o link da página de venda. Enquanto estiver vazio, o botão "Ingressos" abre o WhatsApp.
+- **Eventos** (`EVENTS`): `status: "upcoming"` aparece em "Marca na agenda" (seção própria, com contagem regressiva); `"past"` aparece na seção "Ache a sua foto" (edições passadas, logo abaixo da agenda), onde as edições passam numa esteira que anda sozinha (pausa com mouse, toque ou álbum aberto; dá para arrastar e usar as setas). Cada card abre o álbum de fotos. Novos eventos `"past"` entram na esteira automaticamente. Preencha `ticketUrl` com o link da página de venda. Enquanto estiver vazio, o botão "Ingressos" abre o WhatsApp.
 - **Lotes** (`sale` de cada evento): `{ status: "onsale" }` mostra "Ingressos à venda". Com `lot: "2º lote"` mostra "2º lote à venda", e com `lotEndsAt: "2026-10-09T12:00:00-03:00"` mostra também "Vira em 1d 04h". `status: "soldout"` mostra "Esgotado" e troca o botão por "Esgotado". Não há preço no site, de propósito.
 - **Line-up** (`lineup` do evento): lista de nomes. Vazia, o bloco não aparece.
 - **Vídeos de fundo** (`BG_VIDEOS`): `hero`, `finale` e `videos` (atrás do título da seção de vídeos). Cada um tem um `mp4` (H.264, serve Safari e iPhone) e, de preferência, um `webm` (VP9, que o navegador usa primeiro e é bem mais leve), sem som e em loop, em `public/media/videos/`. O do hero também tem versão vertical para celular (`mobile`, 900x1600, com `mobilePoster`), e o celular só baixa a vertical. Só tocam enquanto estão na tela, e viram imagem parada com "reduzir movimento" ou economia de dados. Remova a chave para desligar.
@@ -57,6 +57,7 @@ Os cliques importantes são enviados como eventos (`src/analytics.ts`):
 | `band_play`, `band_booking_click` | abrir o vídeo da banda, ou Contratar a banda | `has_video` |
 | `tab_change` | trocar de aba | `area`, `tab` |
 | `edition_open` | abrir uma edição passada em "Ache a sua foto" | `event_id` |
+| `hero_find_photo_click` | botão "Ache sua foto" no Hero | — |
 
 Para ver os números, preencha `SITE.analyticsId` com o ID do Google Analytics 4 (`G-...`). Sem ele, os eventos vão só para o `dataLayer` (prontos para o Google Tag Manager). Quando `ticketUrl` estiver preenchido, o link de venda recebe `utm_source=site`, `utm_medium=botao`, `utm_campaign=<id do evento>` e `utm_content=<botão>`, para a plataforma de vendas mostrar de onde veio cada compra.
 
