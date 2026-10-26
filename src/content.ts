@@ -103,17 +103,16 @@ export const EVENTS: SbEvent[] = [
     // TODO: informar o lote atual e quando ele vira, ex: { status: "onsale", lot: "1º lote", lotEndsAt: "2026-11-05T12:00:00-03:00" }
     sale: { status: "onsale" },
     lineup: [
-      { label: "Nasty by ATO", names: ["DJ Kessel"] },
       { label: "Banda Sun, Bar & Love, com participações", names: ["Sambary", "Jader Lewis", "Denilson", "Júnior Paixão"] },
-      { names: ["Millbeatz", "Saulit"] },
+      { names: ["Milbeatz", "Saulit"] },
       { label: "BDS Crew", names: ["Pava", "Santos", "Class"] },
-      { label: "DJ Set Rayo", names: ["Gabriel R", "Nicky", "Thalles"] },
+      { label: "DJ Set Rayo", names: ["Gabriel R", "Nicky", "Jotaerre"] },
     ],
     perk: {
       title: "Open bar das 15h às 16h30",
       items: ["Cerveja Sol", "Caipa da Sun", "Drinks de vodka e gin", "Welcome shot de bananinha"],
     },
-    supporters: ["Meep", "BDS", "ATO", "Rayo"],
+    supporters: ["Meep", "BDS", "Rayo"],
   },
   {
     id: "deck22-9-jan",
