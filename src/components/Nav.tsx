@@ -55,7 +55,7 @@ export function Nav() {
       <header className="fixed inset-x-0 top-3 flex justify-center px-3" style={{ zIndex: "var(--z-nav)" }}>
         <nav
           aria-label="Principal"
-          className="flex h-14 w-full max-w-5xl items-center justify-between gap-2 rounded-full border border-cream/15 bg-night/60 py-2 pl-2 pr-2 shadow-[inset_0_1px_0_rgba(255,241,214,0.12),0_18px_50px_-20px_rgba(4,23,30,0.9)] backdrop-blur-xl"
+          className="flex h-14 w-full max-w-5xl xl:max-w-6xl items-center justify-between gap-2 rounded-full border border-cream/15 bg-night/60 py-2 pl-2 pr-2 shadow-[inset_0_1px_0_rgba(255,241,214,0.12),0_18px_50px_-20px_rgba(4,23,30,0.9)] backdrop-blur-xl"
         >
           <a href="#top" className="flex items-center gap-2.5 rounded-full pr-2" aria-label="Sun, Bar & Love, início">
             <img src={asset("media/logo-icone.webp")} alt="" width={40} height={40} className="size-10" />
