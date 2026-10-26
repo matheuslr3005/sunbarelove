@@ -11,18 +11,33 @@ import { Lineup } from "./Lineup";
 import { SaleBadge } from "./SaleBadge";
 import { TicketButton } from "./TicketButton";
 
-export function FlyerButton({ event, onOpen, aspect = "aspect-[6/7]" }: { event: SbEvent; onOpen: () => void; aspect?: string }) {
+export function FlyerButton({
+  event,
+  onOpen,
+  aspect = "aspect-[6/7]",
+  shared = true,
+  tabIndex,
+}: {
+  event: SbEvent;
+  onOpen: () => void;
+  aspect?: string;
+  /** Anima o cartaz até o modal. Desligue quando o mesmo cartaz aparece mais de uma vez na tela (ex.: esteira). */
+  shared?: boolean;
+  tabIndex?: number;
+}) {
   return (
     <button
       type="button"
       onClick={onOpen}
+      tabIndex={tabIndex}
       aria-label={`Ver detalhes: ${event.title}${atVenue(event)}`}
       className="group block w-full cursor-pointer rounded-card text-left"
     >
       <motion.img
-        layoutId={`flyer-${event.id}`}
+        layoutId={shared ? `flyer-${event.id}` : undefined}
         src={event.flyer}
         alt={`Cartaz: ${event.title}${event.venue ? `, ${event.venue}` : ""}`}
+        draggable={false}
         className={`${aspect} w-full rounded-card object-cover object-[50%_45%] shadow-[0_30px_70px_-25px_rgba(240,40,110,0.55)] ring-1 ring-cream/20 transition-transform duration-500 ease-out-expo group-hover:-translate-y-1.5`}
       />
     </button>

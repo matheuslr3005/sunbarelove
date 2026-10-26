@@ -1,5 +1,5 @@
 import { motion, useReducedMotion, useScroll, useTransform } from "motion/react";
-import { ArrowDown } from "@phosphor-icons/react";
+import { ArrowDown, Images } from "@phosphor-icons/react";
 import { asset } from "../asset";
 import { BG_VIDEOS, EVENTS } from "../content";
 import { useIntro } from "./Intro";
@@ -91,6 +91,9 @@ export function Hero() {
             transition={{ duration: 0.8, delay: 0.5, ease }}
           >
             {next && <TicketButton event={next} location="hero" />}
+            <Button variant="accent" href="#edicoes" icon={<Images size={18} weight="fill" />} trackEvent={["hero_find_photo_click"]}>
+              Ache sua foto
+            </Button>
             <Button variant="ghost" href="#videos" icon={<ArrowDown size={18} />}>
               Ver vídeos
             </Button>
