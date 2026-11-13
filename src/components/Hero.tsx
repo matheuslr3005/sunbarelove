@@ -8,7 +8,6 @@ import { BackgroundVideo } from "./BackgroundVideo";
 import { Button } from "./Button";
 import { Sun } from "./Sun";
 import { TicketButton } from "./TicketButton";
-import { Celebration } from "./Celebration";
 
 const next = EVENTS.find((e) => e.status === "upcoming");
 
@@ -43,7 +42,6 @@ export function Hero() {
       <HeroVideo />
       {/* horizonte do pôr do sol */}
       <div className="pointer-events-none absolute inset-x-0 bottom-0 h-2/5 bg-[linear-gradient(to_top,rgba(255,106,43,0.7),rgba(240,40,110,0.3)_45%,transparent)]" />
-      <Celebration revealed={revealed} />
 
       <div className="relative mx-auto grid min-h-[100dvh] max-w-7xl grid-cols-1 items-center gap-8 px-5 pb-24 pt-24 lg:grid-cols-12 md:px-8">
         <div className="relative z-10 lg:col-span-7">
