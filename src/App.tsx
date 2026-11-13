@@ -4,7 +4,7 @@ import { Nav } from "./components/Nav";
 import { Hero } from "./components/Hero";
 import { BarraStrip } from "./components/BarraStrip";
 import { EventSpotlight } from "./components/EventSpotlight";
-import { EventMap } from "./components/EventMap";
+import { EventMap3D } from "./components/EventMap3D";
 import { Collab } from "./components/Collab";
 import { Manifesto } from "./components/Manifesto";
 import { Events } from "./components/Events";
@@ -45,7 +45,7 @@ export default function App() {
           <Hero />
           <BarraStrip />
           <EventSpotlight />
-          <EventMap />
+          <EventMap3D />
           <Collab />
           <Manifesto />
           <Events />
