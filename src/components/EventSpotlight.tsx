@@ -39,10 +39,10 @@ export function EventSpotlight() {
             <div aria-hidden="true" className="absolute -inset-4 rounded-[36px] bg-[linear-gradient(135deg,#f0286e,#ff6a2b,#ffc21a)] opacity-70 blur-2xl" />
             <img
               src={event.flyer}
-              alt="Cartaz da festa de 7 anos do Sun, Bar & Love, dia 7 de novembro, com o line-up completo"
+              alt={`Cartaz do Sun, Bar & Love${event.venue ? ` no ${event.venue}` : ""}, ${date.day}, com o line-up`}
               width={900}
-              height={1600}
-              className="relative aspect-[9/16] w-full rounded-card object-cover shadow-[0_40px_90px_-30px_rgba(4,23,30,0.95)] ring-4 ring-cream"
+              height={1200}
+              className="relative h-auto w-full rounded-card shadow-[0_40px_90px_-30px_rgba(4,23,30,0.95)] ring-4 ring-cream"
             />
           </motion.figure>
         </Reveal>
@@ -50,7 +50,7 @@ export function EventSpotlight() {
         <div className="grid gap-7">
           <Reveal>
             <p className="inline-flex rounded-full border border-sun/60 bg-night/50 px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.16em] text-sun">
-              Próximo evento · aniversário de 7 anos
+              Próximo evento
             </p>
             <h2 className="mt-5 font-display text-[clamp(2.5rem,5.6vw,4.6rem)] uppercase leading-[0.92] tracking-tight">
               <span className="block text-[0.34em] tracking-[0.14em] text-flame">{date.weekday}</span>

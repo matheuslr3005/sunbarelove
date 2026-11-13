@@ -87,32 +87,25 @@ export interface SbEvent {
 
 export const EVENTS: SbEvent[] = [
   {
-    id: "aniversario-7-anos",
+    id: "sun-bar-love-6-dez",
     status: "upcoming",
-    title: "7 anos de Sun, Bar & Love",
-    // O open bar começa às 15h; usamos esse horário como abertura. TODO: confirmar a abertura dos portões.
-    startsAt: "2026-11-07T15:00:00-03:00",
+    title: "Sun, Bar & Love",
+    startsAt: "2026-12-06T15:00:00-03:00",
     time: "15h",
-    venue: "Quintal Lounge",
-    // TODO: informar o endereço do Quintal Lounge.
+    venue: "Cenna",
+    address: "Rua João Moreira Maciel, 470, Beira do Guaíba",
     city: "Porto Alegre, RS",
-    flyer: asset("media/flyer-7anos-oficial-v2.webp"),
+    flyer: asset("media/flyer-dez-vendas.webp"),
     blurb:
-      "A festa de aniversário do Sun, Bar & Love: sete anos de pôr do sol, música boa e gente que a gente ama, com open bar, banda, DJs e palco 360.",
-    ticketUrl: "https://www.bilheteriadigital.com/sun-bar-e-love-7-anos-07-de-novembro",
-    // TODO: informar o lote atual e quando ele vira, ex: { status: "onsale", lot: "1º lote", lotEndsAt: "2026-11-05T12:00:00-03:00" }
+      "O pôr do sol de dezembro no Cenna, na beira do Guaíba, com a Banda Sun, Bar & Love, open bar e muita música boa.",
+    ticketUrl: "https://vitrine.baladapp.com.br/pt-BR/eventos/sun-bar-love-porto-alegre/9709?promocao=LOVE",
+    // TODO: informar o lote atual e quando ele vira, ex: { status: "onsale", lot: "1º lote", lotEndsAt: "2026-12-04T12:00:00-03:00" }
     sale: { status: "onsale" },
-    lineup: [
-      { label: "Banda Sun, Bar & Love, com participações", names: ["Sambary", "Jader Lewis", "Denilson", "Júnior Paixão"] },
-      { names: ["Milbeatz", "Saulit"] },
-      { label: "BDS Crew", names: ["Pava", "Santos", "Class"] },
-      { label: "DJ Set Rayo", names: ["Gabriel R", "Nicky", "Jotaerre"] },
-    ],
+    lineup: [{ names: ["Banda Sun, Bar & Love", "Helner", "David Natel", "Maicon M.", "Guimarães", "Leo Bueno"] }],
     perk: {
       title: "Open bar das 15h às 16h30",
-      items: ["Cerveja Sol", "Caipa da Sun", "Drinks de vodka e gin", "Welcome shot de bananinha"],
+      items: ["Caipa da Sun", "Aperol", "Drinks de vodka"],
     },
-    supporters: ["Meep", "BDS", "Rayo"],
   },
   {
     id: "deck22-9-jan",
@@ -293,7 +286,7 @@ export const EVENTS: SbEvent[] = [
 ];
 
 /** Evento em destaque logo abaixo do Hero (some da agenda para não repetir). */
-export const SPOTLIGHT_ID = "aniversario-7-anos";
+export const SPOTLIGHT_ID = "sun-bar-love-6-dez";
 
 /**
  * Coleção de roupas em parceria com a Approve, em destaque abaixo do evento.
@@ -544,11 +537,11 @@ export const FAQ: { q: string; a: string }[] = [
   },
   {
     q: "A que horas começa?",
-    a: "A festa de 7 anos é no sábado, 7 de novembro. O open bar rola das 15h às 16h30, então chegue cedo para aproveitar.",
+    a: "A próxima edição é no domingo, 6 de dezembro, a partir das 15h. O open bar rola das 15h às 16h30, então chegue cedo para aproveitar.",
   },
   {
     q: "Onde vai ser?",
-    a: "No Quintal Lounge, em Porto Alegre. No detalhe do evento, o botão Como chegar abre a rota no Google Maps.",
+    a: "No Cenna, na Rua João Moreira Maciel, 470, Beira do Guaíba, em Porto Alegre. O botão Como chegar abre a rota no Google Maps.",
   },
   {
     q: "O lote acabou. E agora?",
