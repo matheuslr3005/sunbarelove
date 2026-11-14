@@ -1,5 +1,5 @@
 import { asset } from "./asset";
-import { CENNA_10_OUT_THUMBS, FROM_RIO_THUMBS, MADE_IN_BRASIL_THUMBS, QUINTAL_17_MAI_THUMBS, QUINTAL_20_SET_THUMBS, QUINTAL_29_MAR_THUMBS } from "./albumData";
+import { ANIVERSARIO_7_ANOS_THUMBS, CENNA_10_OUT_THUMBS, FROM_RIO_THUMBS, MADE_IN_BRASIL_THUMBS, QUINTAL_17_MAI_THUMBS, QUINTAL_20_SET_THUMBS, QUINTAL_29_MAR_THUMBS } from "./albumData";
 
 /**
  * Todo o conteúdo editável do site mora aqui.
@@ -81,6 +81,8 @@ export interface SbEvent {
   album?: AlbumPhoto[];
   /** Link para baixar o álbum inteiro (zip ou pasta compartilhada). Vazio = o botão não aparece. */
   albumUrl?: string;
+  /** Edição passada em destaque em "Ache a sua foto": ganha um banner grande e o selo "Novo" (use em uma edição só, a mais recente). */
+  featured?: boolean;
   /** Quantas fotos existem no total na pasta do Drive. Se for maior que `album.length`, o álbum mostra um botão para ver o resto no Drive. */
   albumTotal?: number;
 }
@@ -135,6 +137,32 @@ export const EVENTS: SbEvent[] = [
     blurb: "Save the date! O Sun, Bar & Love vai ao Deck 22, em Atlântida, no Carnaval. Horário e ingressos saem em breve.",
     ticketUrl: "",
     sale: { status: "soon" },
+  },
+  {
+    id: "aniversario-7-anos",
+    status: "past",
+    featured: true,
+    title: "7 anos de Sun, Bar & Love",
+    dateLabel: "7 de novembro",
+    venue: "Quintal Lounge",
+    city: "Porto Alegre, RS",
+    flyer: asset("media/flyer-7anos-capa.webp"),
+    blurb: "A festa de aniversário do Sun, Bar & Love: sete anos de pôr do sol, música boa e gente que a gente ama.",
+    ticketUrl: "",
+    sale: { status: "closed" },
+    album: ANIVERSARIO_7_ANOS_THUMBS.map(([width, height], i) => {
+      const n = String(i + 1).padStart(3, "0");
+      return {
+        id: `a7-${n}`,
+        thumb: asset(`media/albuns/quintal-07-nov/t${n}.webp`),
+        src: asset(`media/albuns/quintal-07-nov/${n}.jpg`),
+        width,
+        height,
+      };
+    }),
+    // Pasta do Drive com as fotos originais em alta resolução (precisa estar com "qualquer pessoa com o link", como leitor).
+    albumUrl: "https://drive.google.com/drive/folders/1UB3J4KzjIr3J2zrRD18BgE3BczZ_D5gl",
+    albumTotal: 347,
   },
   {
     id: "cenna-10-out",
