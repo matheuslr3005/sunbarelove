@@ -8,8 +8,8 @@ import { track } from "../analytics";
 import { TicketButton } from "./TicketButton";
 
 const LINKS = [
-  { id: "eventos", label: "Eventos" },
   { id: "banda", label: "Banda" },
+  { id: "eventos", label: "Eventos" },
   { id: "mapa", label: "Mapa" },
   { id: "collab", label: "Collab" },
   { id: "videos", label: "Vídeos" },

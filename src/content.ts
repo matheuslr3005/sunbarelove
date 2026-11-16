@@ -567,7 +567,6 @@ export interface BandInfo {
   /**
    * Para onde vai o botão "Contrate aqui": link do WhatsApp (https://wa.me/55...), do Instagram ou "mailto:".
    * Vazio = usa o WhatsApp do site (SITE.whatsapp); sem nenhum dos dois, o botão aparece desativado ("contato em breve").
-   * TODO: preencher com o contato de contratação da banda.
    */
   contactUrl?: string;
   /** Blocos do show que passam na esteira da seção da banda. */
@@ -576,7 +575,7 @@ export interface BandInfo {
 
 export const BAND: BandInfo = {
   title: "Banda do Sun, Bar & Love ao vivo",
-  contactUrl: "",
+  contactUrl: "https://wa.me/message/YMSNO3ZSC3NGB1",
   blocks: [],
 };
 

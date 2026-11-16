@@ -44,8 +44,8 @@ export default function App() {
         <main>
           <Hero />
           <BarraStrip />
-          <EventSpotlight />
           <Band />
+          <EventSpotlight />
           <EventMap3D />
           <Collab />
           <Manifesto />
