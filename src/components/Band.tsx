@@ -156,7 +156,7 @@ export function Band() {
       )}
 
       <div className="mx-auto mt-14 flex max-w-6xl flex-wrap items-center justify-between gap-5 px-5 md:px-8">
-        <p className="max-w-md font-display text-2xl uppercase leading-tight md:text-3xl">Quer essa banda no seu evento?</p>
+        <p className="max-w-md font-display text-2xl uppercase leading-tight md:text-3xl">Nossa banda</p>
         <HireButton location="banda_rodape" />
       </div>
 
