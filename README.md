@@ -33,7 +33,7 @@ Tudo fica em `src/content.ts`.
 - **Números** (`STATS`): o público (+2.500) é um valor de exemplo. Troque pelo real antes de divulgar.
 - **Dúvidas** (`FAQ`): revise as respostas com a equipe (idade, entrada, lotes).
 - **Loja** (`PRODUCTS`, `SHOP_COLORS` e `SHOP`): a esteira de produtos. Cada produto tem `name`, `kind` (moletom, boné, camiseta ou óculos), `colors` (azul, laranja, branco, preto) e, quando houver, `price`, `url` (link do produto) e foto: `photo` (uma foto para qualquer cor) ou `images` (uma foto por cor, em `public/media/`). Sem foto, o card mostra um desenho da peça na cor escolhida. O seletor de cor só aparece com duas ou mais cores. Sem `url`, usa `SHOP.url` (link da loja, a Shopify quando existir), e sem esse abre o WhatsApp com o nome do produto (e a cor, quando há escolha). Fotos podem se repetir na esteira. Para trocar o sentido da esteira, mude o sinal em `Shop.tsx` (`next += ...`).
-- **Banda** (`BAND`): a seção com o vídeo horizontal da banda de pagode. Preencha `src` (mp4 em `public/media/videos/`) ou `youtube` (ID), e `poster` se quiser uma capa própria; sem vídeo, mostra "Vídeo em breve" sobre a arte de nuvens da marca. O botão "Contratar a banda" abre o WhatsApp (remova em `src/components/Band.tsx` se não quiser).
+- **Banda** (`BAND`): fica logo abaixo do destaque do próximo evento. Tem o vídeo principal (`src` em `public/media/videos/` ou `youtube`, e `poster` opcional), a esteira de **blocos do show** (`blocks`: cada bloco tem `poster` e `src` em `public/media/banda/`, `duration` e `fullUrl` com o link do vídeo completo no Drive/YouTube) e o botão **Contrate aqui**. Para o botão funcionar, preencha `contactUrl` (WhatsApp `https://wa.me/55...`, Instagram ou `mailto:`); sem ele, usa o WhatsApp do site (`SITE.whatsapp`) e, se não houver nenhum, aparece desativado ("contato em breve").
 - **Parceiros** (`SPONSORS`): textos da faixa amarela. Para usar logos, troque o conteúdo de `src/components/Marquee.tsx`.
 - **Destaque do evento** (`SPOTLIGHT_ID` e o evento com esse `id` em `EVENTS`): para trocar o próximo evento, troque o evento e o `SPOTLIGHT_ID`. Aparece logo abaixo do Hero, com cartaz, data, local, contagem, `perk` (open bar), `lineup` em blocos e `supporters`. Esse evento não repete na agenda.
 - **Mapa 3D** (`src/components/EventMap3D.tsx`): desenhado em CSS a partir da planta do Cenna (`public/media/mapa-cenna-dez.webp`, que também abre no botão "Ver o mapa em imagem"). As posições das mesas M e A, do DJ, do bar, da parede, do vidro e do rio estão no próprio arquivo (centro de cada mesa no tabuleiro de 1000x720). Para um novo local, ajuste `TABLES_M`, `TABLES_A` e os blocos, e salve a nova imagem com um **nome novo** (os navegadores guardam a antiga em cache).
@@ -54,7 +54,8 @@ Os cliques importantes são enviados como eventos (`src/analytics.ts`):
 | `gallery_open` | ampliar uma foto | `gallery`, `photo_id` |
 | `faq_open` | abrir uma pergunta | `question` |
 | `shop_click` | clique em um produto | `product_id`, `color` |
-| `band_play`, `band_booking_click` | abrir o vídeo da banda, ou Contratar a banda | `has_video` |
+| `band_play`, `band_booking_click` | abrir o vídeo da banda, ou "Contrate aqui" | `has_video`, `location` |
+| `band_block_full_click` | "Assistir o bloco completo" em um bloco | `block` |
 | `tab_change` | trocar de aba | `area`, `tab` |
 | `edition_open` | abrir uma edição passada em "Ache a sua foto" | `event_id` |
 | `hero_find_photo_click` | botão "Ache sua foto" no Hero | — |
