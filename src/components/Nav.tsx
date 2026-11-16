@@ -9,13 +9,13 @@ import { TicketButton } from "./TicketButton";
 
 const LINKS = [
   { id: "eventos", label: "Eventos" },
+  { id: "banda", label: "Banda" },
   { id: "mapa", label: "Mapa" },
   { id: "collab", label: "Collab" },
   { id: "videos", label: "Vídeos" },
   { id: "edicoes", label: "Suas fotos" },
   { id: "fotos", label: "Galeria" },
   { id: "loja", label: "Loja" },
-  { id: "banda", label: "Banda" },
   { id: "duvidas", label: "Dúvidas" },
 ];
 

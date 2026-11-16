@@ -542,6 +542,20 @@ export const PRODUCTS: SbProduct[] = [
   { id: "bone-trio", name: "Boné", kind: "cap", colors: [], photo: asset("media/prod-bones.webp") },
 ];
 
+/** Um "bloco" da banda: um trecho do show, com prévia no site e o vídeo completo no Drive. */
+export interface BandBlock {
+  id: string;
+  title: string;
+  /** Capa horizontal (public/media/banda/). */
+  poster: string;
+  /** Trecho de destaque em mp4 (public/media/banda/). */
+  src: string;
+  /** Duração do bloco completo, ex: "2:38". */
+  duration?: string;
+  /** Link do vídeo completo (Google Drive, com "qualquer pessoa com o link"). */
+  fullUrl?: string;
+}
+
 export interface BandInfo {
   title: string;
   /** Imagem de capa horizontal (public/media/). Sem ela, usa a arte de nuvens da marca. */
@@ -550,11 +564,20 @@ export interface BandInfo {
   src?: string;
   /** ...ou ID de vídeo do YouTube. Sem nenhum dos dois, o vídeo mostra "em breve". */
   youtube?: string;
+  /**
+   * Para onde vai o botão "Contrate aqui": link do WhatsApp (https://wa.me/55...), do Instagram ou "mailto:".
+   * Vazio = usa o WhatsApp do site (SITE.whatsapp); sem nenhum dos dois, o botão aparece desativado ("contato em breve").
+   * TODO: preencher com o contato de contratação da banda.
+   */
+  contactUrl?: string;
+  /** Blocos do show que passam na esteira da seção da banda. */
+  blocks?: BandBlock[];
 }
 
-// TODO: gravar o vídeo da banda tocando (horizontal, 16:9), colocar em public/media/videos/ e preencher `src`.
 export const BAND: BandInfo = {
   title: "Banda do Sun, Bar & Love ao vivo",
+  contactUrl: "",
+  blocks: [],
 };
 
 // TODO: revisar as respostas com a equipe (regras de idade e entrada, política de lotes).
