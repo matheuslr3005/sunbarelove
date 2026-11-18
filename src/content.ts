@@ -462,6 +462,10 @@ export const GALLERIES: Gallery[] = [
       { id: "g18", src: asset("media/galeria/g18.webp"), alt: "Moça bebendo no copo da festa diante de um mural colorido", width: 853, height: 1280 },
       { id: "g19", src: asset("media/galeria/g19.webp"), alt: "Letreiro Sun, Bar & Love ao pôr do sol, em lente olho de peixe", width: 1400, height: 933 },
       { id: "g20", src: asset("media/galeria/g20.webp"), alt: "Quatro amigas fazendo selfie com o céu alaranjado", width: 933, height: 1400 },
+      { id: "g51", src: asset("media/galeria/g51.webp"), alt: "Moça de braço erguido na pista, entre bandeiras coloridas e fumaça sob luzes azuis e vermelhas", width: 933, height: 1400 },
+      { id: "g52", src: asset("media/galeria/g52.webp"), alt: "Cantor no palco com o painel Sun, Bar & Love e fogos de artifício dourados no céu", width: 933, height: 1400 },
+      { id: "g53", src: asset("media/galeria/g53.webp"), alt: "Banda tocando no palco azul do sol, sob a cúpula transparente à beira do rio", width: 933, height: 1400 },
+      { id: "g54", src: asset("media/galeria/g54.webp"), alt: "Moça posando diante do sol de luz amarelo do Sun, Bar & Love", width: 933, height: 1400 },
     ],
   },
   {
