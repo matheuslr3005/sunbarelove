@@ -2,7 +2,7 @@ import { useCallback, useState } from "react";
 import { LayoutGroup } from "motion/react";
 import { ArrowUpRight, Clock, MapPin, WhatsappLogo } from "@phosphor-icons/react";
 import { track } from "../analytics";
-import { EVENTS, SPOTLIGHT_ID, type SbEvent } from "../content";
+import { EVENTS, SPOTLIGHT_IDS, type SbEvent } from "../content";
 import { atVenue, eventDate, hasWhatsapp, whatsappLink } from "../lib";
 import { Button } from "./Button";
 import { Countdown } from "./Countdown";
@@ -80,7 +80,7 @@ export function Events() {
   const [selected, setSelected] = useState<SbEvent | null>(null);
   const close = useCallback(() => setSelected(null), []);
 
-  const upcoming = EVENTS.filter((e) => e.status === "upcoming" && !e.saveTheDate && e.id !== SPOTLIGHT_ID);
+  const upcoming = EVENTS.filter((e) => e.status === "upcoming" && !e.saveTheDate && !SPOTLIGHT_IDS.includes(e.id));
   const saveTheDates = EVENTS.filter((e) => e.status === "upcoming" && e.saveTheDate);
 
   return (
