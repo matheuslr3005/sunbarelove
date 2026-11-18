@@ -587,8 +587,28 @@ export interface BandInfo {
 
 export const BAND: BandInfo = {
   title: "Banda do Sun, Bar & Love ao vivo",
+  poster: asset("media/banda/bloco-01.webp"),
+  src: asset("media/banda/bloco-01.mp4"),
   contactUrl: "https://wa.me/message/YMSNO3ZSC3NGB1",
-  blocks: [],
+  // Prévias de 30 s dos blocos do show; o vídeo completo de cada um fica no Drive.
+  blocks: [
+    {
+      id: "bloco-01",
+      title: "Bloco 01",
+      poster: asset("media/banda/bloco-01.webp"),
+      src: asset("media/banda/bloco-01.mp4"),
+      duration: "2:38",
+      fullUrl: "https://drive.google.com/file/d/1FFOv9xCBtkHQFSXxuSRyhQG-D6OR017X/view",
+    },
+    {
+      id: "bloco-02",
+      title: "Bloco 02",
+      poster: asset("media/banda/bloco-02.webp"),
+      src: asset("media/banda/bloco-02.mp4"),
+      duration: "2:57",
+      fullUrl: "https://drive.google.com/file/d/1LJMVy22wMIa2RVE6tRRcNt4vjJ__G5Qy/view",
+    },
+  ],
 };
 
 // TODO: revisar as respostas com a equipe (regras de idade e entrada, política de lotes).
