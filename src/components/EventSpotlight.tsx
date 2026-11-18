@@ -1,6 +1,6 @@
 import { motion } from "motion/react";
 import { Clock, MapPin, MapTrifold } from "@phosphor-icons/react";
-import { EVENTS, SPOTLIGHT_ID } from "../content";
+import { EVENTS, SPOTLIGHT_IDS, type SbEvent } from "../content";
 import { eventDate, mapsLink } from "../lib";
 import { Button } from "./Button";
 import { Countdown } from "./Countdown";
@@ -9,39 +9,42 @@ import { Reveal } from "./Reveal";
 import { SaleBadge } from "./SaleBadge";
 import { TicketButton } from "./TicketButton";
 
-const event = EVENTS.find((e) => e.id === SPOTLIGHT_ID);
+const events = SPOTLIGHT_IDS.map((id) => EVENTS.find((e) => e.id === id)).filter((e): e is SbEvent => Boolean(e));
 
-/** Próximo evento em destaque, logo abaixo do Hero: cartaz, data, local, contagem, open bar, line-up e ingressos. */
-export function EventSpotlight() {
-  if (!event) return null;
+/** Um evento em destaque: cartaz, data, local, contagem, open bar, line-up e ingressos. `flip` põe o cartaz do outro lado no computador. */
+function SpotlightBlock({ event, index, flip }: { event: SbEvent; index: number; flip: boolean }) {
   const date = eventDate(event);
   const place = [event.venue, event.city].filter(Boolean).join(", ");
 
   return (
-    <section
-      id="eventos"
-      className="relative overflow-clip bg-[linear-gradient(to_bottom,#07232c,#0a4458_55%,#0b3341)] px-5 py-20 md:px-8 md:py-28"
-    >
+    <div className="relative">
       {/* raios de sol atrás do cartaz */}
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute left-[-20%] top-1/2 size-[1400px] -translate-y-1/2 bg-[repeating-conic-gradient(from_0deg,rgba(255,194,26,0.1)_0_5deg,transparent_5deg_10deg)] [mask-image:radial-gradient(circle,#000_8%,transparent_62%)] lg:left-[-8%]"
+        className={`pointer-events-none absolute top-1/2 size-[1400px] -translate-y-1/2 bg-[repeating-conic-gradient(from_0deg,rgba(255,194,26,0.1)_0_5deg,transparent_5deg_10deg)] [mask-image:radial-gradient(circle,#000_8%,transparent_62%)] ${
+          flip ? "right-[-20%] lg:right-[-8%]" : "left-[-20%] lg:left-[-8%]"
+        }`}
       />
 
-      <div className="relative mx-auto grid max-w-6xl items-center gap-12 lg:grid-cols-[minmax(0,430px)_1fr] lg:gap-16">
-        <Reveal>
+      <div
+        className={`relative mx-auto grid max-w-6xl items-center gap-12 lg:gap-16 ${
+          flip ? "lg:grid-cols-[1fr_minmax(0,430px)]" : "lg:grid-cols-[minmax(0,430px)_1fr]"
+        }`}
+      >
+        <Reveal className={flip ? "lg:order-2" : undefined}>
           <motion.figure
             className="relative mx-auto w-full max-w-[400px] lg:max-w-none"
-            initial={{ rotate: -2.5 }}
+            initial={{ rotate: flip ? 2.5 : -2.5 }}
             whileHover={{ rotate: 0, scale: 1.02 }}
             transition={{ type: "spring", stiffness: 200, damping: 18 }}
           >
             <div aria-hidden="true" className="absolute -inset-4 rounded-[36px] bg-[linear-gradient(135deg,#f0286e,#ff6a2b,#ffc21a)] opacity-70 blur-2xl" />
             <img
               src={event.flyer}
-              alt={`Cartaz do Sun, Bar & Love${event.venue ? ` no ${event.venue}` : ""}, ${date.day}, com o line-up`}
+              alt={`Cartaz do ${event.title}${event.venue ? ` no ${event.venue}` : ""}, ${date.day}`}
               width={900}
               height={1200}
+              loading={index === 0 ? undefined : "lazy"}
               className="relative h-auto w-full rounded-card shadow-[0_40px_90px_-30px_rgba(4,23,30,0.95)] ring-4 ring-cream"
             />
           </motion.figure>
@@ -50,7 +53,7 @@ export function EventSpotlight() {
         <div className="grid gap-7">
           <Reveal>
             <p className="inline-flex rounded-full border border-sun/60 bg-night/50 px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.16em] text-sun">
-              Próximo evento
+              {event.badge ?? "Próximo evento"}
             </p>
             <h2 className="mt-5 font-display text-[clamp(2.5rem,5.6vw,4.6rem)] uppercase leading-[0.92] tracking-tight">
               <span className="block text-[0.34em] tracking-[0.14em] text-flame">{date.weekday}</span>
@@ -96,10 +99,12 @@ export function EventSpotlight() {
 
           <Reveal delay={0.24}>
             <div className="flex flex-wrap items-center gap-3">
-              <TicketButton event={event} location="destaque" />
-              <Button variant="ghost" href="#mapa" icon={<MapTrifold size={18} />}>
-                Mapa do evento
-              </Button>
+              <TicketButton event={event} location={`destaque-${index + 1}`} />
+              {event.hasMap && (
+                <Button variant="ghost" href="#mapa" icon={<MapTrifold size={18} />}>
+                  Mapa do evento
+                </Button>
+              )}
               <Button
                 variant="ghost"
                 href={mapsLink(event)}
@@ -113,6 +118,13 @@ export function EventSpotlight() {
             <div className="mt-4">
               <SaleBadge sale={event.sale} />
             </div>
+            {event.notes && (
+              <ul className="mt-4 grid gap-1 text-sm text-cream/75">
+                {event.notes.map((n) => (
+                  <li key={n}>{n}</li>
+                ))}
+              </ul>
+            )}
             {event.supporters && (
               <p className="mt-6 text-sm uppercase tracking-[0.16em] text-cream/65">
                 Apoio: <span className="font-semibold text-cream/90">{event.supporters.join(" · ")}</span>
@@ -121,6 +133,23 @@ export function EventSpotlight() {
           </Reveal>
         </div>
       </div>
+    </div>
+  );
+}
+
+/** Os próximos eventos em destaque, logo abaixo do Hero. */
+export function EventSpotlight() {
+  if (events.length === 0) return null;
+  return (
+    <section
+      id="eventos"
+      className="relative grid gap-24 overflow-clip bg-[linear-gradient(to_bottom,#07232c,#0a4458_55%,#0b3341)] px-5 py-20 md:gap-32 md:px-8 md:py-28"
+    >
+      {events.map((event, i) => (
+        <div key={event.id} id={i === 0 ? undefined : `evento-${event.id}`}>
+          <SpotlightBlock event={event} index={i} flip={i % 2 === 1} />
+        </div>
+      ))}
     </section>
   );
 }

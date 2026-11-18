@@ -81,6 +81,12 @@ export interface SbEvent {
   album?: AlbumPhoto[];
   /** Link para baixar o álbum inteiro (zip ou pasta compartilhada). Vazio = o botão não aparece. */
   albumUrl?: string;
+  /** Etiqueta acima da data no destaque do evento. Padrão: "Próximo evento". */
+  badge?: string;
+  /** Avisos curtos sob os botões do destaque (ex.: camarotes, idade mínima). */
+  notes?: string[];
+  /** true = o destaque mostra o botão "Mapa do evento" (só o evento que tem o mapa 3D). */
+  hasMap?: boolean;
   /** Edição passada em destaque em "Ache a sua foto": ganha um banner grande e o selo "Novo" (use em uma edição só, a mais recente). */
   featured?: boolean;
   /** Quantas fotos existem no total na pasta do Drive. Se for maior que `album.length`, o álbum mostra um botão para ver o resto no Drive. */
@@ -91,6 +97,7 @@ export const EVENTS: SbEvent[] = [
   {
     id: "sun-bar-love-6-dez",
     status: "upcoming",
+    hasMap: true,
     title: "Sun, Bar & Love",
     startsAt: "2026-12-06T15:00:00-03:00",
     time: "15h",
@@ -110,19 +117,21 @@ export const EVENTS: SbEvent[] = [
     },
   },
   {
-    id: "deck22-9-jan",
+    id: "pixote-9-jan",
     status: "upcoming",
-    saveTheDate: true,
-    title: "Sun, Bar & Love no Deck 22",
-    dateLabel: "9 de janeiro",
-    kicker: "Sábado",
+    badge: "Show do Pixote",
+    title: "Sun, Bar & Love com Pixote",
+    startsAt: "2027-01-09T23:00:00-03:00",
+    time: "23h",
     venue: "Deck 22",
-    city: "Atlântida, RS",
-    flyer: asset("media/flyer-deck22.webp"),
-    blurb: "Save the date! O Sun, Bar & Love vai ao Deck 22, em Atlântida, no litoral gaúcho. Horário e ingressos saem em breve.",
-    ticketUrl: "",
-    // TODO: quando abrir a venda, troque para { status: "onsale", lot: "1º lote" } e preencha ticketUrl, time e endereço.
-    sale: { status: "soon" },
+    city: "Xangri-lá, RS",
+    flyer: asset("media/flyer-pixote-9-jan.webp"),
+    blurb: "O Sun, Bar & Love no Deck 22, em Xangri-lá, com show do Pixote, Pava e Will.",
+    ticketUrl: "https://cart.ingresse.com/c92ad514-c543-4d07-9552-2ba871b1f197/tickets?coupon=SUNBARELOVE",
+    // TODO: informar o lote atual e quando ele vira, ex: { status: "onsale", lot: "1º lote", lotEndsAt: "2027-01-07T12:00:00-03:00" }
+    sale: { status: "onsale" },
+    lineup: [{ names: ["Pixote", "Pava", "Will"] }],
+    notes: ["Reservas de camarotes por inbox.", "Proibida a entrada de menores de 18 anos."],
   },
   {
     id: "deck22-7-fev",
@@ -314,7 +323,10 @@ export const EVENTS: SbEvent[] = [
 ];
 
 /** Evento em destaque logo abaixo do Hero (some da agenda para não repetir). */
-export const SPOTLIGHT_ID = "sun-bar-love-6-dez";
+/** Eventos em destaque logo abaixo do Hero, na ordem em que aparecem. */
+export const SPOTLIGHT_IDS = ["sun-bar-love-6-dez", "pixote-9-jan"];
+/** Evento do mapa 3D (o primeiro destaque). */
+export const SPOTLIGHT_ID = SPOTLIGHT_IDS[0];
 
 /**
  * Coleção de roupas em parceria com a Approve, em destaque abaixo do evento.
