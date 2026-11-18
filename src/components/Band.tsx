@@ -1,4 +1,5 @@
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { useReducedMotion } from "motion/react";
 import { ArrowUpRight, ChatCircleText, Play } from "@phosphor-icons/react";
 import { asset } from "../asset";
 import { track } from "../analytics";
@@ -42,6 +43,27 @@ function HireButton({ location, className = "" }: { location: string; className?
   );
 }
 
+/** Vídeo mudo em loop que só toca enquanto está na tela (com "reduzir movimento", fica a capa parada). */
+function AutoVideo({ src, poster, className }: { src: string; poster: string; className?: string }) {
+  const ref = useRef<HTMLVideoElement>(null);
+  const reduce = useReducedMotion();
+  useEffect(() => {
+    const el = ref.current;
+    if (!el || reduce) return;
+    el.muted = true;
+    const io = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) void el.play().catch(() => undefined);
+        else el.pause();
+      },
+      { threshold: 0.4 },
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, [reduce]);
+  return <video ref={ref} src={src} poster={poster} muted loop playsInline preload="metadata" draggable={false} className={className} />;
+}
+
 function BlockCard({ block, onOpen, clone, start }: { block: BandBlock; onOpen: (b: BandBlock) => void; clone: boolean; start: boolean }) {
   return (
     <button
@@ -53,13 +75,7 @@ function BlockCard({ block, onOpen, clone, start }: { block: BandBlock; onOpen: 
       aria-label={`Assistir ${block.title}`}
       className="group relative block aspect-video w-[78vw] max-w-[400px] shrink-0 overflow-hidden rounded-card text-left ring-1 ring-cream/20 sm:w-[360px] lg:w-[380px]"
     >
-      <img
-        src={block.poster}
-        alt=""
-        loading="lazy"
-        draggable={false}
-        className="size-full object-cover transition-transform duration-700 ease-out-expo group-hover:scale-[1.04]"
-      />
+      <AutoVideo src={block.src} poster={block.poster} className="size-full object-cover transition-transform duration-700 ease-out-expo group-hover:scale-[1.04]" />
       <span className="absolute inset-0 bg-gradient-to-t from-deep/85 via-deep/10 to-transparent" />
       <span className="absolute left-1/2 top-1/2 flex size-16 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-rose text-cream shadow-[0_14px_40px_-8px_rgba(240,40,110,0.9)] transition-transform duration-300 group-hover:scale-110">
         <Play size={30} weight="fill" />
@@ -109,13 +125,21 @@ export function Band() {
             aria-label={hasVideo ? "Assistir à banda tocando" : "Vídeo da banda, em breve"}
             className="group relative block aspect-video w-full overflow-hidden rounded-card ring-1 ring-cream/15"
           >
-            <img
-              src={BAND.poster ?? FALLBACK_POSTER}
-              alt=""
-              loading="lazy"
-              draggable={false}
-              className="size-full object-cover transition-transform duration-700 ease-out-expo group-hover:scale-[1.03]"
-            />
+            {BAND.src ? (
+              <AutoVideo
+                src={BAND.src}
+                poster={BAND.poster ?? FALLBACK_POSTER}
+                className="size-full object-cover transition-transform duration-700 ease-out-expo group-hover:scale-[1.03]"
+              />
+            ) : (
+              <img
+                src={BAND.poster ?? FALLBACK_POSTER}
+                alt=""
+                loading="lazy"
+                draggable={false}
+                className="size-full object-cover transition-transform duration-700 ease-out-expo group-hover:scale-[1.03]"
+              />
+            )}
             {!BAND.poster && (
               <span className="absolute left-1/2 top-1/2 w-[34%] -translate-x-1/2 -translate-y-1/2 opacity-90">
                 <Sun />
@@ -125,7 +149,11 @@ export function Band() {
             <span className="absolute left-1/2 top-1/2 flex size-20 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-rose text-cream shadow-[0_14px_40px_-8px_rgba(240,40,110,0.9)] transition-transform duration-300 group-hover:scale-110 group-active:scale-95 md:size-24">
               <Play size={40} weight="fill" />
             </span>
-            {!hasVideo && (
+            {hasVideo ? (
+              <span className="absolute bottom-4 left-4 rounded-full bg-deep/80 px-4 py-1.5 text-sm font-semibold text-cream backdrop-blur">
+                Toque para ouvir com som
+              </span>
+            ) : (
               <span className="absolute bottom-4 left-4 rounded-full bg-deep/80 px-4 py-1.5 text-sm font-semibold text-sun backdrop-blur">
                 Vídeo em breve
               </span>
